@@ -95,6 +95,17 @@
 - **FR-006**: System MUST authenticate users via [NEEDS CLARIFICATION: auth method not specified - email/password, SSO, OAuth?]
 - **FR-007**: System MUST retain user data for [NEEDS CLARIFICATION: retention period not specified]
 
+### Non-Functional Requirements
+
+- **NFR-001**: The feature MUST define the code quality expectations required for merge,
+  including any linting, static analysis, or maintainability constraints that apply.
+- **NFR-002**: The feature MUST define the tests required to prove the behavior, including
+  the minimum unit, integration, contract, or end-to-end coverage expected for changed paths.
+- **NFR-003**: The feature MUST define the user experience consistency constraints,
+  including accessibility expectations, terminology, states, and error handling.
+- **NFR-004**: The feature MUST define measurable performance expectations for the primary
+  workflow, including the metric, budget, and evaluation method.
+
 ### Key Entities *(include if feature involves data)*
 
 - **[Entity 1]**: [What it represents, key attributes without implementation]
@@ -113,6 +124,9 @@
 - **SC-002**: [Measurable metric, e.g., "System handles 1000 concurrent users without degradation"]
 - **SC-003**: [User satisfaction metric, e.g., "90% of users successfully complete primary task on first attempt"]
 - **SC-004**: [Business metric, e.g., "Reduce support tickets related to [X] by 50%"]
+
+Success criteria MUST include at least one measurable outcome for user-facing quality,
+one for performance where relevant, and one for testable completion of the primary journey.
 
 ## Assumptions
 

@@ -31,7 +31,17 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+- Code Quality Gate: Identify the linting, formatting, typing, and reviewability checks
+  required for this feature. Confirm any touched legacy areas will be refactored enough
+  to keep the new change maintainable.
+- Testing Gate: List the unit, integration, contract, and end-to-end tests required for
+  changed behavior and confirm how failures will be demonstrated before the fix or feature.
+- UX Consistency Gate: Describe the existing UX patterns this feature must preserve,
+  including accessibility, terminology, validation, empty states, and error recovery.
+- Performance Gate: Define measurable budgets for the affected workflow and the method
+  that will be used to verify them.
+- Decision Traceability Gate: Record any significant dependency, architecture, data-model,
+  or complexity choice with the rejected alternatives and why they were not selected.
 
 ## Project Structure
 
