@@ -95,23 +95,6 @@
 - **FR-006**: System MUST authenticate users via [NEEDS CLARIFICATION: auth method not specified - email/password, SSO, OAuth?]
 - **FR-007**: System MUST retain user data for [NEEDS CLARIFICATION: retention period not specified]
 
-### Non-Functional Requirements
-
-<!--
-  ACTION REQUIRED: Define the quality attributes that constrain implementation.
-  Include UX consistency requirements for user-facing work and measurable
-  performance budgets whenever the feature affects latency, rendering,
-  throughput, memory, or operating cost.
--->
-
-- **NFR-001**: User-facing changes MUST align with [existing interaction,
-  content, visual, and accessibility patterns] or explicitly define an approved
-  new pattern.
-- **NFR-002**: The feature MUST meet [measurable performance budget] for
-  [primary user journey or workload].
-- **NFR-003**: The implementation MUST define how quality, testing, UX
-  consistency, and performance compliance will be verified.
-
 ### Key Entities *(include if feature involves data)*
 
 - **[Entity 1]**: [What it represents, key attributes without implementation]
@@ -122,8 +105,6 @@
 <!--
   ACTION REQUIRED: Define measurable success criteria.
   These must be technology-agnostic and measurable.
-  Include UX consistency or performance outcomes whenever they materially affect
-  the user experience or release decision.
 -->
 
 ### Measurable Outcomes
