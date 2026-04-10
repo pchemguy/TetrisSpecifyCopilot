@@ -10,10 +10,6 @@
         ".specify/scripts/bash/": true,
         ".specify/scripts/powershell/": false
     },
-    "terminal.explorerKind": "integrated",
-    "terminal.integrated.defaultProfile.windows": "Git Bash",
-    "terminal.integrated.automationProfile.linux": {
-        
-    }
+    "terminal.explorerKind": "integrated"
 }
 
