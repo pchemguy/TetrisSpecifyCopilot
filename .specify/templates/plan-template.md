@@ -31,7 +31,18 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+- [ ] Code Quality Gate: Identify impacted linting, formatting, static-analysis,
+  and maintainability constraints, including any complexity hotspots that
+  need explicit control.
+- [ ] Testing Gate: Define required automated coverage by level (unit,
+  integration, contract, performance) and note any bug reproduction that
+  must fail before implementation begins.
+- [ ] UX Consistency Gate: Describe affected user journeys, shared patterns,
+  terminology, and required loading, empty, success, and failure states.
+- [ ] Performance Gate: State measurable budgets or document why no material
+  performance budget applies, then name the validation method.
+- [ ] Decision Trace Gate: Document the simplest viable design, alternatives
+  considered, and any exception that requires explicit maintainer approval.
 
 ## Project Structure
 
@@ -96,7 +107,7 @@ directories captured above]
 
 ## Complexity Tracking
 
-> **Fill ONLY if Constitution Check has violations that must be justified**
+> **Fill ONLY if Constitution Check has violations or approved exceptions that must be justified**
 
 | Violation | Why Needed | Simpler Alternative Rejected Because |
 |-----------|------------|-------------------------------------|

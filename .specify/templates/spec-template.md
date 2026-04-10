@@ -18,6 +18,7 @@
   - Tested independently
   - Deployed independently
   - Demonstrated to users independently
+  - Evaluated for loading, empty, and failure behavior when those states are user-visible
 -->
 
 ### User Story 1 - [Brief Title] (Priority: P1)
@@ -95,6 +96,17 @@
 - **FR-006**: System MUST authenticate users via [NEEDS CLARIFICATION: auth method not specified - email/password, SSO, OAuth?]
 - **FR-007**: System MUST retain user data for [NEEDS CLARIFICATION: retention period not specified]
 
+### Quality, UX, and Performance Requirements
+
+- **QXP-001**: Feature MUST define how it preserves or intentionally updates
+  existing terminology, interaction patterns, error handling, and accessibility
+  expectations.
+- **QXP-002**: Feature MUST specify the automated test coverage required for
+  impacted behavior, including any integration, contract, or performance tests.
+- **QXP-003**: Feature MUST define measurable performance expectations for
+  affected user journeys or explicitly state why no material performance budget
+  applies.
+
 ### Key Entities *(include if feature involves data)*
 
 - **[Entity 1]**: [What it represents, key attributes without implementation]
@@ -104,7 +116,8 @@
 
 <!--
   ACTION REQUIRED: Define measurable success criteria.
-  These must be technology-agnostic and measurable.
+  These must be technology-agnostic, measurable, and include user experience
+  consistency or performance outcomes whenever those concerns are in scope.
 -->
 
 ### Measurable Outcomes
