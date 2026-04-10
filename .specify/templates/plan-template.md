@@ -21,6 +21,8 @@
 **Primary Dependencies**: [e.g., FastAPI, UIKit, LLVM or NEEDS CLARIFICATION]  
 **Storage**: [if applicable, e.g., PostgreSQL, CoreData, files or N/A]  
 **Testing**: [e.g., pytest, XCTest, cargo test or NEEDS CLARIFICATION]  
+**Quality Gates**: [e.g., lint, format, type-check, review requirements or NEEDS CLARIFICATION]  
+**UX Consistency Constraints**: [e.g., design system reuse, accessibility baseline, content patterns or N/A]  
 **Target Platform**: [e.g., Linux server, iOS 15+, WASM or NEEDS CLARIFICATION]
 **Project Type**: [e.g., library/cli/web-service/mobile-app/compiler/desktop-app or NEEDS CLARIFICATION]  
 **Performance Goals**: [domain-specific, e.g., 1000 req/s, 10k lines/sec, 60 fps or NEEDS CLARIFICATION]  
@@ -31,7 +33,16 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+- **Code Quality**: Identify required linting, formatting, static analysis, and
+  review gates. Call out any complexity hotspots that need explicit justification.
+- **Testing**: Define the automated test mix required for this change. Bug fixes
+  must start from a failing test or reproducible case.
+- **UX Consistency**: Name the existing patterns, terminology, and accessibility
+  baselines this feature must reuse, or document the approved new pattern.
+- **Performance**: State measurable budgets for the primary user journey and how
+  validation will be performed.
+- **Decision Record**: Capture major technical decisions, rejected alternatives,
+  and any constitution exceptions with owner, mitigation, and expiry.
 
 ## Project Structure
 
@@ -96,7 +107,8 @@ directories captured above]
 
 ## Complexity Tracking
 
-> **Fill ONLY if Constitution Check has violations that must be justified**
+> **Fill ONLY if Constitution Check has violations that must be justified,
+> approved, and time-bounded**
 
 | Violation | Why Needed | Simpler Alternative Rejected Because |
 |-----------|------------|-------------------------------------|
