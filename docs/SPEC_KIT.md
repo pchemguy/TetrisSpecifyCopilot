@@ -119,7 +119,7 @@ Use a browser-based architecture with TypeScript/React for the frontend UI and H
 
 ##### V2
 
-Use a browser-based architecture with TypeScript/React for the frontend UI and HTML5 Canvas for rendering gameplay. Implement the game engine as a deterministic client-side core with no backend required. Persist user settings and transient UI state in local storage. Store structured game data such as scores, sessions, and replay records in a client-side SQLite database running in the browser via WebAssembly and persisted locally using browser storage. The application must run entirely on the client with no network service dependency.
+Create a plan for the spec. Use a browser-based architecture with TypeScript/React for the frontend UI and HTML5 Canvas for rendering gameplay. Implement the game engine as a deterministic client-side core with no backend required. Persist user settings and transient UI state in local storage. Store structured game data such as scores, sessions, and replay records in a client-side SQLite database running in the browser via WebAssembly and persisted locally using browser storage. The application must run entirely on the client with no network service dependency.
 
 ### `speckit.tasks`
 
