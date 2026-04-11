@@ -12,6 +12,7 @@ export interface HudLayoutProps extends PropsWithChildren {
 function StatCard({ label, value }: { label: string; value: string | number }) {
   return (
     <div className="hud-stat-card">
+      <span className="sr-only">{label} {value}</span>
       <dt>{label}</dt>
       <dd>{value}</dd>
     </div>
