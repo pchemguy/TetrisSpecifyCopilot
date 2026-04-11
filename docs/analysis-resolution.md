@@ -5,7 +5,7 @@ url: https://chatgpt.com/g/g-p-69ca8410ab7c819198782233666b1069-spec-kit/c/69da3
 
 > [!NOTE] Analysis resolution
 > 
-> `fix` is a resumable issue-resolution workflow that consumes prior analysis findings, creates or resumes ARW artifacts under the feature analysis subspace, asks the user for clarification only when necessary, prepares a traceable resolution plan, applies minimal necessary changes, records outcomes in a resolution report, and finalizes the round by renaming `CUR` to the next numbered analysis directory and committing the result.
+> `analysis-resolution` is a resumable issue-resolution workflow that consumes prior analysis findings, creates or resumes ARW artifacts under the feature analysis subspace, asks the user for clarification only when necessary, prepares a traceable resolution plan, applies minimal necessary changes, records outcomes in a resolution report, and finalizes the round by renaming `CUR` to the next numbered analysis directory and committing the result.
 
 ## User Input
 
@@ -28,16 +28,6 @@ This command is responsible for:
 - preparing and executing a traceable resolution plan
 - producing a resolution report
 - finalizing the ARW round and committing changes
-
-## Analysis Source Priority
-
-This command is the **resolution phase** that follows prior analysis. It must use one of the following as its issue source of truth, in this priority order:
-
-1. an existing `analysis-report.md` in the current ARW subspace
-2. issues already established in current conversation context from a prior `analyze` run
-3. explicit user-provided issue list in `$ARGUMENTS`
-
-If no issue source can be established, abort and instruct the user to run `/speckit.analyze` first.
 
 ## Operating Constraints
 
@@ -138,7 +128,7 @@ Resume rules:
     - remove no lock automatically unless doing so is required by explicit recovery logic documented in the resolution report
 - If `CUR_DIR` exists and all required artifacts are complete with no locks, proceed directly to finalization.
 
-## ARW Naming Convention
+## Naming Convention
 
 Each feature may have multiple ARW rounds. Each completed round must live under:
 
@@ -448,60 +438,3 @@ Resolve issues completely, but do not perform unrelated improvements.
 
 $ARGUMENTS
 
-
----
----
-
-
-## A few optional improvements you may want next
-
-I would consider adding these later, but I did not force them into the prompt yet.
-
-### A. Explicit artifact schemas
-
-You may want to define required section templates for:
-
-* `analysis-report.md`
-* `analysis-clarification-form.md`
-* `analysis-resolution-plan.md`
-* `analysis-resolution-report.md`
-
-That would make artifacts more machine-checkable.
-
-### B. Issue taxonomy normalization
-
-You may want a controlled vocabulary for issue categories, such as:
-
-* duplication
-* ambiguity
-* underspecification
-* constitution_conflict
-* coverage_gap
-* inconsistency
-
-This would help later automation.
-
-### C. “Deferred” policy
-
-You may want to define whether `deferred` is allowed only with explicit user approval, or allowed automatically for low-severity items.
-
-### D. Git cleanliness policy outside `analyses/`
-
-You currently mention committing changes under `analyses/` before starting a new round. You may also want rules for unrelated dirty changes elsewhere in the repo.
-
-### E. Number assignment race policy
-
-If multiple agents could run, you may want stricter wording around numbered directory assignment. That may not matter yet.
-
----
-
-
----
-
-## Suggested shorter protocol summary
-
-If you also want a concise human-facing summary to accompany the prompt, use this:
-
-> `fix` is a resumable issue-resolution workflow that consumes prior analysis findings, creates or resumes ARW artifacts under the feature analysis subspace, asks the user for clarification only when necessary, prepares a traceable resolution plan, applies minimal necessary changes, records outcomes in a resolution report, and finalizes the round by renaming `CUR` to the next numbered analysis directory and committing the result.
-
-If useful, I can next turn this into a paired `analyze` + `fix` design where the two commands share artifact contracts cleanly.
