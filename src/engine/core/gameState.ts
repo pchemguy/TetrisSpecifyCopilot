@@ -39,8 +39,11 @@ export function createInitialLockState(): LockState {
   };
 }
 
+let sessionSequence = 0;
+
 function createSessionId(seed: string): string {
-  return `session-${seed}`;
+  sessionSequence += 1;
+  return `session-${seed}-${sessionSequence}`;
 }
 
 export function createSpawnPiece(tetrominoId: TetrominoId, spawnTick: number): ActivePiece {

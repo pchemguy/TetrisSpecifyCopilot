@@ -31,3 +31,11 @@ export function createPerformanceSnapshot(lastInputLatencyMs: number | null): Pe
 export function isInputLatencyWithinBudget(snapshot: PerformanceSnapshot): boolean {
   return snapshot.lastInputLatencyMs === null || snapshot.lastInputLatencyMs <= INPUT_LATENCY_BUDGET_MS;
 }
+
+export function summarizeSessionPerformance(lastInputLatencyMs: number | null) {
+  return {
+    withinInputBudget: isInputLatencyWithinBudget(createPerformanceSnapshot(lastInputLatencyMs)),
+    lastInputLatencyMs,
+    requiresAttention: lastInputLatencyMs !== null && lastInputLatencyMs > INPUT_LATENCY_BUDGET_MS,
+  };
+}

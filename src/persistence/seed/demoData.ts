@@ -36,7 +36,7 @@ export const DEMO_SCORE: ScoreRecord = {
   level_reached: DEMO_SESSION.level,
   lines_cleared: DEMO_SESSION.lines_cleared,
   achieved_at: DEMO_SESSION.ended_at ?? DEMO_SESSION.started_at,
-  is_personal_best: true,
+  is_personal_best: false,
 };
 
 export const DEMO_REPLAY: ReplayEnvelope = {

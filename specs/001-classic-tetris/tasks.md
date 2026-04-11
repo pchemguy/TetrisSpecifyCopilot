@@ -109,19 +109,19 @@ description: "Task list for Classic Browser Tetris implementation"
 
 ### Tests for User Story 3 ⚠️
 
-- [ ] T032 [P] [US3] Add unit tests for pause/resume, restart, best-score state behavior, and pause freezing the remaining lock delay before lock commit in `tests/unit/engine/session-controls.spec.ts` and `tests/unit/persistence/best-score-store.spec.ts`
-- [ ] T033 [P] [US3] Add contract tests for localStorage keys and SQLite schema/read-write behavior in `tests/contract/local-storage.contract.spec.ts` and `tests/contract/sqlite.contract.spec.ts`
-- [ ] T034 [P] [US3] Add integration coverage for persistence hydration and seeded demo state in `tests/integration/app/persistence-hydration.spec.tsx`
-- [ ] T035 [P] [US3] Add browser end-to-end coverage for pause/resume, restart, reload, persisted best score, and locally stored session/score/replay records in `tests/e2e/session-persistence.spec.ts`
+- [x] T032 [P] [US3] Add unit tests for pause/resume, restart, best-score state behavior, and pause freezing the remaining lock delay before lock commit in `tests/unit/engine/session-controls.spec.ts` and `tests/unit/persistence/best-score-store.spec.ts`
+- [x] T033 [P] [US3] Add contract tests for localStorage keys and SQLite schema/read-write behavior in `tests/contract/local-storage.contract.spec.ts` and `tests/contract/sqlite.contract.spec.ts`
+- [x] T034 [P] [US3] Add integration coverage for persistence hydration and seeded demo state in `tests/integration/app/persistence-hydration.spec.tsx`
+- [x] T035 [P] [US3] Add browser end-to-end coverage for pause/resume, restart, reload, persisted best score, and locally stored session/score/replay records in `tests/e2e/session-persistence.spec.ts`
 
 ### Implementation for User Story 3
 
-- [ ] T036 [US3] Implement pause, resume, restart, lock-delay freeze/resume handling, and overlay transitions in `src/engine/commands/sessionCommands.ts`, `src/components/overlays/PauseOverlay.tsx`, and `src/app/state/useGameSession.ts`
-- [ ] T037 [US3] Implement best-score storage plus settings and UI-state persistence in `src/persistence/local-storage/bestScoreStore.ts`, `src/persistence/local-storage/settingsStore.ts`, and `src/persistence/local-storage/uiStateStore.ts`
-- [ ] T038 [US3] Implement SQLite repositories for sessions, scores, and replays in `src/persistence/sqlite/sessionRepository.ts`, `src/persistence/sqlite/scoreRepository.ts`, and `src/persistence/sqlite/replayRepository.ts`
-- [ ] T039 [US3] Implement deterministic replay recording and demo-data seeding orchestration for local-only storage without a replay browser UI in `src/engine/replay/replayRecorder.ts`, `src/persistence/seed/seedDatabase.ts`, and `src/app/providers/PersistenceProvider.tsx`
-- [ ] T040 [US3] Surface best-score display, persistence status, and non-blocking storage warnings in `src/components/hud/BestScorePanel.tsx`, `src/components/overlays/PersistenceWarning.tsx`, and `src/app/App.tsx`
-- [ ] T041 [US3] Verify long-session pause/reload behavior, offline-capable local persistence, and local-only performance in `src/engine/core/performance.ts` and `tests/e2e/session-persistence.spec.ts`
+- [x] T036 [US3] Implement pause, resume, restart, lock-delay freeze/resume handling, and overlay transitions in `src/engine/commands/sessionCommands.ts`, `src/components/overlays/PauseOverlay.tsx`, and `src/app/state/useGameSession.ts`
+- [x] T037 [US3] Implement best-score storage plus settings and UI-state persistence in `src/persistence/local-storage/bestScoreStore.ts`, `src/persistence/local-storage/settingsStore.ts`, and `src/persistence/local-storage/uiStateStore.ts`
+- [x] T038 [US3] Implement SQLite repositories for sessions, scores, and replays in `src/persistence/sqlite/sessionRepository.ts`, `src/persistence/sqlite/scoreRepository.ts`, and `src/persistence/sqlite/replayRepository.ts`
+- [x] T039 [US3] Implement deterministic replay recording and demo-data seeding orchestration for local-only storage without a replay browser UI in `src/engine/replay/replayRecorder.ts`, `src/persistence/seed/seedDatabase.ts`, and `src/app/providers/PersistenceProvider.tsx`
+- [x] T040 [US3] Surface best-score display, persistence status, and non-blocking storage warnings in `src/components/hud/BestScorePanel.tsx`, `src/components/overlays/PersistenceWarning.tsx`, and `src/app/App.tsx`
+- [x] T041 [US3] Verify long-session pause/reload behavior, offline-capable local persistence, and local-only performance in `src/engine/core/performance.ts` and `tests/e2e/session-persistence.spec.ts`
 
 **Checkpoint**: All user stories are independently functional, persistent, and replayable on the client.
 

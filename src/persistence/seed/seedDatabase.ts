@@ -1,6 +1,7 @@
 import type { Database } from 'sql.js';
 import { DEFAULT_UI_STATE, DEFAULT_USER_SETTINGS, type SeededPersistenceState } from '../../types/persistence';
 import type { ReplayEnvelope } from '../../types/replay';
+import { readBestScore } from '../local-storage/bestScoreStore';
 import { writeSettings } from '../local-storage/settingsStore';
 import { writeUIState } from '../local-storage/uiStateStore';
 import { DEMO_REPLAY, DEMO_SCORE, DEMO_SESSION, DEMO_UI_STATE, DEMO_USER_SETTINGS } from './demoData';
@@ -39,8 +40,21 @@ function insertReplay(database: Database, replayEnvelope: ReplayEnvelope): void 
 }
 
 export function seedLocalPersistence(): void {
-  writeSettings(DEMO_USER_SETTINGS ?? DEFAULT_USER_SETTINGS);
-  writeUIState(DEMO_UI_STATE ?? DEFAULT_UI_STATE);
+  if (typeof window === 'undefined' || typeof window.localStorage === 'undefined') {
+    return;
+  }
+
+  if (!window.localStorage.getItem('tetris.settings.v1')) {
+    writeSettings(DEMO_USER_SETTINGS ?? DEFAULT_USER_SETTINGS);
+  }
+
+  if (!window.localStorage.getItem('tetris.ui.v1')) {
+    writeUIState(DEMO_UI_STATE ?? DEFAULT_UI_STATE);
+  }
+
+  if (readBestScore() < 0) {
+    window.localStorage.removeItem('tetris.best-score.v1');
+  }
 }
 
 export function seedDatabase(database: Database): SeededPersistenceState {

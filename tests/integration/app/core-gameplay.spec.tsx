@@ -1,3 +1,4 @@
+import type { PropsWithChildren } from 'react';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
@@ -5,6 +6,7 @@ import App from '../../../src/app/App';
 import { renderWithProviders } from '../../setup/renderWithProviders';
 
 vi.mock('../../../src/app/providers/PersistenceProvider', () => ({
+  PersistenceProvider: ({ children }: PropsWithChildren) => children,
   usePersistence: () => ({
     databaseHandle: null,
     settings: {

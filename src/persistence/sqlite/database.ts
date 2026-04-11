@@ -90,7 +90,13 @@ async function writePersistedDatabase(binary: Uint8Array): Promise<void> {
 export function loadSqlJs(): Promise<SqlJsStatic> {
   if (!sqlJsPromise) {
     sqlJsPromise = initSqlJs({
-      locateFile: () => wasmUrl,
+      locateFile: () => {
+        if (typeof window === 'undefined') {
+          return `${process.cwd().replace(/\\/g, '/')}/node_modules/sql.js/dist/sql-wasm.wasm`;
+        }
+
+        return wasmUrl;
+      },
     });
   }
 
@@ -102,6 +108,13 @@ export interface SQLiteDatabaseHandle {
   sqlJs: SqlJsStatic;
   schemaVersion: number;
   persist: () => Promise<void>;
+}
+
+export async function createSqlDatabase(): Promise<Database> {
+  const sqlJs = await loadSqlJs();
+  const database = new sqlJs.Database();
+  ensureSchema(database);
+  return database;
 }
 
 export async function initializeSQLiteDatabase(): Promise<SQLiteDatabaseHandle> {

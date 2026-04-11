@@ -1,18 +1,35 @@
 import GameCanvas from '../canvas/GameCanvas';
 import KeyboardInputHandler from '../components/controls/KeyboardInputHandler';
+import BestScorePanel from '../components/hud/BestScorePanel';
 import HudLayout from '../components/hud/HudLayout';
 import GameOverOverlay from '../components/overlays/GameOverOverlay';
+import PauseOverlay from '../components/overlays/PauseOverlay';
+import PersistenceWarning from '../components/overlays/PersistenceWarning';
 import { selectGhostPiece, selectHeldTetromino, selectNextTetromino } from '../engine/core/selectors';
+import { summarizeSessionPerformance } from '../engine/core/performance';
 import { useGameSession } from './state/useGameSession';
 import { usePersistence } from './providers/PersistenceProvider';
 
 export default function App() {
-  const { bestScore, health, isHydrated, settings, uiState, warnings } = usePersistence();
-  const { state, dispatchCommand, lastInputLatencyMs } = useGameSession(bestScore);
+  const {
+    bestScore,
+    health,
+    isHydrated,
+    settings,
+    uiState,
+    warnings,
+    recordCompletedSession,
+    updateOverlayState,
+  } = usePersistence();
+  const { state, dispatchCommand, lastInputLatencyMs } = useGameSession(bestScore, {
+    onCompletedSession: recordCompletedSession,
+    onOverlayStateChange: updateOverlayState,
+  });
   const liveBestScore = Math.max(bestScore, state.metrics.bestScore);
   const ghostPiece = settings.show_ghost_piece && state.status === 'active'
     ? selectGhostPiece(state)
     : null;
+  const performanceSummary = summarizeSessionPerformance(lastInputLatencyMs);
   const readinessItems = [
     `Persistence ${health}`,
     `Ghost ${settings.show_ghost_piece ? 'on' : 'off'}`,
@@ -49,15 +66,19 @@ export default function App() {
         heldTetromino={selectHeldTetromino(state)}
         canHold={state.hold.canHold}
         aside={
-          <div className="hud-status-card hud-panel">
-            <p className="section-label">Persistence</p>
-            <strong>{liveBestScore} best score</strong>
-            <p>
-              {warnings.length > 0
-                ? warnings[0].message
-                : `Selected panel: ${uiState.last_selected_panel}. Last input latency: ${Math.round(lastInputLatencyMs ?? 0)} ms.`}
-            </p>
-          </div>
+          <>
+            <BestScorePanel bestScore={liveBestScore} />
+            <div className="hud-status-card hud-panel">
+              <p className="section-label">Persistence</p>
+              <strong>{health}</strong>
+              <p>
+                Selected panel: {uiState.last_selected_panel}. Last input latency:{' '}
+                {Math.round(lastInputLatencyMs ?? 0)} ms. Performance budget:{' '}
+                {performanceSummary.withinInputBudget ? 'healthy' : 'attention needed'}.
+              </p>
+            </div>
+            {warnings[0] ? <PersistenceWarning warning={warnings[0]} /> : null}
+          </>
         }
       >
         <article className="surface-card playfield-card">
@@ -72,13 +93,7 @@ export default function App() {
               ghostPiece={ghostPiece}
               inputLatencyMs={lastInputLatencyMs}
             />
-            {state.status === 'paused' ? (
-              <div className="playfield-overlay" role="dialog" aria-label="Pause overlay">
-                <p className="section-label">Session halted</p>
-                <h3>Paused</h3>
-                <p>Press P or Escape to resume.</p>
-              </div>
-            ) : null}
+            {state.status === 'paused' ? <PauseOverlay /> : null}
             {state.status === 'game_over' ? (
               <GameOverOverlay score={state.metrics.score} onRestart={() => dispatchCommand('restart')} />
             ) : null}
