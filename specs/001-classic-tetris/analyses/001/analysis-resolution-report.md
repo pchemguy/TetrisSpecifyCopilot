@@ -1,8 +1,8 @@
 # Analysis Resolution Report: Classic Browser Tetris
 
-**ARW Round**: CUR  
+**ARW Round**: 001  
 **Executed**: 2026-04-11  
-**Status**: completed pending finalization
+**Status**: completed and finalized
 
 ## Execution Summary
 
@@ -24,9 +24,9 @@ Resolved the seven recorded analysis issues by updating the governing feature sp
 
 - `specs/001-classic-tetris/spec.md`
 - `specs/001-classic-tetris/tasks.md`
-- `specs/001-classic-tetris/analyses/CUR/analysis-report.md`
-- `specs/001-classic-tetris/analyses/CUR/analysis-resolution-plan.md`
-- `specs/001-classic-tetris/analyses/CUR/analysis-resolution-report.md`
+- `specs/001-classic-tetris/analyses/001/analysis-report.md`
+- `specs/001-classic-tetris/analyses/001/analysis-resolution-plan.md`
+- `specs/001-classic-tetris/analyses/001/analysis-resolution-report.md`
 
 ## Deviations from Plan
 
@@ -51,4 +51,4 @@ Bootstrap mode was used because no existing `analyses/CUR` directory was present
 
 ## Commit Summary
 
-Finalization will use a focused commit for the completed ARW round and governed artifact updates with the summary: `Resolve ARW round 001 for classic browser tetris`.
+Finalized in commit `c2bee92` with summary: `Resolve ARW round 001 for classic browser tetris`.

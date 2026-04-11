@@ -1,6 +1,6 @@
 # Analysis Report: Classic Browser Tetris
 
-**ARW Round**: CUR  
+**ARW Round**: 001  
 **Mode**: bootstrap  
 **Created**: 2026-04-11  
 **Issue Source**: prior `/speckit.analyze` findings from conversation context  

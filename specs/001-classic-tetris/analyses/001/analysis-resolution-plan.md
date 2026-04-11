@@ -1,6 +1,6 @@
 # Analysis Resolution Plan: Classic Browser Tetris
 
-**ARW Round**: CUR  
+**ARW Round**: 001  
 **Created**: 2026-04-11  
 **Inputs**: `spec.md`, `plan.md`, `tasks.md`, `analysis-report.md`, constitution v1.1.0
 
