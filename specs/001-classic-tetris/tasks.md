@@ -35,7 +35,7 @@ description: "Task list for Classic Browser Tetris implementation"
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete.
 
-- [ ] T005 Define shared gameplay and persistence types in `src/types/game.ts`, `src/types/persistence.ts`, and `src/types/replay.ts`
+- [x] T005 Define shared gameplay and persistence types in `src/types/game.ts`, `src/types/persistence.ts`, and `src/types/replay.ts`
 - [ ] T006 [P] Implement tetromino definitions, SRS kick data, and 7-bag randomization in `src/engine/rules/tetrominoes.ts`, `src/engine/rules/rotation.ts`, and `src/engine/rules/randomizer.ts`
 - [ ] T007 [P] Implement the deterministic tick loop, immutable game state, and command queue in `src/engine/core/gameState.ts`, `src/engine/core/gameEngine.ts`, and `src/engine/commands/commandQueue.ts`
 - [ ] T008 [P] Implement browser SQLite bootstrap and schema management in `src/persistence/sqlite/database.ts` and `src/persistence/sqlite/schema.ts`
