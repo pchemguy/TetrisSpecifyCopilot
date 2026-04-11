@@ -149,6 +149,7 @@ Execute
 
 The full ARW protocol involves the following stages:
 
+0. Current state assessment.
 1. Analysis of current feature and project-level artifacts, leading to generation of analysis report.
 2. Preliminary analysis of every identified issue with the goal to determine if user input is required for optimal resolution, leading to generation of clarification form, if user input is deemed necessary. In such a case, agent shall "switch" to interactive mode, presenting the user with each issue that requires clarifications and either suggest options, if possible, or ask for open-ended input. User answers shall be recorded to clarification form, completing it.
 3. Preparation of resolution plan, taking into account the completed clarification form, if appropriate.
@@ -157,19 +158,48 @@ The full ARW protocol involves the following stages:
 
 The protocol should use
 
+- state awareness at start
 - artifact and subspace naming conventions
-- lock-file-based 
+- lock-file-based recovery provisions
+- smart changes committing process
+
+described below.
 
 ##### Naming Convention
 
 Each feature (identified as a set of artifacts under a `spec/` feature subdirectory, e.g., `spec/user-auth/`) may include multiple ARW rounds, with each spanning one or multiple runs of the `speckit.analyze` command. Each ARW round is expected to create associated artifacts under a subspace `spec/<feature_name>/analyses/<###>/` directory, where `###` is a three-digit sequential number identifying a particular ARW round. The primary artifacts to be created include:
 
-| Step | Artefact                        | Required | Description                                                                                                                                                |
+| Step | Artifact                        | Required | Description                                                                                                                                                |
 | ---- | ------------------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 1    | `analysis-report.md`            | Yes      | Detailed analysis account of findings of the analysis performed.                                                                                           |
 | 2    | `analysis-QA-form.md`           | No       | Resolution clarification form. This artifact is required, if the agent determines that user input is required for optimal resolution of discovered issues. |
 | 3    | `analysis-resolution-plan.md`   | Yes      | Detailed actionable resolution plan to be executed by an agent.                                                                                            |
 | 4    | `analysis-resolution-report.md` | Yes      | Detailed resolution report.                                                                                                                                |
+
+A special subspace `CUR` (`spec/<feature_name>/analyses/CUR/`) is used for hosting artifacts of the current analysis. This directory is created at the beginning if agent determines that there is no incomplete ARW round.
+
+##### Lock File Policy
+
+Before creating any artifact, the agent must create a lock file `<artifact_name>.LOCK` (e.g., `analysis-report.LOCK`). The LOCK file is deleted only after the artifact is considered to be completed. The primary artifacts listed in the table in Naming Conventions are created sequentially at subsequent stages. Each artifact should be edited only during its corresponding stage. Once the stage is completed, the associated artifact is complete and the associated `LOCK`  file must be removed before creating the `LOCK` file for the artifact of the subsequent stage. Two `LOCK` files should never exist within `spec/<feature_name>/analyses/CUR/`.
+
+##### State Analysis at Start
+
+At the start of execution of the `speckit.analyze` command, agent must determine whether there is an incomplete ARW round by checking for `spec/<feature_name>/analyses/CUR/` directory.
+
+- If such directory exist, it contains artifacts of an incomplete ARW round. The agent must analyze its contents and decide on which step of the Protocol needs to be executed next. Specifically, the agent should identify which `LOCK` file exist and match its name against the table of the primary artifacts. The associated stage should be considered incomplete and agent should resume it, reading associated incomplete artifact, if available, or starting the stage from scratch otherwise.
+- If such directory does not exist, agent must
+    - commit any uncommitted changes made to files under `spec/<feature_name>/analyses/`
+    - create `spec/<feature_name>/analyses/CUR/` for the new ARW round
+    - proceed to performing the full Protocol.
+
+##### Committing Completed ARW Round
+
+Once current ARW round is complete, agent must
+
+- make sure that `spec/<feature_name>/analyses/CUR/` contains no remaining `*.LOCK` files 
+- determine the next available numbered directory following the last `spec/<feature_name>/analyses/###/` 
+- rename `spec/<feature_name>/analyses/CUR/` to the next available numbered directory
+- commit changes.
 
 ##### Recovery Provisions
 
