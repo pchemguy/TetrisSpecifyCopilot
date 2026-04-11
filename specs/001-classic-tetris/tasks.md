@@ -57,16 +57,16 @@ description: "Task list for Classic Browser Tetris implementation"
 
 > **NOTE**: Write these tests first and confirm they fail before implementation.
 
-- [ ] T012 [P] [US1] Add engine rule tests for movement, collision, rotation, lock, and line clearing in `tests/unit/engine/game-engine.spec.ts`
-- [ ] T013 [P] [US1] Add scoring and level-progression tests in `tests/unit/engine/scoring-leveling.spec.ts`
+- [ ] T012 [P] [US1] Add engine rule tests for movement, collision, rotation, 500-millisecond lock delay, lock-reset limits, and line clearing in `tests/unit/engine/game-engine.spec.ts`
+- [ ] T013 [P] [US1] Add scoring-table and gravity-progression tests in `tests/unit/engine/scoring-leveling.spec.ts`
 - [ ] T014 [P] [US1] Add app integration coverage for keyboard-driven core gameplay in `tests/integration/app/core-gameplay.spec.tsx`
 - [ ] T015 [P] [US1] Add browser end-to-end coverage for a playable run to game over in `tests/e2e/core-gameplay.spec.ts`
 
 ### Implementation for User Story 1
 
-- [ ] T016 [US1] Implement spawn, gravity, locking, and top-out handling in `src/engine/core/gameState.ts` and `src/engine/core/gameEngine.ts`
+- [ ] T016 [US1] Implement spawn, gravity, 500-millisecond lock delay, lock-reset limits, and top-out handling in `src/engine/core/gameState.ts` and `src/engine/core/gameEngine.ts`
 - [ ] T017 [US1] Implement left/right movement, rotation, soft drop, and hard drop commands in `src/engine/commands/gameCommands.ts` and `src/engine/rules/collision.ts`
-- [ ] T018 [US1] Implement line clearing, score calculation, level thresholds, and speed curve updates in `src/engine/rules/scoring.ts` and `src/engine/rules/leveling.ts`
+- [ ] T018 [US1] Implement the explicit line-clear scoring table, drop bonuses, level thresholds, and 15%-per-level gravity curve in `src/engine/rules/scoring.ts` and `src/engine/rules/leveling.ts`
 - [ ] T019 [US1] Wire the deterministic engine loop into the React shell in `src/app/state/useGameSession.ts`, `src/app/App.tsx`, and `src/canvas/GameCanvas.tsx`
 - [ ] T020 [US1] Render the board, active piece, locked stack, and game-over overlay in `src/canvas/renderer/boardRenderer.ts`, `src/canvas/renderer/pieceRenderer.ts`, and `src/components/overlays/GameOverOverlay.tsx`
 - [ ] T021 [US1] Implement desktop keyboard input capture and focus-safe gameplay controls in `src/components/controls/KeyboardInputHandler.tsx` and `src/app/App.tsx`
@@ -112,16 +112,16 @@ description: "Task list for Classic Browser Tetris implementation"
 - [ ] T032 [P] [US3] Add unit tests for pause/resume, restart, and best-score state behavior in `tests/unit/engine/session-controls.spec.ts` and `tests/unit/persistence/best-score-store.spec.ts`
 - [ ] T033 [P] [US3] Add contract tests for localStorage keys and SQLite schema/read-write behavior in `tests/contract/local-storage.contract.spec.ts` and `tests/contract/sqlite.contract.spec.ts`
 - [ ] T034 [P] [US3] Add integration coverage for persistence hydration and seeded demo state in `tests/integration/app/persistence-hydration.spec.tsx`
-- [ ] T035 [P] [US3] Add browser end-to-end coverage for pause/resume, restart, reload, and persisted best score in `tests/e2e/session-persistence.spec.ts`
+- [ ] T035 [P] [US3] Add browser end-to-end coverage for pause/resume, restart, reload, persisted best score, and locally stored session/score/replay records in `tests/e2e/session-persistence.spec.ts`
 
 ### Implementation for User Story 3
 
 - [ ] T036 [US3] Implement pause, resume, restart, and overlay transitions in `src/engine/commands/sessionCommands.ts`, `src/components/overlays/PauseOverlay.tsx`, and `src/app/state/useGameSession.ts`
 - [ ] T037 [US3] Implement best-score storage plus settings and UI-state persistence in `src/persistence/local-storage/bestScoreStore.ts`, `src/persistence/local-storage/settingsStore.ts`, and `src/persistence/local-storage/uiStateStore.ts`
 - [ ] T038 [US3] Implement SQLite repositories for sessions, scores, and replays in `src/persistence/sqlite/sessionRepository.ts`, `src/persistence/sqlite/scoreRepository.ts`, and `src/persistence/sqlite/replayRepository.ts`
-- [ ] T039 [US3] Implement deterministic replay recording and demo-data seeding orchestration in `src/engine/replay/replayRecorder.ts`, `src/persistence/seed/seedDatabase.ts`, and `src/app/providers/PersistenceProvider.tsx`
-- [ ] T040 [US3] Surface best-score history, persistence status, and non-blocking storage warnings in `src/components/hud/BestScorePanel.tsx`, `src/components/overlays/PersistenceWarning.tsx`, and `src/app/App.tsx`
-- [ ] T041 [US3] Verify long-session pause/reload behavior and local-only persistence performance in `src/engine/core/performance.ts` and `tests/e2e/session-persistence.spec.ts`
+- [ ] T039 [US3] Implement deterministic replay recording and demo-data seeding orchestration for local-only storage without a replay browser UI in `src/engine/replay/replayRecorder.ts`, `src/persistence/seed/seedDatabase.ts`, and `src/app/providers/PersistenceProvider.tsx`
+- [ ] T040 [US3] Surface best-score display, persistence status, and non-blocking storage warnings in `src/components/hud/BestScorePanel.tsx`, `src/components/overlays/PersistenceWarning.tsx`, and `src/app/App.tsx`
+- [ ] T041 [US3] Verify long-session pause/reload behavior, offline-capable local persistence, and local-only performance in `src/engine/core/performance.ts` and `tests/e2e/session-persistence.spec.ts`
 
 **Checkpoint**: All user stories are independently functional, persistent, and replayable on the client.
 
@@ -134,7 +134,7 @@ description: "Task list for Classic Browser Tetris implementation"
 - [ ] T042 [P] Update developer and reviewer guidance in `specs/001-classic-tetris/quickstart.md` and `.github/copilot-instructions.md`
 - [ ] T043 Refactor shared gameplay and persistence seams for maintainability in `src/engine/core/gameEngine.ts`, `src/app/state/useGameSession.ts`, and `src/persistence/sqlite/database.ts`
 - [ ] T044 [P] Add regression coverage for replay determinism and performance-budget enforcement in `tests/unit/engine/replay.spec.ts` and `tests/integration/app/performance-budget.spec.tsx`
-- [ ] T045 [P] Run final desktop validation for quickstart, UX consistency, and seeded data behavior in `tests/e2e/core-gameplay.spec.ts`, `tests/e2e/hud-and-strategy.spec.ts`, and `tests/e2e/session-persistence.spec.ts`
+- [ ] T045 [P] Run final desktop validation for quickstart, UX consistency, seeded data behavior, and no-network runtime operation in `tests/e2e/core-gameplay.spec.ts`, `tests/e2e/hud-and-strategy.spec.ts`, and `tests/e2e/session-persistence.spec.ts`
 
 ---
 

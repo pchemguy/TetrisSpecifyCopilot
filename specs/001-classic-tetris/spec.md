@@ -68,39 +68,41 @@ As a returning player, I want to pause, resume, restart, and keep my best score 
 
 - **FR-001**: The game MUST provide a single-player Tetris playfield with a standard 10-column by 20-row visible board.
 - **FR-002**: The game MUST include all seven standard tetromino shapes: I, O, T, S, Z, J, and L.
-- **FR-003**: The game MUST generate active tetrominoes using a randomized sequence that distributes all seven tetrominoes regularly and avoids indefinite starvation of any single shape.
+- **FR-003**: The game MUST generate active tetrominoes using a 7-bag randomizer that shuffles all seven tetrominoes once per bag before replenishing the queue.
 - **FR-004**: The player MUST be able to move the active tetromino left and right while the movement remains valid.
 - **FR-005**: The player MUST be able to rotate the active tetromino during play, and invalid rotations MUST be rejected without corrupting the game state.
 - **FR-006**: The player MUST be able to perform soft drop and hard drop actions on the active tetromino.
-- **FR-007**: The game MUST lock an active tetromino when it reaches a valid resting position according to the game's timing rules.
+- **FR-007**: The game MUST apply a 500-millisecond lock delay when the active tetromino first reaches a valid resting position, MUST reset that delay only after a successful move or rotation, MUST allow no more than 15 such resets for a single tetromino, MUST freeze the remaining delay while paused, and MUST lock immediately on hard drop.
 - **FR-008**: The game MUST clear every fully occupied horizontal line after piece lock and shift remaining blocks downward.
-- **FR-009**: The game MUST award score for gameplay events, including higher rewards for clearing more lines in a single placement than for clearing fewer lines.
+- **FR-009**: The game MUST award `100`, `300`, `500`, and `800` points multiplied by the current level for clearing `1`, `2`, `3`, and `4` lines respectively in a single placement, plus `1` point per row soft-dropped and `2` points per row hard-dropped.
 - **FR-010**: The game MUST track cleared lines and increase the level after each 10 cleared lines.
-- **FR-011**: The game MUST increase the fall speed as the level increases.
+- **FR-011**: The game MUST set the automatic fall interval to `1000` milliseconds per row at level `1` and reduce that interval by `15%` per level thereafter, rounded to the nearest millisecond, to a minimum of `50` milliseconds per row.
 - **FR-012**: The UI MUST display the current board state, active tetromino, ghost piece, score, level, cleared-line count, next piece, and held piece throughout gameplay.
-- **FR-013**: The game MUST show a next-piece preview for the immediate upcoming tetromino.
+- **FR-013**: The game MUST show exactly one next-piece preview representing the immediate upcoming tetromino.
 - **FR-014**: The game MUST provide a single hold slot that allows the player to store or swap the active tetromino once per active-piece turn.
 - **FR-015**: The game MUST provide desktop keyboard controls for left move, right move, rotate, soft drop, hard drop, hold, pause/resume, and restart.
 - **FR-016**: The game MUST clearly communicate paused, active, and game-over states.
 - **FR-017**: The game MUST stop active gameplay updates while paused and resume them without losing the in-progress board state.
 - **FR-018**: The game MUST allow the player to restart from either an active, paused, or game-over state.
 - **FR-019**: The game MUST detect game over when a new tetromino cannot enter the playfield and MUST prevent further gameplay actions other than restart.
-- **FR-020**: The game MUST retain the best score across sessions for the same player environment and display it whenever the game is available to play.
+- **FR-020**: The game MUST retain the best score across sessions for the same player environment, display it whenever the game is available to play, and persist structured score, session, and replay records locally in browser storage for that same environment.
 - **FR-021**: The game MUST provide an immediately playable default configuration, including initial speed, scoring rules, and control mapping, without requiring manual setup.
-- **FR-022**: The game MUST include sample seed data or a sample configuration that allows reviewers to verify core gameplay, scoring, and persisted best-score behavior immediately.
+- **FR-022**: The game MUST include sample seed data or a sample configuration that allows reviewers to verify core gameplay, scoring, persisted best-score behavior, and locally stored session, score, and replay records immediately.
 
 ### Non-Functional Requirements
 
 - **NFR-001**: The feature MUST meet the repository quality bar with no unresolved linting, formatting, typing, or static-analysis violations in the delivered game code.
 - **NFR-002**: The feature MUST include automated tests that cover core game-state rules, scoring, line clearing, level progression, hold behavior, pause/resume behavior, and best-score persistence, plus at least one end-to-end validation of the primary desktop play flow.
 - **NFR-003**: The feature MUST present a consistent desktop-first experience with clear labels, readable state panels, visible focus handling where relevant, and understandable feedback for pause, restart, and game-over conditions.
-- **NFR-004**: On supported desktop browsers, 95% of player input actions during standard play sessions MUST produce visible game-state updates within 100 milliseconds, and the game MUST sustain smooth continuous play for at least 15 minutes without requiring a page refresh.
+- **NFR-004**: On the latest stable Chrome, Edge, Firefox, and Safari desktop browsers that support WebAssembly and IndexedDB, 95% of player input actions during standard play sessions MUST produce visible game-state updates within 100 milliseconds, and the game MUST sustain smooth continuous play for at least 15 minutes without requiring a page refresh.
+- **NFR-005**: The application MUST run entirely on the client after initial asset load, with no backend or runtime network service dependency for gameplay, persistence, or replay recording.
 
 ### Key Entities *(include if feature involves data)*
 
 - **Game Session**: Represents one active or completed run, including board state, active tetromino, queued tetromino, held tetromino, score, level, cleared lines, and session status.
 - **Tetromino**: Represents one of the seven playable piece types, including its shape identity, orientation, occupied cells, and current board position.
 - **Score Record**: Represents the best recorded score available to the current player environment and the conditions under which it was achieved.
+- **Replay Record**: Represents the locally stored command history and metadata needed to deterministically reconstruct a completed session.
 - **Control Mapping**: Represents the default keyboard actions associated with movement, rotation, drop, hold, pause/resume, and restart.
 
 ## Success Criteria *(mandatory)*
@@ -108,9 +110,10 @@ As a returning player, I want to pause, resume, restart, and keep my best score 
 ### Measurable Outcomes
 
 - **SC-001**: 100% of validation playthroughs can start a new game and place at least 20 tetrominoes using only desktop keyboard controls without blocking input confusion.
-- **SC-002**: In 95% of validation sessions on supported desktop browsers, player inputs produce visible board updates within 100 milliseconds during active play.
+- **SC-002**: In 95% of validation sessions on the latest stable Chrome, Edge, Firefox, and Safari desktop browsers that support WebAssembly and IndexedDB, player inputs produce visible board updates within 100 milliseconds during active play.
 - **SC-003**: In 100% of scripted validation runs, line clears, score updates, level progression, next-piece preview, hold behavior, pause/resume, and game-over handling match the specified game rules.
-- **SC-004**: In 100% of restart and revisit validation sessions on the same device profile, the best score remains available after reload and restart while current-run score resets appropriately.
+- **SC-004**: In 100% of restart and revisit validation sessions on the same device profile, the best score and locally stored session, score, and replay records remain available after reload and restart while current-run score resets appropriately.
+- **SC-005**: After the client assets and browser storage have initialized once, the game remains fully playable with browser network access disabled, including local persistence and replay recording.
 
 ## Assumptions
 
@@ -118,4 +121,5 @@ As a returning player, I want to pause, resume, restart, and keep my best score 
 - Default gameplay uses one visible next-piece preview and one hold slot.
 - The game follows familiar modern Tetris interaction expectations, including ghost piece visibility and one hold use per active tetromino turn.
 - Level progression uses a default threshold of 10 cleared lines per level.
+- Stored replay records support local validation and deterministic reconstruction, but a dedicated replay browser UI is out of scope for this release.
 - The sample configuration may include preselected scoring, speed, and control defaults so reviewers can exercise the game immediately without additional setup.
