@@ -40,7 +40,7 @@ description: "Task list for Classic Browser Tetris implementation"
 - [x] T007 [P] Implement the deterministic tick loop, immutable game state, and command queue in `src/engine/core/gameState.ts`, `src/engine/core/gameEngine.ts`, and `src/engine/commands/commandQueue.ts`
 - [x] T008 [P] Implement browser SQLite bootstrap and schema management in `src/persistence/sqlite/database.ts` and `src/persistence/sqlite/schema.ts`
 - [x] T009 [P] Implement localStorage adapters for settings and transient UI state in `src/persistence/local-storage/settingsStore.ts` and `src/persistence/local-storage/uiStateStore.ts`
-- [ ] T010 Implement seeded demo-data hydration and persistence providers in `src/persistence/seed/demoData.ts`, `src/persistence/seed/seedDatabase.ts`, and `src/app/providers/PersistenceProvider.tsx`
+- [x] T010 Implement seeded demo-data hydration and persistence providers in `src/persistence/seed/demoData.ts`, `src/persistence/seed/seedDatabase.ts`, and `src/app/providers/PersistenceProvider.tsx`
 - [ ] T011 Build the shared canvas renderer baseline and HUD shell layout in `src/canvas/GameCanvas.tsx`, `src/canvas/renderer/boardRenderer.ts`, and `src/components/hud/HudLayout.tsx`
 
 **Checkpoint**: Foundation complete. User stories can now be implemented and validated independently.
