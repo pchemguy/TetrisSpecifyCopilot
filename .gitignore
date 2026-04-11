@@ -1,2 +1,14 @@
 .obsidian
 .trash
+node_modules/
+dist/
+build/
+coverage/
+playwright-report/
+test-results/
+*.log
+.env*
+.DS_Store
+Thumbs.db
+*.tmp
+*.swp

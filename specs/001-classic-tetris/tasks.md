@@ -22,7 +22,7 @@ description: "Task list for Classic Browser Tetris implementation"
 
 **Purpose**: Initialize the client-only TypeScript/React application and project tooling.
 
-- [ ] T001 Create the client application scaffold and scripts in `package.json`, `tsconfig.json`, `vite.config.ts`, `vitest.config.ts`, `playwright.config.ts`, and `index.html`
+- [x] T001 Create the client application scaffold and scripts in `package.json`, `tsconfig.json`, `vite.config.ts`, `vitest.config.ts`, `playwright.config.ts`, and `index.html`
 - [ ] T002 Create the application entrypoint and base shell in `src/main.tsx`, `src/app/App.tsx`, and `src/styles/app.css`
 - [ ] T003 [P] Configure linting and editor rules in `eslint.config.js`, `.editorconfig`, and `package.json`
 - [ ] T004 [P] Configure shared test setup files in `tests/setup/vitest.setup.ts`, `tests/setup/renderWithProviders.tsx`, and `tests/e2e/fixtures.ts`
