@@ -58,7 +58,7 @@ description: "Task list for Classic Browser Tetris implementation"
 > **NOTE**: Write these tests first and confirm they fail before implementation.
 
 - [x] T012 [P] [US1] Add engine rule tests for movement, collision, rotation, 500-millisecond lock delay, lock-reset limits, same-tick hard-drop/pause/hold precedence, and line clearing in `tests/unit/engine/game-engine.spec.ts`
-- [ ] T013 [P] [US1] Add scoring-table and gravity-progression tests in `tests/unit/engine/scoring-leveling.spec.ts`
+- [x] T013 [P] [US1] Add scoring-table and gravity-progression tests in `tests/unit/engine/scoring-leveling.spec.ts`
 - [ ] T014 [P] [US1] Add app integration coverage for keyboard-driven core gameplay in `tests/integration/app/core-gameplay.spec.tsx`
 - [ ] T015 [P] [US1] Add browser end-to-end coverage for a playable run to game over in `tests/e2e/core-gameplay.spec.ts`
 
