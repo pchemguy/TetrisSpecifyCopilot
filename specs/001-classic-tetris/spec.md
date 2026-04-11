@@ -66,28 +66,31 @@ As a returning player, I want to pause, resume, restart, and keep my best score 
 
 ### Functional Requirements
 
-- **FR-001**: The game MUST provide a single-player Tetris playfield with a standard 10-column by 20-row visible board.
+- **FR-001**: The game MUST provide a single-player Tetris playfield with a standard 10-column by 20-row visible board plus a 2-row hidden spawn buffer above the visible board for piece entry and top-out detection.
 - **FR-002**: The game MUST include all seven standard tetromino shapes: I, O, T, S, Z, J, and L.
 - **FR-003**: The game MUST generate active tetrominoes using a 7-bag randomizer that shuffles all seven tetrominoes once per bag before replenishing the queue.
 - **FR-004**: The player MUST be able to move the active tetromino left and right while the movement remains valid.
-- **FR-005**: The player MUST be able to rotate the active tetromino during play, and invalid rotations MUST be rejected without corrupting the game state.
+- **FR-005**: The player MUST be able to rotate the active tetromino during play using Super Rotation System kick behavior for the applicable tetromino, and invalid rotations, including rejected wall or floor kicks, MUST be rejected without corrupting the game state.
 - **FR-006**: The player MUST be able to perform soft drop and hard drop actions on the active tetromino.
 - **FR-007**: The game MUST apply a 500-millisecond lock delay when the active tetromino first reaches a valid resting position, MUST reset that delay only after a successful move or rotation, MUST allow no more than 15 such resets for a single tetromino, MUST freeze the remaining delay while paused, MUST lock immediately on hard drop, and MUST resolve simultaneous lock-time commands in this order: hard drop first, then pause, then hold, then lock commit.
 - **FR-008**: The game MUST clear every fully occupied horizontal line after piece lock and shift remaining blocks downward.
 - **FR-009**: The game MUST award `100`, `300`, `500`, and `800` points multiplied by the current level for clearing `1`, `2`, `3`, and `4` lines respectively in a single placement, plus `1` point per row soft-dropped and `2` points per row hard-dropped.
 - **FR-010**: The game MUST track cleared lines and increase the level after each 10 cleared lines.
 - **FR-011**: The game MUST set the automatic fall interval to `1000` milliseconds per row at level `1` and reduce that interval by `15%` per level thereafter, rounded to the nearest millisecond, to a minimum of `50` milliseconds per row.
-- **FR-012**: The UI MUST display the current board state, active tetromino, ghost piece, score, level, cleared-line count, next piece, and held piece throughout gameplay.
+- **FR-012**: The UI MUST display the current board state, active tetromino, ghost piece, score, level, cleared-line count, next piece, and held piece throughout gameplay, MUST update the ghost piece after each valid movement, rotation, or drop state change during active play, and MUST hide the ghost piece while paused or while the game-over overlay is shown.
 - **FR-013**: The game MUST show exactly one next-piece preview representing the immediate upcoming tetromino.
-- **FR-014**: The game MUST provide a single hold slot that allows the player to store or swap the active tetromino once per active-piece turn, but MUST reject the hold request if lock commit has already occurred for the active tetromino.
-- **FR-015**: The game MUST provide desktop keyboard controls for left move, right move, rotate, soft drop, hard drop, hold, pause/resume, and restart.
+- **FR-014**: The game MUST provide a single hold slot that allows the player to store or swap the active tetromino once per active-piece turn; if the hold slot is empty, the first valid hold MUST store the active tetromino and immediately spawn the next queued tetromino, hold availability MUST reset only after the replacement active tetromino locks, and the game MUST reject the hold request if lock commit has already occurred for the active tetromino.
+- **FR-015**: The game MUST provide desktop keyboard controls using these default bindings: `ArrowLeft` move left, `ArrowRight` move right, `ArrowDown` soft drop, `ArrowUp` or `X` rotate clockwise, `Z` rotate counterclockwise, `Space` hard drop, `C` or `Left Shift` hold, `P` or `Escape` pause/resume, and `R` restart; control remapping is out of scope for this release.
 - **FR-016**: The game MUST clearly communicate paused, active, and game-over states.
 - **FR-017**: The game MUST stop active gameplay updates while paused and resume them without losing the in-progress board state, and a pause request received before lock commit MUST freeze any remaining lock delay until the game resumes.
 - **FR-018**: The game MUST allow the player to restart from either an active, paused, or game-over state.
-- **FR-019**: The game MUST detect game over when a new tetromino cannot enter the playfield and MUST prevent further gameplay actions other than restart.
-- **FR-020**: The game MUST retain the best score across sessions for the same player environment, display it whenever the game is available to play, and persist structured score, session, and replay records locally in browser storage for that same environment.
+- **FR-019**: The game MUST detect game over when a new tetromino cannot enter the playfield, MUST keep the final score and restart option visible in that state, MUST allow only pause/resume and restart inputs while paused, and MUST prevent further gameplay actions other than restart once game over has occurred.
+- **FR-020**: The game MUST retain the best score across sessions for the same player environment, display it whenever the game is available to play, persist the best score plus settings and transient UI state in localStorage for that same environment, persist structured score, session, and replay records in browser-local SQLite WASM storage backed by IndexedDB for that same environment, commit a new best score only when a locally played run reaches game over with a higher score than the current best, and MUST NOT allow seeded demo or sample records to overwrite or count as the player's best score.
 - **FR-021**: The game MUST provide an immediately playable default configuration, including initial speed, scoring rules, and control mapping, without requiring manual setup.
 - **FR-022**: The game MUST include sample seed data or a sample configuration that allows reviewers to verify core gameplay, scoring, persisted best-score behavior, and locally stored session, score, and replay records immediately.
+- **FR-023**: If localStorage settings or UI-state documents are missing or malformed, the game MUST recover with shipped defaults; if IndexedDB or SQLite initialization fails, the game MUST still allow a fresh local play session and surface a non-blocking persistence warning; and if replay persistence fails after a completed session, the final outcome MUST remain visible and the active gameplay state MUST not be corrupted.
+- **FR-024**: On first launch or reload, the game MUST become playable as soon as client assets initialize even if seeded data or persisted history are still hydrating, and any hydration or persistence status MUST be communicated non-blockingly.
+- **FR-025**: When browser storage quota or write limits prevent retaining unlimited history, the game MUST preserve the current best score, prefer pruning the oldest non-best session, score, and replay records before blocking new play, and surface a non-blocking storage warning if retained history has been reduced.
 
 ### Non-Functional Requirements
 

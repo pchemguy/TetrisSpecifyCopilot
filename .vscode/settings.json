@@ -8,7 +8,15 @@
     },
     "chat.tools.terminal.autoApprove": {
         ".specify/scripts/bash/": true,
-        ".specify/scripts/powershell/": false
+        ".specify/scripts/powershell/": false,
+        "npm install": true,
+        "npm exec": true,
+        "npm --version": true,
+        "set": true,
+        "git add": true,
+        "git commit": true,
+        "git rev-parse": true,
+        "npx eslint": true
     },
     "terminal.explorerKind": "integrated"
 }
