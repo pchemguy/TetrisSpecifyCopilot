@@ -155,6 +155,9 @@ Create GitHub issues from tasks. Do not merge any tasks. Keep issues focused, sm
 
 ### `speckit.implement`
 
+Execute. Make sure to link and update GitHub Issues. Commit after implementation of each task/ GitHub issue. Close GH issue after successful implementation. Create pull requests.
+
+Implement 001-prepare-spec-branch feature. Make sure to link and update GitHub Issues. Commit after implementation of each task/ GitHub issue. Close GH issue after successful implementation. Create pull requests.
 
 Execute (**Pass 1**)
 Execute (**Pass 2**)
