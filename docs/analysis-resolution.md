@@ -29,7 +29,7 @@ This command is responsible for:
 - producing a resolution report
 - finalizing the ARW round and committing changes
 
-## Scope
+## Analysis Source Priority
 
 This command is the **resolution phase** that follows prior analysis. It must use one of the following as its issue source of truth, in this priority order:
 
@@ -100,10 +100,11 @@ There are three possible states:
 
 - If `CUR_DIR` does not exist AND analysis findings are available in conversation context (from a prior `/speckit.analyze` run):
     - Create `ANALYSES_DIR` if missing
-    - Commit any uncommitted changes under `ANALYSES_DIR` before starting
+    - If `ANALYSES_DIR` contains uncommitted changes, commit those changes before starting
     - Create `CUR_DIR`
     - Initialize a new ARW round in **bootstrap mode**
-    - Proceed directly to Stage 1 (`analysis-report.md`) using the existing analysis findings as the source of truth
+    - Follow `## Required Inputs for Resolution` to create `analysis-report.md` using the existing analysis findings.
+    - Proceed to Stage 1
     - Do NOT re-run analysis or reinterpret findings beyond normalization into the issue register
 
 #### C. No ARW Round and No Analysis Available (Invalid State)
@@ -120,12 +121,12 @@ At most one primary artifact lock may exist at any time.
 
 Use the following stage mapping:
 
-| Stage | Artifact                        | Lock file                          |
-|------:|---------------------------------|------------------------------------|
-| 1     | `analysis-report.md`            | `analysis-report.md.LOCK`          |
-| 2     | `analysis-clarification-form.md`           | `analysis-clarification-form.md.LOCK`         |
-| 3     | `analysis-resolution-plan.md`   | `analysis-resolution-plan.md.LOCK` |
-| 4     | `analysis-resolution-report.md` | `analysis-resolution-report.md.LOCK` |
+| Stage | Artifact                         | Lock file                          |
+| ----: | -------------------------------- | ---------------------------------- |
+|     1 | `analysis-report.md`             | `analysis-report.LOCK`             |
+|     2 | `analysis-clarification-form.md` | `analysis-clarification-form.LOCK` |
+|     3 | `analysis-resolution-plan.md`    | `analysis-resolution-plan.LOCK`    |
+|     4 | `analysis-resolution-report.md`  | `analysis-resolution-report.LOCK`  |
 
 Resume rules:
 
@@ -230,14 +231,30 @@ Completion criterion:
 
 ### Stage 2 — Clarification Assessment and `analysis-clarification-form.md` if Needed
 
-Determine whether user clarification is required for any issue.
+Determine whether user clarification is required for any issue. Clarification is required when one or more issues cannot be optimally resolved from constitution, feature artifacts, repository context, or previously recorded decisions.
 
-Clarification is required when one or more issues cannot be optimally resolved from constitution, feature artifacts, repository context, or previously recorded decisions.
+#### Clarification is not Required
+
+Clarification MUST NOT be triggered for:
+
+- LOW severity issues
+- purely editorial or wording issues
+- issues resolvable by constitution or existing artifacts
 
 If no clarification is required:
 
 - do not create `analysis-clarification-form.md`
 - proceed directly to Stage 3
+
+#### Clarification is Required
+
+Clarification SHOULD be triggered for:
+
+- conflicting requirements
+- architectural decisions
+- ambiguous non-functional requirements
+- missing acceptance criteria affecting implementation
+
 
 If clarification is required:
 
@@ -251,7 +268,7 @@ If clarification is required:
     - otherwise request concise open input
 - record user answers directly in the form next to the corresponding question
 
-Completion criterion:
+#### Completion criterion
 
 - every issue requiring clarification has a recorded answer or an explicit fallback decision rule
 - no unresolved clarification dependency remains for Stage 3
@@ -336,6 +353,10 @@ Completion criterion:
 
 Before finalization, verify at minimum:
 
+- `CUR_DIR` must contain at least:  
+    - `analysis-report.md`  
+    - `analysis-resolution-plan.md`  
+    - `analysis-resolution-report.md`  
 - all issue IDs from `analysis-report.md` appear in `analysis-resolution-plan.md`
 - all issue IDs from `analysis-report.md` appear in `analysis-resolution-report.md`
 - all required lock files have been removed
@@ -417,6 +438,10 @@ Resolve issues completely, but do not perform unrelated improvements.
 ## Context
 
 $ARGUMENTS
+
+
+---
+---
 
 
 ## A few optional improvements you may want next
