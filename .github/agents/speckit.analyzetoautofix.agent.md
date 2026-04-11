@@ -1,6 +1,5 @@
 ---
 description: Resolve issues previously identified by `analyze` using a state-aware, resumable Analysis and Resolution Workflow (ARW).
-url: https://chatgpt.com/g/g-p-69ca8410ab7c819198782233666b1069-spec-kit/c/69da3111-3e48-838f-8d54-2923cc1cecb7
 ---
 
 <!--
@@ -439,4 +438,3 @@ Resolve issues completely, but do not perform unrelated improvements.
 ## Context
 
 $ARGUMENTS
-
