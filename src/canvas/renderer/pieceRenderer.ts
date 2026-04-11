@@ -63,3 +63,40 @@ export function drawActivePiece(
     });
   });
 }
+
+export function drawGhostPiece(
+  context: CanvasRenderingContext2D,
+  ghostPiece: ActivePiece,
+  cellSize: number,
+  hiddenRows: number,
+  visibleRows: number,
+  columns: number,
+): void {
+  const definition = getTetrominoDefinition(ghostPiece.tetrominoId);
+  const matrix = definition.rotationStates[ghostPiece.rotationIndex];
+
+  context.save();
+  context.globalAlpha = 0.3;
+
+  matrix.forEach((row, rowOffset) => {
+    row.forEach((cell, columnOffset) => {
+      if (cell !== 1) {
+        return;
+      }
+
+      const boardColumn = ghostPiece.x + columnOffset;
+      const boardRow = ghostPiece.y + rowOffset - hiddenRows;
+
+      if (boardColumn < 0 || boardColumn >= columns || boardRow < 0 || boardRow >= visibleRows) {
+        return;
+      }
+
+      drawTileCell(context, boardColumn, boardRow, cellSize, {
+        tetrominoId: definition.id,
+        colorToken: definition.colorToken,
+      });
+    });
+  });
+
+  context.restore();
+}

@@ -2,6 +2,7 @@ import GameCanvas from '../canvas/GameCanvas';
 import KeyboardInputHandler from '../components/controls/KeyboardInputHandler';
 import HudLayout from '../components/hud/HudLayout';
 import GameOverOverlay from '../components/overlays/GameOverOverlay';
+import { selectGhostPiece, selectHeldTetromino, selectNextTetromino } from '../engine/core/selectors';
 import { useGameSession } from './state/useGameSession';
 import { usePersistence } from './providers/PersistenceProvider';
 
@@ -9,6 +10,9 @@ export default function App() {
   const { bestScore, health, isHydrated, settings, uiState, warnings } = usePersistence();
   const { state, dispatchCommand, lastInputLatencyMs } = useGameSession(bestScore);
   const liveBestScore = Math.max(bestScore, state.metrics.bestScore);
+  const ghostPiece = settings.show_ghost_piece && state.status === 'active'
+    ? selectGhostPiece(state)
+    : null;
   const readinessItems = [
     `Persistence ${health}`,
     `Ghost ${settings.show_ghost_piece ? 'on' : 'off'}`,
@@ -41,8 +45,11 @@ export default function App() {
         level={state.metrics.level}
         linesCleared={state.metrics.linesCleared}
         status={isHydrated ? health : 'bootstrapping'}
+        nextTetromino={selectNextTetromino(state)}
+        heldTetromino={selectHeldTetromino(state)}
+        canHold={state.hold.canHold}
         aside={
-          <div className="hud-status-card">
+          <div className="hud-status-card hud-panel">
             <p className="section-label">Persistence</p>
             <strong>{liveBestScore} best score</strong>
             <p>
@@ -62,6 +69,7 @@ export default function App() {
             <GameCanvas
               board={state.board}
               activePiece={state.activePiece}
+              ghostPiece={ghostPiece}
               inputLatencyMs={lastInputLatencyMs}
             />
             {state.status === 'paused' ? (
@@ -76,8 +84,8 @@ export default function App() {
             ) : null}
           </div>
           <p className="card-copy">
-            Controls: Left/Right move, Up or X rotate, Down soft drop, Space hard drop, P
-            pause, and R restart.
+            Plan the next queue, use hold once per turn, and watch the ghost projection to
+            read the landing column before you commit.
           </p>
         </article>
       </HudLayout>

@@ -1,4 +1,9 @@
 import type { PropsWithChildren, ReactNode } from 'react';
+import type { TetrominoId } from '../../types/game';
+import ControlLegend from '../controls/ControlLegend';
+import HoldPanel from './HoldPanel';
+import PreviewPanel from './PreviewPanel';
+import ScorePanel from './ScorePanel';
 
 export interface HudLayoutProps extends PropsWithChildren {
   score: number;
@@ -6,17 +11,10 @@ export interface HudLayoutProps extends PropsWithChildren {
   level: number;
   linesCleared: number;
   status: string;
+  nextTetromino: TetrominoId | null;
+  heldTetromino: TetrominoId | null;
+  canHold: boolean;
   aside?: ReactNode;
-}
-
-function StatCard({ label, value }: { label: string; value: string | number }) {
-  return (
-    <div className="hud-stat-card">
-      <span className="sr-only">{label} {value}</span>
-      <dt>{label}</dt>
-      <dd>{value}</dd>
-    </div>
-  );
 }
 
 export function HudLayout({
@@ -25,6 +23,9 @@ export function HudLayout({
   level,
   linesCleared,
   status,
+  nextTetromino,
+  heldTetromino,
+  canHold,
   children,
   aside,
 }: HudLayoutProps) {
@@ -32,18 +33,25 @@ export function HudLayout({
     <section className="hud-layout">
       <div className="hud-primary">{children}</div>
       <aside className="hud-aside">
-        <dl className="hud-stat-grid">
-          <StatCard label="Score" value={score} />
-          <StatCard label="Best" value={bestScore} />
-          <StatCard label="Level" value={level} />
-          <StatCard label="Lines" value={linesCleared} />
-        </dl>
+        <ScorePanel
+          score={score}
+          bestScore={bestScore}
+          level={level}
+          linesCleared={linesCleared}
+        />
 
-        <div className="hud-status-card">
+        <div className="hud-secondary-grid">
+          <PreviewPanel tetrominoId={nextTetromino} />
+          <HoldPanel tetrominoId={heldTetromino} canHold={canHold} />
+        </div>
+
+        <div className="hud-status-card hud-panel">
           <p className="section-label">Session status</p>
           <strong>{status}</strong>
           <p>Canvas rendering and persistence hydration are now wired into the shared shell.</p>
         </div>
+
+        <ControlLegend />
 
         {aside}
       </aside>

@@ -1,6 +1,7 @@
 import type { EngineCommand } from '../../types/game';
 import type { GameState } from '../../types/game';
 import { canPlacePiece, getHardDropDistance, isPieceResting, translatePiece } from '../rules/collision';
+import { applyHoldPiece } from '../rules/holdPiece';
 import { getKickOffsets, getKickTableIdForTetromino, getNextRotationIndex, type RotationDirection } from '../rules/rotation';
 
 const COMMAND_PRIORITY: Record<EngineCommand['type'], number> = {
@@ -190,6 +191,8 @@ export function applyGameCommand(state: GameState, command: EngineCommand): Game
       };
     case 'hard_drop':
       return hardDrop(state);
+    case 'hold':
+      return applyHoldPiece(state);
     default:
       return state;
   }

@@ -6,6 +6,7 @@ import { getBoardCanvasSize, renderBoard } from './renderer/boardRenderer';
 export interface GameCanvasProps {
   board: BoardMatrix;
   activePiece: ActivePiece | null;
+  ghostPiece?: ActivePiece | null;
   inputLatencyMs?: number | null;
   title?: string;
 }
@@ -13,6 +14,7 @@ export interface GameCanvasProps {
 export function GameCanvas({
   board,
   activePiece,
+  ghostPiece = null,
   inputLatencyMs = null,
   title = 'Classic Browser Tetris board',
 }: GameCanvasProps) {
@@ -28,8 +30,8 @@ export function GameCanvas({
       return;
     }
 
-    renderBoard(context, { board, activePiece, showGrid: true });
-  }, [activePiece, board]);
+    renderBoard(context, { board, activePiece, ghostPiece, showGrid: true });
+  }, [activePiece, board, ghostPiece]);
 
   return (
     <div className="game-canvas-shell">

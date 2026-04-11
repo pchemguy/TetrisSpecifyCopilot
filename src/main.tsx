@@ -3,6 +3,8 @@ import { createRoot } from 'react-dom/client';
 import App from './app/App';
 import { PersistenceProvider } from './app/providers/PersistenceProvider';
 import './styles/app.css';
+import './styles/layout.css';
+import './styles/game.css';
 
 const rootElement = document.getElementById('root');
 

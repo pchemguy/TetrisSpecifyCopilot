@@ -84,18 +84,18 @@ description: "Task list for Classic Browser Tetris implementation"
 
 ### Tests for User Story 2 ⚠️
 
-- [ ] T023 [P] [US2] Add rule tests for ghost projection, next queue behavior, hold-slot restrictions, and hold rejection after lock commit in `tests/unit/engine/preview-and-hold.spec.ts`
-- [ ] T024 [P] [US2] Add integration tests for HUD synchronization and preview panels in `tests/integration/app/hud-panels.spec.tsx`
-- [ ] T025 [P] [US2] Add browser end-to-end coverage for hold, preview, and speed-up behavior in `tests/e2e/hud-and-strategy.spec.ts`
+- [x] T023 [P] [US2] Add rule tests for ghost projection, next queue behavior, hold-slot restrictions, and hold rejection after lock commit in `tests/unit/engine/preview-and-hold.spec.ts`
+- [x] T024 [P] [US2] Add integration tests for HUD synchronization and preview panels in `tests/integration/app/hud-panels.spec.tsx`
+- [x] T025 [P] [US2] Add browser end-to-end coverage for hold, preview, and speed-up behavior in `tests/e2e/hud-and-strategy.spec.ts`
 
 ### Implementation for User Story 2
 
-- [ ] T026 [US2] Implement ghost-piece projection and next-piece queue selectors in `src/engine/rules/ghostPiece.ts` and `src/engine/core/selectors.ts`
-- [ ] T027 [US2] Implement hold-slot state and once-per-turn hold enforcement in `src/engine/rules/holdPiece.ts` and `src/engine/core/gameEngine.ts`
-- [ ] T028 [US2] Render score, level, lines, next piece, and held piece panels in `src/components/hud/ScorePanel.tsx`, `src/components/hud/PreviewPanel.tsx`, `src/components/hud/HoldPanel.tsx`, and `src/components/hud/HudLayout.tsx`
-- [ ] T029 [US2] Render ghost-piece visuals and gameplay-side styling in `src/canvas/renderer/pieceRenderer.ts` and `src/styles/game.css`
-- [ ] T030 [US2] Add the controls legend and descriptive gameplay labels in `src/components/controls/ControlLegend.tsx` and `src/app/App.tsx`
-- [ ] T031 [US2] Validate desktop layout consistency and HUD readability in `src/styles/layout.css` and `src/components/hud/HudLayout.tsx`
+- [x] T026 [US2] Implement ghost-piece projection and next-piece queue selectors in `src/engine/rules/ghostPiece.ts` and `src/engine/core/selectors.ts`
+- [x] T027 [US2] Implement hold-slot state and once-per-turn hold enforcement in `src/engine/rules/holdPiece.ts` and `src/engine/core/gameEngine.ts`
+- [x] T028 [US2] Render score, level, lines, next piece, and held piece panels in `src/components/hud/ScorePanel.tsx`, `src/components/hud/PreviewPanel.tsx`, `src/components/hud/HoldPanel.tsx`, and `src/components/hud/HudLayout.tsx`
+- [x] T029 [US2] Render ghost-piece visuals and gameplay-side styling in `src/canvas/renderer/pieceRenderer.ts` and `src/styles/game.css`
+- [x] T030 [US2] Add the controls legend and descriptive gameplay labels in `src/components/controls/ControlLegend.tsx` and `src/app/App.tsx`
+- [x] T031 [US2] Validate desktop layout consistency and HUD readability in `src/styles/layout.css` and `src/components/hud/HudLayout.tsx`
 
 **Checkpoint**: User Stories 1 and 2 work together, and the game exposes the full strategic desktop HUD.
 

@@ -3,11 +3,12 @@ import {
   type ActivePiece,
   type BoardMatrix,
 } from '../../types/game';
-import { drawActivePiece, drawTileCell } from './pieceRenderer';
+import { drawActivePiece, drawGhostPiece, drawTileCell } from './pieceRenderer';
 
 export interface BoardRenderModel {
   board: BoardMatrix;
   activePiece: ActivePiece | null;
+  ghostPiece?: ActivePiece | null;
   showGrid?: boolean;
 }
 
@@ -59,6 +60,17 @@ export function renderBoard(context: CanvasRenderingContext2D, model: BoardRende
       drawTileCell(context, columnIndex, rowIndex, CELL_SIZE, cell);
     });
   });
+
+  if (model.ghostPiece) {
+    drawGhostPiece(
+      context,
+      model.ghostPiece,
+      CELL_SIZE,
+      BOARD_DIMENSIONS.hiddenRows,
+      BOARD_DIMENSIONS.visibleRows,
+      BOARD_DIMENSIONS.columns,
+    );
+  }
 
   if (model.activePiece) {
     drawActivePiece(

@@ -1,6 +1,6 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
+import { beforeAll, describe, expect, it, vi } from 'vitest';
 import App from '../../../src/app/App';
 import { renderWithProviders } from '../../setup/renderWithProviders';
 
@@ -45,41 +45,33 @@ beforeAll(() => {
   });
 });
 
-afterEach(() => {
-  vi.clearAllMocks();
-});
-
-describe('App core gameplay integration', () => {
-  it('starts a fresh playable session with zeroed run metrics and the best score visible', () => {
+describe('App HUD synchronization', () => {
+  it('renders next and held piece panels with descriptive labels', () => {
     renderWithProviders(<App />);
 
-    expect(screen.getByLabelText('Classic Browser Tetris board')).toBeInTheDocument();
-    expect(screen.getByText(/Score\s*0/i)).toBeInTheDocument();
-    expect(screen.getByText(/Level\s*1/i)).toBeInTheDocument();
-    expect(screen.getByText(/Lines\s*0/i)).toBeInTheDocument();
-    expect(screen.getByText(/Best\s*1200/i)).toBeInTheDocument();
+    expect(screen.getByText(/Next piece/i)).toBeInTheDocument();
+    expect(screen.getByText(/Held piece/i)).toBeInTheDocument();
+    expect(screen.getByText(/Controls/i)).toBeInTheDocument();
   });
 
-  it('shows a paused state when the player presses the pause key and resumes on the next press', async () => {
+  it('updates the hold panel after a hold input', async () => {
     const user = userEvent.setup();
     renderWithProviders(<App />);
 
-    await user.keyboard('p');
-    expect(screen.getByText(/paused/i)).toBeInTheDocument();
+    await user.keyboard('c');
 
-    await user.keyboard('p');
-    expect(screen.queryByText(/paused/i)).not.toBeInTheDocument();
+    expect(screen.getByText(/Held piece/i)).toBeInTheDocument();
+    expect(screen.getByText(/T stored|T held|Hold: T/i)).toBeInTheDocument();
   });
 
-  it('resets the current run score while preserving the best score when the player restarts', async () => {
+  it('keeps the score, level, and lines panels synchronized during active play', async () => {
     const user = userEvent.setup();
     renderWithProviders(<App />);
 
     await user.keyboard('{Space}');
-    expect(screen.getByText(/Score\s*[1-9]\d*/i)).toBeInTheDocument();
 
-    await user.keyboard('r');
-    expect(screen.getByText(/Score\s*0/i)).toBeInTheDocument();
-    expect(screen.getByText(/Best\s*1200/i)).toBeInTheDocument();
+    expect(screen.getByText(/Score\s*[1-9]\d*/i)).toBeInTheDocument();
+    expect(screen.getByText(/Level\s*1/i)).toBeInTheDocument();
+    expect(screen.getByText(/Lines\s*0|Lines\s*[1-9]\d*/i)).toBeInTheDocument();
   });
 });
