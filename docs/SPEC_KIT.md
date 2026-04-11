@@ -135,6 +135,8 @@ Create a plan for the spec. Use a browser-based architecture with TypeScript/Rea
 
 Execute
 
+Complete checklists.
+
 ### `speckit.tasks`
 
 Execute
