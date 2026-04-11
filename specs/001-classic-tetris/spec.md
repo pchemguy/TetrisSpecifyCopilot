@@ -58,7 +58,7 @@ As a returning player, I want to pause, resume, restart, and keep my best score 
 ### Edge Cases
 
 - What happens when a rotation would place part of the active tetromino outside the board or overlapping locked blocks near a wall or floor?
-- How does the game handle a hard drop, hold action, or pause request submitted at the same moment a piece is locking?
+- If a hard drop, pause request, or hold request occurs at the same lock-time boundary, the game resolves them in this order: hard drop locks immediately, otherwise pause freezes the remaining lock delay before lock commit, otherwise hold is allowed only while the lock delay is still pending and is rejected once lock commit has occurred.
 - What happens when line clears, level progression, and a new best score all occur on the same placement?
 - How does restart behave if triggered while the game is paused or immediately after game over?
 
@@ -72,17 +72,17 @@ As a returning player, I want to pause, resume, restart, and keep my best score 
 - **FR-004**: The player MUST be able to move the active tetromino left and right while the movement remains valid.
 - **FR-005**: The player MUST be able to rotate the active tetromino during play, and invalid rotations MUST be rejected without corrupting the game state.
 - **FR-006**: The player MUST be able to perform soft drop and hard drop actions on the active tetromino.
-- **FR-007**: The game MUST apply a 500-millisecond lock delay when the active tetromino first reaches a valid resting position, MUST reset that delay only after a successful move or rotation, MUST allow no more than 15 such resets for a single tetromino, MUST freeze the remaining delay while paused, and MUST lock immediately on hard drop.
+- **FR-007**: The game MUST apply a 500-millisecond lock delay when the active tetromino first reaches a valid resting position, MUST reset that delay only after a successful move or rotation, MUST allow no more than 15 such resets for a single tetromino, MUST freeze the remaining delay while paused, MUST lock immediately on hard drop, and MUST resolve simultaneous lock-time commands in this order: hard drop first, then pause, then hold, then lock commit.
 - **FR-008**: The game MUST clear every fully occupied horizontal line after piece lock and shift remaining blocks downward.
 - **FR-009**: The game MUST award `100`, `300`, `500`, and `800` points multiplied by the current level for clearing `1`, `2`, `3`, and `4` lines respectively in a single placement, plus `1` point per row soft-dropped and `2` points per row hard-dropped.
 - **FR-010**: The game MUST track cleared lines and increase the level after each 10 cleared lines.
 - **FR-011**: The game MUST set the automatic fall interval to `1000` milliseconds per row at level `1` and reduce that interval by `15%` per level thereafter, rounded to the nearest millisecond, to a minimum of `50` milliseconds per row.
 - **FR-012**: The UI MUST display the current board state, active tetromino, ghost piece, score, level, cleared-line count, next piece, and held piece throughout gameplay.
 - **FR-013**: The game MUST show exactly one next-piece preview representing the immediate upcoming tetromino.
-- **FR-014**: The game MUST provide a single hold slot that allows the player to store or swap the active tetromino once per active-piece turn.
+- **FR-014**: The game MUST provide a single hold slot that allows the player to store or swap the active tetromino once per active-piece turn, but MUST reject the hold request if lock commit has already occurred for the active tetromino.
 - **FR-015**: The game MUST provide desktop keyboard controls for left move, right move, rotate, soft drop, hard drop, hold, pause/resume, and restart.
 - **FR-016**: The game MUST clearly communicate paused, active, and game-over states.
-- **FR-017**: The game MUST stop active gameplay updates while paused and resume them without losing the in-progress board state.
+- **FR-017**: The game MUST stop active gameplay updates while paused and resume them without losing the in-progress board state, and a pause request received before lock commit MUST freeze any remaining lock delay until the game resumes.
 - **FR-018**: The game MUST allow the player to restart from either an active, paused, or game-over state.
 - **FR-019**: The game MUST detect game over when a new tetromino cannot enter the playfield and MUST prevent further gameplay actions other than restart.
 - **FR-020**: The game MUST retain the best score across sessions for the same player environment, display it whenever the game is available to play, and persist structured score, session, and replay records locally in browser storage for that same environment.

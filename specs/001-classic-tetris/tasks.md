@@ -57,14 +57,14 @@ description: "Task list for Classic Browser Tetris implementation"
 
 > **NOTE**: Write these tests first and confirm they fail before implementation.
 
-- [ ] T012 [P] [US1] Add engine rule tests for movement, collision, rotation, 500-millisecond lock delay, lock-reset limits, and line clearing in `tests/unit/engine/game-engine.spec.ts`
+- [ ] T012 [P] [US1] Add engine rule tests for movement, collision, rotation, 500-millisecond lock delay, lock-reset limits, same-tick hard-drop/pause/hold precedence, and line clearing in `tests/unit/engine/game-engine.spec.ts`
 - [ ] T013 [P] [US1] Add scoring-table and gravity-progression tests in `tests/unit/engine/scoring-leveling.spec.ts`
 - [ ] T014 [P] [US1] Add app integration coverage for keyboard-driven core gameplay in `tests/integration/app/core-gameplay.spec.tsx`
 - [ ] T015 [P] [US1] Add browser end-to-end coverage for a playable run to game over in `tests/e2e/core-gameplay.spec.ts`
 
 ### Implementation for User Story 1
 
-- [ ] T016 [US1] Implement spawn, gravity, 500-millisecond lock delay, lock-reset limits, and top-out handling in `src/engine/core/gameState.ts` and `src/engine/core/gameEngine.ts`
+- [ ] T016 [US1] Implement spawn, gravity, 500-millisecond lock delay, lock-reset limits, deterministic hard-drop/pause/hold precedence at lock time, and top-out handling in `src/engine/core/gameState.ts` and `src/engine/core/gameEngine.ts`
 - [ ] T017 [US1] Implement left/right movement, rotation, soft drop, and hard drop commands in `src/engine/commands/gameCommands.ts` and `src/engine/rules/collision.ts`
 - [ ] T018 [US1] Implement the explicit line-clear scoring table, drop bonuses, level thresholds, and 15%-per-level gravity curve in `src/engine/rules/scoring.ts` and `src/engine/rules/leveling.ts`
 - [ ] T019 [US1] Wire the deterministic engine loop into the React shell in `src/app/state/useGameSession.ts`, `src/app/App.tsx`, and `src/canvas/GameCanvas.tsx`
@@ -84,7 +84,7 @@ description: "Task list for Classic Browser Tetris implementation"
 
 ### Tests for User Story 2 ⚠️
 
-- [ ] T023 [P] [US2] Add rule tests for ghost projection, next queue behavior, and hold-slot restrictions in `tests/unit/engine/preview-and-hold.spec.ts`
+- [ ] T023 [P] [US2] Add rule tests for ghost projection, next queue behavior, hold-slot restrictions, and hold rejection after lock commit in `tests/unit/engine/preview-and-hold.spec.ts`
 - [ ] T024 [P] [US2] Add integration tests for HUD synchronization and preview panels in `tests/integration/app/hud-panels.spec.tsx`
 - [ ] T025 [P] [US2] Add browser end-to-end coverage for hold, preview, and speed-up behavior in `tests/e2e/hud-and-strategy.spec.ts`
 
@@ -109,14 +109,14 @@ description: "Task list for Classic Browser Tetris implementation"
 
 ### Tests for User Story 3 ⚠️
 
-- [ ] T032 [P] [US3] Add unit tests for pause/resume, restart, and best-score state behavior in `tests/unit/engine/session-controls.spec.ts` and `tests/unit/persistence/best-score-store.spec.ts`
+- [ ] T032 [P] [US3] Add unit tests for pause/resume, restart, best-score state behavior, and pause freezing the remaining lock delay before lock commit in `tests/unit/engine/session-controls.spec.ts` and `tests/unit/persistence/best-score-store.spec.ts`
 - [ ] T033 [P] [US3] Add contract tests for localStorage keys and SQLite schema/read-write behavior in `tests/contract/local-storage.contract.spec.ts` and `tests/contract/sqlite.contract.spec.ts`
 - [ ] T034 [P] [US3] Add integration coverage for persistence hydration and seeded demo state in `tests/integration/app/persistence-hydration.spec.tsx`
 - [ ] T035 [P] [US3] Add browser end-to-end coverage for pause/resume, restart, reload, persisted best score, and locally stored session/score/replay records in `tests/e2e/session-persistence.spec.ts`
 
 ### Implementation for User Story 3
 
-- [ ] T036 [US3] Implement pause, resume, restart, and overlay transitions in `src/engine/commands/sessionCommands.ts`, `src/components/overlays/PauseOverlay.tsx`, and `src/app/state/useGameSession.ts`
+- [ ] T036 [US3] Implement pause, resume, restart, lock-delay freeze/resume handling, and overlay transitions in `src/engine/commands/sessionCommands.ts`, `src/components/overlays/PauseOverlay.tsx`, and `src/app/state/useGameSession.ts`
 - [ ] T037 [US3] Implement best-score storage plus settings and UI-state persistence in `src/persistence/local-storage/bestScoreStore.ts`, `src/persistence/local-storage/settingsStore.ts`, and `src/persistence/local-storage/uiStateStore.ts`
 - [ ] T038 [US3] Implement SQLite repositories for sessions, scores, and replays in `src/persistence/sqlite/sessionRepository.ts`, `src/persistence/sqlite/scoreRepository.ts`, and `src/persistence/sqlite/replayRepository.ts`
 - [ ] T039 [US3] Implement deterministic replay recording and demo-data seeding orchestration for local-only storage without a replay browser UI in `src/engine/replay/replayRecorder.ts`, `src/persistence/seed/seedDatabase.ts`, and `src/app/providers/PersistenceProvider.tsx`
