@@ -64,9 +64,9 @@ description: "Task list for Classic Browser Tetris implementation"
 
 ### Implementation for User Story 1
 
-- [ ] T016 [US1] Implement spawn, gravity, 500-millisecond lock delay, lock-reset limits, deterministic hard-drop/pause/hold precedence at lock time, and top-out handling in `src/engine/core/gameState.ts` and `src/engine/core/gameEngine.ts`
-- [ ] T017 [US1] Implement left/right movement, rotation, soft drop, and hard drop commands in `src/engine/commands/gameCommands.ts` and `src/engine/rules/collision.ts`
-- [ ] T018 [US1] Implement the explicit line-clear scoring table, drop bonuses, level thresholds, and 15%-per-level gravity curve in `src/engine/rules/scoring.ts` and `src/engine/rules/leveling.ts`
+- [x] T016 [US1] Implement spawn, gravity, 500-millisecond lock delay, lock-reset limits, deterministic hard-drop/pause/hold precedence at lock time, and top-out handling in `src/engine/core/gameState.ts` and `src/engine/core/gameEngine.ts`
+- [x] T017 [US1] Implement left/right movement, rotation, soft drop, and hard drop commands in `src/engine/commands/gameCommands.ts` and `src/engine/rules/collision.ts`
+- [x] T018 [US1] Implement the explicit line-clear scoring table, drop bonuses, level thresholds, and 15%-per-level gravity curve in `src/engine/rules/scoring.ts` and `src/engine/rules/leveling.ts`
 - [ ] T019 [US1] Wire the deterministic engine loop into the React shell in `src/app/state/useGameSession.ts`, `src/app/App.tsx`, and `src/canvas/GameCanvas.tsx`
 - [ ] T020 [US1] Render the board, active piece, locked stack, and game-over overlay in `src/canvas/renderer/boardRenderer.ts`, `src/canvas/renderer/pieceRenderer.ts`, and `src/components/overlays/GameOverOverlay.tsx`
 - [ ] T021 [US1] Implement desktop keyboard input capture and focus-safe gameplay controls in `src/components/controls/KeyboardInputHandler.tsx` and `src/app/App.tsx`

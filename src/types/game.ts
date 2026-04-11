@@ -122,6 +122,8 @@ export interface GameState {
   lock: LockState;
   currentTick: number;
   elapsedMs: number;
+  gravityTimerMs: number;
+  softDropActive: boolean;
   config: GameplayConfig;
 }
 
