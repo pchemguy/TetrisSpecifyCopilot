@@ -103,7 +103,6 @@ There are three possible states:
     - If `ANALYSES_DIR` contains uncommitted changes, commit those changes before starting
     - Create `CUR_DIR`
     - Initialize a new ARW round in **bootstrap mode**
-    - Follow `## Required Inputs for Resolution` to create `analysis-report.md` using the existing analysis findings.
     - Proceed to Stage 1
     - Do NOT re-run analysis or reinterpret findings beyond normalization into the issue register
 
@@ -153,12 +152,12 @@ The active in-progress round lives under:
 
 Primary ARW artifacts:
 
-| Stage | Artifact                        | Required | Purpose |
-|------:|---------------------------------|----------|---------|
-| 1     | `analysis-report.md`            | Yes      | Source-of-truth issue record for this ARW round |
-| 2     | `analysis-clarification-form.md`           | No       | Clarification record, only when user input is needed |
-| 3     | `analysis-resolution-plan.md`   | Yes      | Detailed, actionable, issue-complete plan for resolution |
-| 4     | `analysis-resolution-report.md` | Yes      | Traceable account of applied changes, outcomes, and residuals |
+| Stage | Artifact                         | Required | Purpose                                                       |
+| ----: | -------------------------------- | -------- | ------------------------------------------------------------- |
+|     1 | `analysis-report.md`             | Yes      | Source-of-truth issue record for this ARW round               |
+|     2 | `analysis-clarification-form.md` | No       | Clarification record, only when user input is needed          |
+|     3 | `analysis-resolution-plan.md`    | Yes      | Detailed, actionable, issue-complete plan for resolution      |
+|     4 | `analysis-resolution-report.md`  | Yes      | Traceable account of applied changes, outcomes, and residuals |
 
 ## Lock File Policy
 
@@ -172,21 +171,46 @@ Rules:
 - once a stage is completed, treat its artifact as closed except where a later stage explicitly requires appending traceability or recovery notes
 - if a stage must be redone due to newly discovered gaps, re-open it explicitly, recreate its lock, and document why in the resolution report
 
-## Required Inputs for Resolution
+## Workflow
 
-Before planning or editing, establish the issue source of truth.
+### Stage 0 — Issue Source Determination
 
-### Preferred issue source
+Determine the issue source of truth:
 
-Use `CUR_DIR/analysis-report.md` if present.
+1. `CUR_DIR/analysis-report.md` (if present)
+2. Prior `/speckit.analyze` findings available in conversation context
+3. Explicit user-provided issue list in `$ARGUMENTS`
 
-### Fallback issue source
+Prefer `analysis-report.md`, if available, and also consider direct user input `$ARGUMENTS`, if provided.
 
-If no `analysis-report.md` exists in `CUR_DIR`, but prior `analyze` results are clearly available in conversation context, create `analysis-report.md` first by transcribing those findings into a stable issue register.
+If no valid source can be established:
 
-### Minimum structure for issue register
+- Abort execution
+- Instruct the user to run `/speckit.analyze` first
 
-Each recorded issue must have, at minimum:
+### Stage 1 — Establish or Complete `analysis-report.md`
+
+This stage is responsible for:
+
+- materializing the issue source into a persistent artifact
+- normalizing all issues into the Issue Registry format
+- assigning stable IDs if missing
+
+#### Behavior
+
+- If `analysis-report.md` already exists:
+    - load it as the issue source of truth
+    - assign IDs if missing
+- If `analysis-report.md` does not exist:
+    - create it from the selected issue source
+    - transcribe all issues into the Issue Registry Format
+    - assign IDs if missing
+
+#### Issue Registry Format
+
+All issues within an ARW round MUST be represented in a normalized issue registry.
+
+Each issue MUST include:
 
 - stable issue ID
 - category
@@ -195,39 +219,25 @@ Each recorded issue must have, at minimum:
 - summary
 - recommended resolution direction
 
-If no stable IDs exist yet, create deterministic IDs during Stage 1.
+#### Constraints
 
-## Workflow
+- Do NOT add, remove, merge, or reinterpret issues
+- Only normalize structure, wording, and identifiers
+- Preserve semantic equivalence with the original source
 
-### Stage 1 — Establish or Complete `analysis-report.md`
-
-Create `analysis-report.md` if missing, or resume and complete it if locked or incomplete.
-
-Purpose:
-
-- establish the canonical issue register for this ARW round
-- normalize issue IDs and issue descriptions
-- ensure the set of issues to resolve is explicit and stable
-
-Requirements:
-
-- include every issue from the chosen source of truth
-- preserve original issue intent
-- normalize wording only for clarity and traceability
-- mark issues that obviously require user clarification, but do not yet ask the user here unless resuming directly into clarification mode is required
-
-Minimum contents:
+#### Required Contents
 
 - ARW round metadata
-- issue register table
-- issue details section for high and critical items
-- initial clarification-needed markers where applicable
+- normalized issue registry table
+- detailed sections for HIGH and CRITICAL issues
+- clarification-needed markers (if detectable without user input)
 
-Completion criterion:
+#### Completion Criterion
 
-- every issue to be resolved in this ARW round is explicitly recorded
-- issue IDs are stable
-- the file can serve as the single issue source of truth for subsequent stages
+- all issues from the selected source are represented in the registry
+- all issues comply with the Issue Registry Specification
+- all issue IDs are stable
+- `analysis-report.md` is the single authoritative issue source for subsequent stages
 
 ### Stage 2 — Clarification Assessment and `analysis-clarification-form.md` if Needed
 
