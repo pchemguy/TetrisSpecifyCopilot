@@ -38,7 +38,7 @@ description: "Task list for Classic Browser Tetris implementation"
 - [x] T005 Define shared gameplay and persistence types in `src/types/game.ts`, `src/types/persistence.ts`, and `src/types/replay.ts`
 - [x] T006 [P] Implement tetromino definitions, SRS kick data, and 7-bag randomization in `src/engine/rules/tetrominoes.ts`, `src/engine/rules/rotation.ts`, and `src/engine/rules/randomizer.ts`
 - [x] T007 [P] Implement the deterministic tick loop, immutable game state, and command queue in `src/engine/core/gameState.ts`, `src/engine/core/gameEngine.ts`, and `src/engine/commands/commandQueue.ts`
-- [ ] T008 [P] Implement browser SQLite bootstrap and schema management in `src/persistence/sqlite/database.ts` and `src/persistence/sqlite/schema.ts`
+- [x] T008 [P] Implement browser SQLite bootstrap and schema management in `src/persistence/sqlite/database.ts` and `src/persistence/sqlite/schema.ts`
 - [ ] T009 [P] Implement localStorage adapters for settings and transient UI state in `src/persistence/local-storage/settingsStore.ts` and `src/persistence/local-storage/uiStateStore.ts`
 - [ ] T010 Implement seeded demo-data hydration and persistence providers in `src/persistence/seed/demoData.ts`, `src/persistence/seed/seedDatabase.ts`, and `src/app/providers/PersistenceProvider.tsx`
 - [ ] T011 Build the shared canvas renderer baseline and HUD shell layout in `src/canvas/GameCanvas.tsx`, `src/canvas/renderer/boardRenderer.ts`, and `src/components/hud/HudLayout.tsx`

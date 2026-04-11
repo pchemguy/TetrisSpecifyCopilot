@@ -1,0 +1,150 @@
+import initSqlJs, { type Database, type SqlJsStatic } from 'sql.js';
+import wasmUrl from 'sql.js/dist/sql-wasm.wasm?url';
+import { ensureSchema, SCHEMA_VERSION } from './schema';
+
+const DATABASE_NAME = 'classic-browser-tetris';
+const DATABASE_VERSION = 1;
+const STORE_NAME = 'sqlite';
+const DATABASE_FILE_KEY = 'main';
+
+let sqlJsPromise: Promise<SqlJsStatic> | null = null;
+
+function getIndexedDb(): IDBFactory {
+  if (!globalThis.indexedDB) {
+    throw new Error('IndexedDB is not available in this browser environment.');
+  }
+
+  return globalThis.indexedDB;
+}
+
+function openDatabaseStore(): Promise<IDBDatabase> {
+  return new Promise((resolve, reject) => {
+    const request = getIndexedDb().open(DATABASE_NAME, DATABASE_VERSION);
+
+    request.onerror = () => {
+      reject(request.error ?? new Error('Failed to open IndexedDB for SQLite persistence.'));
+    };
+
+    request.onupgradeneeded = () => {
+      const database = request.result;
+
+      if (!database.objectStoreNames.contains(STORE_NAME)) {
+        database.createObjectStore(STORE_NAME);
+      }
+    };
+
+    request.onsuccess = () => {
+      resolve(request.result);
+    };
+  });
+}
+
+async function readPersistedDatabase(): Promise<Uint8Array | null> {
+  const database = await openDatabaseStore();
+
+  return new Promise((resolve, reject) => {
+    const transaction = database.transaction(STORE_NAME, 'readonly');
+    const store = transaction.objectStore(STORE_NAME);
+    const request = store.get(DATABASE_FILE_KEY);
+
+    request.onerror = () => {
+      reject(request.error ?? new Error('Failed to read SQLite database from IndexedDB.'));
+    };
+
+    request.onsuccess = () => {
+      const result = request.result;
+      if (!result) {
+        resolve(null);
+        return;
+      }
+
+      resolve(new Uint8Array(result as ArrayBuffer));
+    };
+
+    transaction.oncomplete = () => {
+      database.close();
+    };
+  });
+}
+
+async function writePersistedDatabase(binary: Uint8Array): Promise<void> {
+  const database = await openDatabaseStore();
+
+  await new Promise<void>((resolve, reject) => {
+    const transaction = database.transaction(STORE_NAME, 'readwrite');
+    const store = transaction.objectStore(STORE_NAME);
+    store.put(binary, DATABASE_FILE_KEY);
+
+    transaction.onerror = () => {
+      reject(transaction.error ?? new Error('Failed to write SQLite database to IndexedDB.'));
+    };
+
+    transaction.oncomplete = () => {
+      resolve();
+    };
+  });
+
+  database.close();
+}
+
+export function loadSqlJs(): Promise<SqlJsStatic> {
+  if (!sqlJsPromise) {
+    sqlJsPromise = initSqlJs({
+      locateFile: () => wasmUrl,
+    });
+  }
+
+  return sqlJsPromise!;
+}
+
+export interface SQLiteDatabaseHandle {
+  database: Database;
+  sqlJs: SqlJsStatic;
+  schemaVersion: number;
+  persist: () => Promise<void>;
+}
+
+export async function initializeSQLiteDatabase(): Promise<SQLiteDatabaseHandle> {
+  const sqlJs = await loadSqlJs();
+  const persistedBinary = await readPersistedDatabase();
+  const database = persistedBinary ? new sqlJs.Database(persistedBinary) : new sqlJs.Database();
+
+  const schemaVersion = ensureSchema(database);
+
+  return {
+    database,
+    sqlJs,
+    schemaVersion,
+    persist: async () => {
+      const binary = database.export();
+      await writePersistedDatabase(binary);
+    },
+  };
+}
+
+export async function resetSQLiteDatabase(): Promise<void> {
+  const database = await openDatabaseStore();
+
+  await new Promise<void>((resolve, reject) => {
+    const transaction = database.transaction(STORE_NAME, 'readwrite');
+    const store = transaction.objectStore(STORE_NAME);
+    store.delete(DATABASE_FILE_KEY);
+
+    transaction.onerror = () => {
+      reject(transaction.error ?? new Error('Failed to reset persisted SQLite database.'));
+    };
+
+    transaction.oncomplete = () => {
+      resolve();
+    };
+  });
+
+  database.close();
+}
+
+export const SQLITE_PERSISTENCE_INFO = {
+  databaseName: DATABASE_NAME,
+  storeName: STORE_NAME,
+  fileKey: DATABASE_FILE_KEY,
+  schemaVersion: SCHEMA_VERSION,
+} as const;
