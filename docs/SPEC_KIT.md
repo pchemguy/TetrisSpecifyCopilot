@@ -1,5 +1,12 @@
 ---
 url: https://chatgpt.com/g/g-p-69ca8410ab7c819198782233666b1069-spec-kit/c/69d94e2a-f79c-838c-b016-9c714cc1759e
+ide: VS Code
+agent: Copilot
+framework: Spec Kit
+model: GPT-5.4 - High
+note: The same model is used for all steps.
+shell: Bash
+environment: pchemguy/LLM-CLI
 ---
 ### `speckit.constitution`
 
