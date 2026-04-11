@@ -117,8 +117,70 @@ body::before {
   margin-top: 24px;
 }
 
+.hud-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.95fr);
+  gap: 20px;
+  margin-top: 24px;
+}
+
+.hud-primary,
+.hud-aside {
+  min-width: 0;
+}
+
+.hud-aside {
+  display: grid;
+  gap: 16px;
+}
+
+.hud-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0;
+}
+
+.hud-stat-card,
+.hud-status-card {
+  padding: 18px;
+  border-radius: 20px;
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  box-shadow: var(--panel-shadow);
+}
+
+.hud-stat-card dt {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.hud-stat-card dd {
+  margin: 10px 0 0;
+  font-family: 'Aptos Display', 'Trebuchet MS', sans-serif;
+  font-size: 1.8rem;
+}
+
+.hud-status-card strong {
+  display: block;
+  margin-top: 8px;
+  font-size: 1.2rem;
+}
+
+.hud-status-card p:last-child {
+  margin-bottom: 0;
+  color: var(--text-muted);
+}
+
 .surface-card {
   padding: 24px;
+}
+
+.playfield-card {
+  min-width: 0;
 }
 
 .playfield-placeholder {
@@ -131,6 +193,26 @@ body::before {
     linear-gradient(180deg, rgba(9, 14, 18, 0.84), rgba(16, 20, 24, 0.94)),
     linear-gradient(90deg, transparent 0, transparent 50%, rgba(255, 255, 255, 0.03) 50%, rgba(255, 255, 255, 0.03) 100%);
   border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.game-canvas-shell {
+  display: grid;
+  place-items: center;
+  min-height: 420px;
+  margin: 20px 0 16px;
+  border-radius: 22px;
+  background:
+    linear-gradient(180deg, rgba(9, 14, 18, 0.84), rgba(16, 20, 24, 0.94)),
+    linear-gradient(90deg, transparent 0, transparent 50%, rgba(255, 255, 255, 0.03) 50%, rgba(255, 255, 255, 0.03) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.game-canvas {
+  display: block;
+  width: min(100%, 320px);
+  height: auto;
+  border-radius: 18px;
+  box-shadow: inset 0 0 0 1px rgba(242, 184, 75, 0.18);
 }
 
 .playfield-matrix {
@@ -183,7 +265,15 @@ body::before {
     grid-template-columns: 1fr;
   }
 
+  .hud-layout {
+    grid-template-columns: 1fr;
+  }
+
   .playfield-placeholder {
+    min-height: 360px;
+  }
+
+  .game-canvas-shell {
     min-height: 360px;
   }
 }

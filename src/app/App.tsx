@@ -1,10 +1,60 @@
-const readinessItems = [
-  'Client-only runtime',
-  'Deterministic engine scaffold',
-  'Local persistence pipeline',
-];
+import GameCanvas from '../canvas/GameCanvas';
+import HudLayout from '../components/hud/HudLayout';
+import { createInitialGameState } from '../engine/core/gameState';
+import { getTetrominoDefinition } from '../engine/rules/tetrominoes';
+import type { BoardTile } from '../types/game';
+import { usePersistence } from './providers/PersistenceProvider';
+
+function createPreviewState() {
+  const baseState = createInitialGameState('app-shell-preview');
+  const board = baseState.board.map((row) => [...row]) as BoardTile[][];
+
+  const placeTile = (row: number, column: number, tetrominoId: 'I' | 'O' | 'T' | 'S' | 'Z' | 'J' | 'L') => {
+    board[row][column] = {
+      tetrominoId,
+      colorToken: getTetrominoDefinition(tetrominoId).colorToken,
+    };
+  };
+
+  placeTile(21, 3, 'J');
+  placeTile(21, 4, 'J');
+  placeTile(21, 5, 'L');
+  placeTile(21, 6, 'L');
+  placeTile(20, 4, 'S');
+  placeTile(20, 5, 'S');
+  placeTile(20, 6, 'Z');
+  placeTile(19, 5, 'O');
+
+  return {
+    ...baseState,
+    status: 'active' as const,
+    board,
+    activePiece: {
+      tetrominoId: 'T' as const,
+      rotationIndex: 0 as const,
+      x: 3,
+      y: 5,
+      spawnTick: 0,
+    },
+    metrics: {
+      ...baseState.metrics,
+      score: 4820,
+      level: 4,
+      linesCleared: 28,
+    },
+  };
+}
+
+const previewState = createPreviewState();
 
 export default function App() {
+  const { bestScore, health, isHydrated, settings, uiState, warnings } = usePersistence();
+  const readinessItems = [
+    `Persistence ${health}`,
+    `Ghost ${settings.show_ghost_piece ? 'on' : 'off'}`,
+    `Panel ${uiState.last_selected_panel}`,
+  ];
+
   return (
     <main className="app-shell">
       <section className="hero-panel">
@@ -23,42 +73,36 @@ export default function App() {
         </div>
       </section>
 
-      <section className="workspace-grid" aria-label="Application shell preview">
+      <HudLayout
+        score={previewState.metrics.score}
+        bestScore={bestScore}
+        level={previewState.metrics.level}
+        linesCleared={previewState.metrics.linesCleared}
+        status={isHydrated ? health : 'bootstrapping'}
+        aside={
+          <div className="hud-status-card">
+            <p className="section-label">Persistence</p>
+            <strong>{bestScore} best-score preview</strong>
+            <p>
+              {warnings.length > 0
+                ? warnings[0].message
+                : 'Seed data and provider wiring are available for later gameplay tasks.'}
+            </p>
+          </div>
+        }
+      >
         <article className="surface-card playfield-card">
           <header>
             <p className="section-label">Playfield Surface</p>
-            <h2>Canvas mount target</h2>
+            <h2>Canvas renderer baseline</h2>
           </header>
-          <div className="playfield-placeholder" aria-hidden="true">
-            <div className="playfield-matrix" />
-          </div>
+          <GameCanvas board={previewState.board} activePiece={previewState.activePiece} />
           <p className="card-copy">
-            This region is reserved for the HTML5 canvas renderer and overlays that will drive
-            the actual game board.
+            The shared board renderer now draws a real canvas grid and staged preview stack,
+            ready for gameplay loop integration and overlay work.
           </p>
         </article>
-
-        <aside className="surface-card status-card">
-          <header>
-            <p className="section-label">Setup Status</p>
-            <h2>Phase 1 foundation</h2>
-          </header>
-          <dl className="status-list">
-            <div>
-              <dt>Current task</dt>
-              <dd>Base shell and entrypoint</dd>
-            </div>
-            <div>
-              <dt>Next handoff</dt>
-              <dd>Linting, test harness, and shared providers</dd>
-            </div>
-            <div>
-              <dt>Runtime shape</dt>
-              <dd>React shell + canvas gameplay + browser-local storage</dd>
-            </div>
-          </dl>
-        </aside>
-      </section>
+      </HudLayout>
     </main>
   );
 }
