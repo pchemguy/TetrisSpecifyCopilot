@@ -147,6 +147,10 @@ Run analysis
 
 Perform resolution
 
+### `speckit.taskstoissues`
+
+Create GitHub issues from tasks. Do not merge any tasks. Keep issues focused, small, and testable. Produce a task-to-issue mapping table to the created GitHub issue URLs. Save it next to tasks.md as task-to-issue.md. Create labels and milestones and update the new issues to use them.
+
 ### `speckit.implement`
 
 
