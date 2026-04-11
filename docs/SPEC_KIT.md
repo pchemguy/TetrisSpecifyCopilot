@@ -7,7 +7,10 @@ model: GPT-5.4 - High
 note: The same model is used for all steps.
 shell: Bash
 environment: pchemguy/LLM-CLI
+agent_local: "true"
+agent_approval_mode: selective
 ---
+
 ### `speckit.constitution`
 
 Create principles focused on code quality, testing standards, user experience consistency, and performance requirements. Include governance for how these principles should guide technical decisions and implementation choices.
