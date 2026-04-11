@@ -5,7 +5,7 @@ url: https://chatgpt.com/g/g-p-69ca8410ab7c819198782233666b1069-spec-kit/c/69da3
 
 > [!NOTE] Analysis resolution
 > 
-> `analysis-resolution` is a resumable issue-resolution workflow that consumes prior analysis findings, creates or resumes ARW artifacts under the feature analysis subspace, asks the user for clarification only when necessary, prepares a traceable resolution plan, applies minimal necessary changes, records outcomes in a resolution report, and finalizes the round by renaming `CUR` to the next numbered analysis directory and committing the result.
+> `analyzetoautofix` is a resumable issue-resolution workflow that consumes prior analysis findings, creates or resumes ARW artifacts under the feature analysis subspace, asks the user for clarification only when necessary, prepares a traceable resolution plan, applies minimal necessary changes, records outcomes in a resolution report, and finalizes the round by renaming `CUR` to the next numbered analysis directory and committing the result.
 
 ## User Input
 
