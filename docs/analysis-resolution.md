@@ -265,7 +265,6 @@ Clarification SHOULD be triggered for:
 - ambiguous non-functional requirements
 - missing acceptance criteria affecting implementation
 
-
 If clarification is required:
 
 - create or resume `analysis-clarification-form.md`
