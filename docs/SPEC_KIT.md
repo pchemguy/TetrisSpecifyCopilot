@@ -150,9 +150,11 @@ Execute
 The full ARW protocol involves the following stages:
 
 0. Current state assessment.
-1. Analysis of current feature and project-level artifacts, leading to generation of analysis report.
-2. Preliminary analysis of every identified issue with the goal to determine if user input is required for optimal resolution, leading to generation of clarification form, if user input is deemed necessary. In such a case, agent shall "switch" to interactive mode, presenting the user with each issue that requires clarifications and either suggest options, if possible, or ask for open-ended input. User answers shall be recorded to clarification form, completing it.
-3. Preparation of resolution plan, taking into account the completed clarification form, if appropriate.
+1. Analysis of current feature and project-level artifacts, leading to generation of an analysis report including a detailed account of all findings.
+2. Preliminary analysis of every identified issue with the goal to determine if user input is required for optimal resolution, leading to generation of clarification form, if user input is deemed necessary. In such a case, agent shall "switch" to interactive mode, presenting the user with each issue that requires clarifications and either suggest options, if possible, or ask for open-ended input. User answers shall be recorded to the clarification form file next to associated questions, completing it.
+3. Preparation of a detailed actionable resolution plan, taking into account the completed clarification form, if appropriate, for resolving/fixing all identified issues. The resolution plan must be grounded in governing artifacts and include detailed specific traceability information for each issue.
+    - a) Verify that every identified issue recorded to analysis report is covered in the resolution plan and that any user input from the  clarification form is also taken into account.
+    - b) If any gaps have been identified, extend the resolution plan to address them and repeat steps a)-b) until no more gaps found in step a).
 4. Perform resolution of all identified issues according to the created resolution plan and complete associated resolution report.
 5. Committing changes.
 
@@ -190,6 +192,7 @@ At the start of execution of the `speckit.analyze` command, agent must determine
 - If such directory does not exist, agent must
     - commit any uncommitted changes made to files under `spec/<feature_name>/analyses/`
     - create `spec/<feature_name>/analyses/CUR/` for the new ARW round
+        - Note, if `spec/<feature_name>/analyses/` does not exist, it should be silently created.
     - proceed to performing the full Protocol.
 
 ##### Committing Completed ARW Round
@@ -200,37 +203,6 @@ Once current ARW round is complete, agent must
 - determine the next available numbered directory following the last `spec/<feature_name>/analyses/###/` 
 - rename `spec/<feature_name>/analyses/CUR/` to the next available numbered directory
 - commit changes.
-
-##### Recovery Provisions
-
-The ARW process shall integrate provisions for interruptions and resumptions. Interruptions may occur due to an unexpected failure or as planned state transitions when the agent determines that user clarification is necessary for optimal resolution of identified issues. The primary interruption resilience means shall rely on `LOCK` files.
-
-1. If `spec/<feature_name>/analyses/` does not exist, agent must create it.
-2. Agent must check if `spec/<feature_name>/analyses/CUR/` directory exists.
-    - If `CUR` does not exist, there is not incomplete ARW round, and agent MUST initialize a new round by creating it.
-    - If `CUR` exists, it contains the current incomplete ARW round. The agent will need to analyze its contents to assess the current status and resume interrupted round.
-3. Agent must determine if the prior ARW round has been completed by identifying if the last (the largest numbered) `analyses/###/` subdirectory contains the `analysis.LOCK` file.
-    - If `analyses/` is empty or `###/analysis.LOCK` does not exist inside the last `###/`, no incomplete ARW round exists.  
-
-- Before the first analysis is started (directory `spec/<feature_name>/analyses/` does not exist or completely empty), the agent must create `spec/<feature_name>/analyses/`.
-- If
-
-The agent 
-
-- Commit any uncommitted changes.
-- Create `analyses/` directory under the feature directory, if not exist.
-- Assess current analysis status:
-    - 
-- Generate a `analyses/xxx-analysis-report.md` under the feature directory including a detailed account of all current findings. Do not rerun analysis at this point. Do not override any prior reports, if exist. Use sequential numerical prefix `xxx`, starting from the smallest available.
-- Perform initial assessments as to whether resolution for any issue requires clarification and cannot be performed without human interaction.
-- Generate a detailed actionable `analyses/xxx-analysis-resolution.md` plan for resolving/fixing all identified issues. You must use identical `xxx` prefix matching report prefix. The resolution plan must be grounded in governing artifacts and include detailed specific traceability information for each issue. Verify that you covered every issue and extend the resolution plan appropriately, if any issues not covered by a detailed resolution strategy in `analyses/xxx-analysis-resolution.md` have been identified. 
-- 
-- Repeat this check/extension loop until each and every identified issue regardless of severity has been covered in `analyses/xxx-analysis-resolution.md`. 
-
-
-
-
-
 
 ### `speckit.implement`
 
