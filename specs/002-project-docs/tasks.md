@@ -99,8 +99,8 @@
 ### Implementation for User Story 4
 
 - [x] T021 [US4] Draft the SQLite tables and schema-purpose reference in docs/persistence-reference.md
-- [ ] T022 [P] [US4] Add localStorage keys, document shapes, and IndexedDB/SQLite lifecycle sections in docs/persistence-reference.md
-- [ ] T023 [P] [US4] Add seed-data invariants, best-score protection rules, and persistence failure/recovery guidance in docs/persistence-reference.md
+- [x] T022 [P] [US4] Add localStorage keys, document shapes, and IndexedDB/SQLite lifecycle sections in docs/persistence-reference.md
+- [x] T023 [P] [US4] Add seed-data invariants, best-score protection rules, and persistence failure/recovery guidance in docs/persistence-reference.md
 - [ ] T024 [US4] Run the maintainer verification pass and revise docs/persistence-reference.md to satisfy SC-006
 
 **Checkpoint**: All four user stories are independently functional.
