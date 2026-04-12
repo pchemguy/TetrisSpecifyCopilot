@@ -29,8 +29,8 @@
 
 **⚠️ CRITICAL**: No user story work should be treated as complete until this phase is done.
 
-- [ ] T004 Build a source-of-truth inventory for controls, scoring, and seed-data behavior in specs/002-project-docs/research.md
-- [ ] T005 [P] Build a source-of-truth inventory for command validation and expected outputs in specs/002-project-docs/quickstart.md
+- [ ] T004 Validate and extract the source-of-truth inventory for controls, scoring, and seed-data behavior from specs/002-project-docs/research.md for use in docs/user-guide.md and docs/persistence-reference.md
+- [ ] T005 [P] Validate and extract the source-of-truth command set and expected outputs from specs/002-project-docs/quickstart.md for use in docs/developer-guide.md and docs/reviewer-guide.md
 - [ ] T006 [P] Record the canonical terminology, cross-link targets, and consistency rules to follow from specs/002-project-docs/contracts/documentation-interfaces.md while drafting docs/user-guide.md, docs/developer-guide.md, docs/reviewer-guide.md, and docs/persistence-reference.md
 
 **Checkpoint**: Shared validation baseline is ready; user story document work can proceed in parallel.
@@ -114,7 +114,7 @@
 - [ ] T025 [P] Run a cross-document terminology and internal-link consistency pass across docs/user-guide.md, docs/developer-guide.md, docs/reviewer-guide.md, and docs/persistence-reference.md
 - [ ] T026 [P] Execute the documented command-validation pass and update docs/reviewer-guide.md and docs/developer-guide.md with verified expected outcomes
 - [ ] T027 Re-run the requirements-quality checklist in specs/002-project-docs/checklists/docs.md and update docs/user-guide.md, docs/developer-guide.md, docs/reviewer-guide.md, and docs/persistence-reference.md to close any findings
-- [ ] T028 Run the quickstart acceptance checklist from specs/002-project-docs/quickstart.md and complete the final editorial/release-gate pass across docs/user-guide.md, docs/developer-guide.md, docs/reviewer-guide.md, and docs/persistence-reference.md
+- [ ] T028 Run the full quickstart acceptance checklist from specs/002-project-docs/quickstart.md, including FR-025 failed-command handling, FR-026 Playwright remedy coverage, FR-027 persistence fallback messaging, and the NFR-005 reviewer checklist cap, then complete the final editorial/release-gate pass across docs/user-guide.md, docs/developer-guide.md, docs/reviewer-guide.md, and docs/persistence-reference.md
 
 ---
 

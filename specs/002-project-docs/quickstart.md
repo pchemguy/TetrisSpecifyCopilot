@@ -70,4 +70,7 @@ npm run build
 - all command snippets are Bash and have been run successfully
 - scoring values and control names match implementation exactly
 - internal Markdown links resolve
-- reviewer checklist is executable end-to-end in <= 30 minutes on a prepared machine
+- reviewer checklist is executable end-to-end in <= 30 minutes on a prepared machine and stays within 12 top-level steps
+- reviewer guide documents the failed-command exception workflow required by `FR-025`
+- reviewer guide documents the Playwright browser install remedy (`npx playwright install chromium`) and rerun path required by `FR-026`
+- user-guide and persistence-reference drafts include fallback messaging for blocked localStorage/IndexedDB environments required by `FR-027`

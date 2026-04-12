@@ -76,11 +76,11 @@ Planning artifacts remain in `specs/002-project-docs/`.
 
 Minimum verification pass before completion:
 
-1. Read-through for section completeness against spec FR-001 through FR-024.
-2. Command run-through for all command blocks.
+1. Read-through for section completeness against the current approved specification, including `FR-001` through `FR-027` and `NFR-001` through `NFR-005`.
+2. Command run-through for all command blocks, including the Playwright browser installation remedy path when browser binaries are missing.
 3. Terminology and scoring consistency sweep across all four docs.
 4. Broken-link sweep for internal Markdown links.
-5. Reviewer checklist dry run duration check (target <= 30 minutes).
+5. Reviewer checklist dry run duration check (target <= 30 minutes), including verification that the checklist remains within the 12-step cap and that failed-command exception handling is documented.
 
 ## 6. Failure Handling Contract
 
