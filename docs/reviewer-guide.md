@@ -81,3 +81,28 @@ npm run build
 ```
 
 Expected outcome: production build completes without errors.
+
+## Playwright Browser Remedy
+
+If Playwright cannot launch Chromium because browser binaries are missing, run:
+
+```bash
+npx playwright install chromium
+```
+
+Then re-run the E2E commands listed in this guide.
+
+## Offline Verification
+
+1. Launch the app while online and wait for first render.
+2. Open browser DevTools and set network to offline.
+3. Perform gameplay smoke actions and verify behavior continues.
+4. Reload and verify local persistence behavior remains understandable from the docs.
+
+## Failed-Command Exception Workflow
+
+1. Capture the exact failing command and output.
+2. Mark the affected review step as not verified.
+3. Open or update a correction issue linked to the failing command.
+4. Re-run only the corrected validation step, then resume the remaining checklist.
+5. Do not sign off until all required steps are verified.
