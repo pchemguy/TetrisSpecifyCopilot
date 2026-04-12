@@ -49,9 +49,9 @@
 - [X] T011 [US1] Implement executable-adjacent database path resolution with LocalAppData fallback metadata in src-tauri/src/runtime/storage_path.rs
 - [X] T012 [US1] Implement the load_best_score_state command response mapping in src-tauri/src/commands/load_best_score_state.rs
 - [X] T013 [US1] Register the startup hydration command in src-tauri/src/main.rs
-- [ ] T014 [US1] Replace browser best-score hydration with desktop command loading in src/app/providers/PersistenceProvider.tsx
-- [ ] T015 [US1] Hide or reveal the startup best-score panel from hydration state in src/components/hud/BestScorePanel.tsx
-- [ ] T016 [US1] Update startup shell copy to remove browser-specific persistence wording in src/app/App.tsx
+- [X] T014 [US1] Replace browser best-score hydration with desktop command loading in src/app/providers/PersistenceProvider.tsx
+- [X] T015 [US1] Hide or reveal the startup best-score panel from hydration state in src/components/hud/BestScorePanel.tsx
+- [X] T016 [US1] Update startup shell copy to remove browser-specific persistence wording in src/app/App.tsx
 
 **Checkpoint**: The desktop app boots through Tauri, creates or opens native storage, and displays startup best-score state correctly without any game-over update logic yet.
 

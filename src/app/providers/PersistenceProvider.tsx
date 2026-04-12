@@ -14,8 +14,9 @@ import {
   type UIStateDocument,
   type UserSettingsDocument,
 } from '../../types/persistence';
+import type { DesktopStorageMode } from '../../types/desktopPersistence';
 import type { ReplayEnvelope } from '../../types/replay';
-import { commitBestScore, readBestScore } from '../../persistence/local-storage/bestScoreStore';
+import { desktopPersistenceClient } from '../services/desktopPersistenceClient';
 import { initializeSQLiteDatabase, type SQLiteDatabaseHandle } from '../../persistence/sqlite/database';
 import { readSettings } from '../../persistence/local-storage/settingsStore';
 import { mergeUIState, readUIState, writeUIState } from '../../persistence/local-storage/uiStateStore';
@@ -35,6 +36,9 @@ export interface PersistenceContextValue {
   settings: UserSettingsDocument;
   uiState: UIStateDocument;
   bestScore: number;
+  startupBestScore: number;
+  showStartupBestScore: boolean;
+  storageMode: DesktopStorageMode | null;
   health: PersistenceHealth;
   warnings: readonly PersistenceWarning[];
   isHydrated: boolean;
@@ -49,13 +53,17 @@ export function PersistenceProvider({ children }: PropsWithChildren) {
   const [databaseHandle, setDatabaseHandle] = useState<SQLiteDatabaseHandle | null>(null);
   const [settings, setSettings] = useState<UserSettingsDocument>(() => readSettings());
   const [uiState, setUiState] = useState<UIStateDocument>(() => readUIState());
-  const [bestScore, setBestScore] = useState(() => readBestScore());
+  const [bestScore, setBestScore] = useState(0);
+  const [startupBestScore, setStartupBestScore] = useState(0);
+  const [showStartupBestScore, setShowStartupBestScore] = useState(false);
+  const [storageMode, setStorageMode] = useState<DesktopStorageMode | null>(null);
   const [health, setHealth] = useState<PersistenceHealth>('hydrating');
   const [warnings, setWarnings] = useState<PersistenceWarning[]>([]);
   const [isHydrated, setIsHydrated] = useState(false);
 
   async function initializePersistence() {
     const nextWarnings: PersistenceWarning[] = [];
+    let nextHealth: PersistenceHealth = 'ready';
 
     try {
       seedLocalPersistence();
@@ -69,8 +77,28 @@ export function PersistenceProvider({ children }: PropsWithChildren) {
       setSettings(nextSettings);
       setUiState(nextUIState);
       setDatabaseHandle(handle);
-      setBestScore(readBestScore());
-      setHealth('ready');
+
+      try {
+        const startupState = await desktopPersistenceClient.loadBestScoreState();
+
+        setBestScore(startupState.bestScore);
+        setStartupBestScore(startupState.bestScore);
+        setShowStartupBestScore(startupState.showBestScore);
+        setStorageMode(startupState.storageMode);
+      } catch (error) {
+        nextWarnings.push({
+          code: 'desktop_persistence_unavailable',
+          message: error instanceof Error
+            ? error.message
+            : 'Desktop persistence is unavailable.',
+          recoverable: true,
+        });
+        setBestScore(0);
+        setStartupBestScore(0);
+        setShowStartupBestScore(false);
+        setStorageMode(null);
+        nextHealth = 'warning';
+      }
     } catch (error) {
       nextWarnings.push({
         code: 'sqlite_unavailable',
@@ -79,9 +107,13 @@ export function PersistenceProvider({ children }: PropsWithChildren) {
       });
       setDatabaseHandle(null);
       setBestScore(0);
-      setHealth('warning');
+      setStartupBestScore(0);
+      setShowStartupBestScore(false);
+      setStorageMode(null);
+      nextHealth = 'warning';
     }
 
+    setHealth(nextHealth);
     setWarnings(nextWarnings);
     setIsHydrated(true);
   }
@@ -93,9 +125,6 @@ export function PersistenceProvider({ children }: PropsWithChildren) {
   }
 
   async function recordCompletedSession(payload: CompletedSessionPayload): Promise<void> {
-    const nextBestScore = commitBestScore(payload.score.final_score);
-    setBestScore(nextBestScore);
-
     if (!databaseHandle) {
       return;
     }
@@ -103,11 +132,11 @@ export function PersistenceProvider({ children }: PropsWithChildren) {
     try {
       insertSessionRecord(databaseHandle.database, {
         ...payload.session,
-        best_score_at_end: nextBestScore,
+        best_score_at_end: Math.max(bestScore, payload.score.final_score),
       });
       insertScoreRecord(databaseHandle.database, {
         ...payload.score,
-        is_personal_best: payload.score.final_score >= nextBestScore,
+        is_personal_best: payload.score.final_score >= bestScore,
       });
       insertReplayEnvelope(databaseHandle.database, payload.replay);
       await databaseHandle.persist();
@@ -145,6 +174,9 @@ export function PersistenceProvider({ children }: PropsWithChildren) {
     settings,
     uiState,
     bestScore,
+    startupBestScore,
+    showStartupBestScore,
+    storageMode,
     health,
     warnings,
     isHydrated,

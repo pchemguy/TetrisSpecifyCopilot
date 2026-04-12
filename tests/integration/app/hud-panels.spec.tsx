@@ -23,10 +23,15 @@ vi.mock('../../../src/app/providers/PersistenceProvider', () => ({
       last_selected_panel: 'stats',
     },
     bestScore: 1200,
+    startupBestScore: 1200,
+    showStartupBestScore: true,
+    storageMode: 'portable_adjacent',
     health: 'ready',
     warnings: [],
     isHydrated: true,
     refresh: vi.fn(),
+    recordCompletedSession: vi.fn(),
+    updateOverlayState: vi.fn(),
   }),
 }));
 

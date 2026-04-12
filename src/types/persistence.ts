@@ -31,6 +31,7 @@ export type PersistenceHealth = 'idle' | 'hydrating' | 'ready' | 'warning' | 'er
 
 export interface PersistenceWarning {
   code:
+    | 'desktop_persistence_unavailable'
     | 'sqlite_unavailable'
     | 'replay_write_failed'
     | 'storage_pruned'

@@ -15,6 +15,8 @@ export default function App() {
     bestScore,
     health,
     isHydrated,
+    showStartupBestScore,
+    startupBestScore,
     settings,
     uiState,
     warnings,
@@ -41,11 +43,11 @@ export default function App() {
       <KeyboardInputHandler onCommand={dispatchCommand} />
 
       <section className="hero-panel">
-        <p className="eyebrow">Classic Browser Tetris</p>
+        <p className="eyebrow">Classic Desktop Tetris</p>
         <h1>Guide the stack, not the placeholder shell.</h1>
         <p className="hero-copy">
           The deterministic engine, canvas renderer, and keyboard input path are now wired
-          together in the live browser session.
+          together in the local desktop session.
         </p>
         <div className="readiness-strip" aria-label="Scaffold readiness highlights">
           {readinessItems.map((item) => (
@@ -67,7 +69,10 @@ export default function App() {
         canHold={state.hold.canHold}
         aside={
           <>
-            <BestScorePanel bestScore={liveBestScore} />
+            <BestScorePanel
+              bestScore={startupBestScore}
+              isVisible={showStartupBestScore}
+            />
             <div className="hud-status-card hud-panel">
               <p className="section-label">Persistence</p>
               <strong>{health}</strong>

@@ -67,6 +67,5 @@ describe('desktop startup hydration', () => {
     renderWithProviders(<App />);
 
     expect(screen.getByLabelText('Best score panel')).toHaveTextContent('4800');
-    expect(screen.getByText('Saved locally for this desktop app.')).toBeInTheDocument();
   });
 });

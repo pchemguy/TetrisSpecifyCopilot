@@ -1,8 +1,13 @@
 export interface BestScorePanelProps {
   bestScore: number;
+  isVisible: boolean;
 }
 
-export function BestScorePanel({ bestScore }: BestScorePanelProps) {
+export function BestScorePanel({ bestScore, isVisible }: BestScorePanelProps) {
+  if (!isVisible) {
+    return null;
+  }
+
   return (
     <section className="hud-panel" aria-label="Best score panel">
       <p className="section-label">Best score</p>
