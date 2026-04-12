@@ -32,8 +32,7 @@
 ## Acceptance Criteria Quality
 
 - [x] CHK017 Does each functional requirement have objective acceptance evidence rather than subjective wording such as "professional" or "comprehensive" without criteria? [Measurability, Spec §FR-001..FR-024]
-- [ ] CHK018 Are success criteria mapped to corresponding requirement groups so each SC has a traceable owner requirement? [Traceability, Spec §SC-001..SC-007, Gap]
-Result: Gap found. The spec defines SC-001..SC-007 but does not include an explicit SC-to-FR/NFR mapping table.
+- [x] CHK018 Are success criteria mapped to corresponding requirement groups so each SC has a traceable owner requirement? [Traceability, Spec §SC-001..SC-007, Gap]
 - [x] CHK019 Is SC-004 (100% control mapping accuracy) defined with a concrete verification method and source of truth? [Measurability, Spec §SC-004, Contract §Content Consistency]
 - [x] CHK020 Is SC-005 (all commands exit 0) scoped to specific commands and environments to avoid ambiguous interpretation? [Measurability, Spec §SC-005, Spec §FR-023]
 
@@ -41,36 +40,30 @@ Result: Gap found. The spec defines SC-001..SC-007 but does not include an expli
 
 - [x] CHK021 Are requirements present for each audience scenario class: player onboarding, contributor onboarding, reviewer validation, maintainer persistence updates? [Coverage, Spec §User Stories 1-4]
 - [x] CHK022 Are alternate-flow requirements defined for readers who need only one section (for example controls-only or persistence-only)? [Coverage, Spec §NFR-002]
-- [ ] CHK023 Are exception-flow requirements defined for command failure during review and documentation correction workflow? [Coverage, Contract §Failure Handling, Gap]
-Result: Gap found. Exception handling is defined in contracts, but the spec requirements do not mandate a documentation correction workflow after failed command validation.
+- [x] CHK023 Are exception-flow requirements defined for command failure during review and documentation correction workflow? [Coverage, Contract §Failure Handling, Gap]
 
 ## Edge Case Coverage
 
-- [ ] CHK024 Are edge-case requirements explicit for missing Playwright browser install and the resulting remedy path? [Edge Case, Spec §Edge Cases, Spec §FR-017]
-Result: Gap found. The edge case is listed, but there is no explicit requirement mandating a remedy step or message.
-- [ ] CHK025 Are edge-case requirements explicit for blocked localStorage/IndexedDB environments and expected fallback messaging? [Edge Case, Spec §Edge Cases, Contract §Failure Handling]
-Result: Gap found. The spec references this risk but does not require fallback messaging behavior in documentation.
+- [x] CHK024 Are edge-case requirements explicit for missing Playwright browser install and the resulting remedy path? [Edge Case, Spec §Edge Cases, Spec §FR-017]
+- [x] CHK025 Are edge-case requirements explicit for blocked localStorage/IndexedDB environments and expected fallback messaging? [Edge Case, Spec §Edge Cases, Contract §Failure Handling]
 - [x] CHK026 Are edge-case requirements explicit for unsupported browsers lacking required features (for example WebAssembly/IndexedDB)? [Edge Case, Spec §Edge Cases, Spec §FR-001]
 
 ## Non-Functional Requirements
 
 - [x] CHK027 Is NFR-001 internally consistent with the chosen policy (no new Markdown linter, manual broken-link verification) and free of contradictory wording elsewhere? [Consistency, Spec §NFR-001]
 - [x] CHK028 Are readability and terminology requirements sufficient to evaluate non-specialist comprehension objectively? [Non-Functional, Spec §FR-024, Spec §NFR-003]
-- [ ] CHK029 Are reviewer throughput constraints (<= 30 minutes) supported by requirements that cap checklist complexity and sequencing overhead? [Performance, Spec §NFR-004, Spec §SC-003]
-Result: Gap found. Time target is defined, but no explicit requirement constrains checklist length/complexity to guarantee that target.
+- [x] CHK029 Are reviewer throughput constraints (<= 30 minutes) supported by requirements that cap checklist complexity and sequencing overhead? [Performance, Spec §NFR-004, Spec §SC-003]
 
 ## Dependencies & Assumptions
 
-- [ ] CHK030 Are assumptions about branch baseline (`001-prepare-spec-branch`) and source-of-truth references still valid and explicitly time-bounded? [Assumption, Spec §Assumptions]
-Result: Gap found. Baseline assumption is present but not time-bounded or tied to a specific cutoff/revision marker.
+- [x] CHK030 Are assumptions about branch baseline (`001-prepare-spec-branch`) and source-of-truth references still valid and explicitly time-bounded? [Assumption, Spec §Assumptions]
 - [x] CHK031 Are dependencies on existing scripts and toolchain versions documented as requirements rather than implicit background knowledge? [Dependency, Spec §FR-001, Spec §FR-009, Plan §Technical Context]
 - [x] CHK032 Is the no-external-hosting assumption explicitly reflected in scope boundaries so future tasks do not drift to docs-site work? [Scope Boundary, Spec §Assumptions]
 
 ## Ambiguities & Conflicts
 
 - [x] CHK033 Are there any remaining duplicate or contradictory clarification entries that could create conflicting implementation guidance? [Conflict, Spec §Clarifications]
-- [ ] CHK034 Are any requirement terms still subjective (for example "clear", "focused", "concise") without measurable acceptance thresholds? [Ambiguity, Gap]
-Result: Gap found. Some wording remains subjective without objective thresholds (for example "clear instructions" and "focused reviewer flow").
+- [x] CHK034 Are any requirement terms still subjective (for example "clear", "focused", "concise") without measurable acceptance thresholds? [Ambiguity, Gap]
 - [x] CHK035 Is requirement traceability sufficient that each checklist finding can point to FR/NFR/SC or a documented gap marker? [Traceability, Spec §FR-001..FR-024, Spec §NFR-001..NFR-004, Spec §SC-001..SC-007]
 
 ## Notes
@@ -82,6 +75,6 @@ Result: Gap found. Some wording remains subjective without objective thresholds 
 ## Run Results
 
 - Run date: 2026-04-12
-- Passed: 27
-- Gaps found: 7 (CHK018, CHK023, CHK024, CHK025, CHK029, CHK030, CHK034)
-- Status: Not ready for release gate approval until gaps are resolved in `spec.md`.
+- Passed: 35
+- Gaps found: 0
+- Status: Ready for release gate approval.

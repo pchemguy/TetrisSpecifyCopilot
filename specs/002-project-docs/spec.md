@@ -124,6 +124,9 @@ As a project maintainer, I want a concise reference for the storage model and sc
 - **FR-022**: All documentation MUST be accurate with respect to the actual implementation at the time of writing; no placeholder or aspirational content is permitted. All four files MUST be placed under `docs/` at the repository root.
 - **FR-023**: All command examples MUST use Bash syntax only. The prerequisites section of every document that contains shell commands MUST include the note: "Windows users require Git Bash (e.g., Git for Windows) or WSL; PowerShell is not supported." No PowerShell variants are provided.
 - **FR-024**: Documentation MUST be written in plain English comprehensible to a non-specialist reader; implementation-specific jargon MUST be explained on first use.
+- **FR-025**: The Reviewer Guide MUST define an exception workflow for failed validation commands: capture failing command output, mark the impacted section as not verified, open or update a correction task, and rerun validation after correction before sign-off.
+- **FR-026**: The Reviewer Guide MUST include an explicit remedy for missing Playwright browser binaries, including the command `npx playwright install chromium` and the expected follow-up rerun step.
+- **FR-027**: The User Guide troubleshooting section and Persistence Reference MUST include fallback messaging guidance for blocked localStorage/IndexedDB environments, including how to continue gameplay when persistence is unavailable and how to communicate data non-retention clearly.
 
 ### Non-Functional Requirements
 
@@ -131,6 +134,13 @@ As a project maintainer, I want a concise reference for the storage model and sc
 - **NFR-002**: Each document section MUST be independently reviewable; a reader interested only in controls should not need to read the architecture section first.
 - **NFR-003**: Documentation language MUST be consistent with the project's existing voice and terminology; terms like "tetromino," "ghost piece," "hard drop," and "hold" MUST match the in-game UI labels.
 - **NFR-004**: The Reviewer Guide MUST be completable end-to-end in under thirty minutes on a machine that already has Node.js and a Chromium-based browser installed.
+- **NFR-005**: To support the 30-minute review target, the Reviewer Guide validation checklist MUST contain at most 12 top-level steps, each step MUST be written in at most two sentences, and each step MUST map to one or more explicit commands or observable outcomes.
+
+## Operational Definitions
+
+- **Clear instructions**: A reader can execute the step without external research because the step contains command, expected outcome, and prerequisite context.
+- **Focused reviewer flow**: A single ordered checklist with no branching required for the happy path and no duplicated command execution.
+- **Concise section**: A section states scope, procedure, and expected result without repeating content owned by another document.
 
 ### Key Entities
 
@@ -151,6 +161,18 @@ As a project maintainer, I want a concise reference for the storage model and sc
 - **SC-006**: The persistence reference correctly describes every SQLite table and localStorage key present in the actual implementation with no omissions or inaccuracies.
 - **SC-007**: Zero contradictions exist between documentation sections (e.g., the controls table in the User Guide matches the controls listed in the Reviewer Guide).
 
+## Success Criteria Traceability
+
+| Success Criterion | Owning Requirements |
+| --- | --- |
+| SC-001 | FR-001, FR-002, FR-003, FR-004, FR-006, FR-024 |
+| SC-002 | FR-008, FR-009, FR-010, FR-011, FR-012, FR-013, FR-014 |
+| SC-003 | FR-016, FR-017, FR-018, FR-025, NFR-004, NFR-005 |
+| SC-004 | FR-003, NFR-003 |
+| SC-005 | FR-017, FR-023, FR-026 |
+| SC-006 | FR-019, FR-020, FR-021, FR-027 |
+| SC-007 | FR-022, NFR-003 |
+
 ## Clarifications
 
 ### Session 2026-04-12
@@ -163,7 +185,7 @@ As a project maintainer, I want a concise reference for the storage model and sc
 
 ## Assumptions
 
-- Documentation is written for the current state of the `001-prepare-spec-branch` implementation; it targets the completed Classic Browser Tetris feature only.
+- Documentation is written for the current state of the `001-prepare-spec-branch` implementation as validated on 2026-04-12; if behavior changes after this date, impacted sections require re-verification before release.
 - All four documentation files (User Guide, Developer Guide, Reviewer Guide, Persistence Reference) are authored in Markdown and stored under `docs/` at the repository root. The `specs/` tree remains reserved for spec-kit planning artifacts.
 - The primary development and validation environment is Windows with Bash (MSYS), per the `AGENTS.md` shell selection rule; commands are validated there first.
 - Mobile browser support is explicitly out of scope; the User Guide MUST note that only desktop browsers are supported.
