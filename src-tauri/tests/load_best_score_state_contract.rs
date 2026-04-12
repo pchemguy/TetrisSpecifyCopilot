@@ -76,5 +76,6 @@ fn hydrates_the_existing_saved_best_score() {
     assert_eq!(response.storage_mode, StorageMode::PortableAdjacent);
     assert!(response.notice.is_none());
 
+    drop(connection);
     fs::remove_dir_all(temp_directory).expect("temporary directory should be removed");
 }
