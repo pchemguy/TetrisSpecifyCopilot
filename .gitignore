@@ -13,3 +13,5 @@ test-results/
 Thumbs.db
 *.tmp
 *.swp
+.vscode/
+.idea/
