@@ -25,7 +25,9 @@
             "approve": true,
             "matchCommandLine": true
         },
-        "cargo check": true
+        "cargo check": true,
+        "rustfmt": true,
+        "/c/Users/evgeny/.cargo/bin/rustfmt.exe": true
     },
     "terminal.explorerKind": "integrated"
 }
