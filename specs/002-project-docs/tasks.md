@@ -113,7 +113,7 @@
 
 - [x] T025 [P] Run a cross-document terminology and internal-link consistency pass across docs/user-guide.md, docs/developer-guide.md, docs/reviewer-guide.md, and docs/persistence-reference.md
 - [x] T026 [P] Execute the documented command-validation pass and update docs/reviewer-guide.md and docs/developer-guide.md with verified expected outcomes
-- [ ] T027 Re-run the requirements-quality checklist in specs/002-project-docs/checklists/docs.md and update docs/user-guide.md, docs/developer-guide.md, docs/reviewer-guide.md, and docs/persistence-reference.md to close any findings
+- [x] T027 Re-run the requirements-quality checklist in specs/002-project-docs/checklists/docs.md and update docs/user-guide.md, docs/developer-guide.md, docs/reviewer-guide.md, and docs/persistence-reference.md to close any findings
 - [ ] T028 Run the full quickstart acceptance checklist from specs/002-project-docs/quickstart.md, including FR-025 failed-command handling, FR-026 Playwright remedy coverage, FR-027 persistence fallback messaging, and the NFR-005 reviewer checklist cap, then complete the final editorial/release-gate pass across docs/user-guide.md, docs/developer-guide.md, docs/reviewer-guide.md, and docs/persistence-reference.md
 
 ---

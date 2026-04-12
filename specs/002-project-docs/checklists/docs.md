@@ -75,6 +75,7 @@
 ## Run Results
 
 - Run date: 2026-04-12
+- Re-run date: 2026-04-12 (Phase 7 T027)
 - Passed: 35
 - Gaps found: 0
 - Status: Ready for release gate approval.
