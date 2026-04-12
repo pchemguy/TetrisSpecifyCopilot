@@ -229,3 +229,46 @@ Success-oriented expectations:
 - A player who does not beat the saved best score does not receive a false congratulatory message and does not lose the previously saved best score.
 - The local best score survives normal application shutdown and restart.
 
+### [plan](https://chatgpt.com/g/g-p-69db58392fb48191849a03dcc4483741-tetrisspeckitcopilotreacttypescriptnodejs/c/69db5996-0688-8393-b81b-5cf5a3a04812)
+
+Create an implementation plan for this feature as a Windows-first Tauri desktop application.
+
+Use these technical constraints and architectural goals as fixed planning inputs:
+
+- Desktop framework: Tauri
+- Frontend: preserve the existing React + TypeScript + Vite application where practical
+- Persistence: replace browser-side `sql.js` persistence with native SQLite-backed persistence
+- Platform focus: Windows only for this feature
+- Distribution target: portable local desktop app
+- Single executable packaging is preferred, but it is not required if it conflicts with the selected Tauri packaging model
+- The application must run fully locally with no separate server process and no browser-launched deployment mode
+
+Architecture expectations:
+- Plan for strong separation between frontend gameplay/UI responsibilities and native desktop/runtime/persistence responsibilities
+- Database access and file-system ownership should live on the Tauri/native side, not in the frontend
+- The frontend should interact with persistence through explicit Tauri command/interface boundaries
+- Prefer a design where gameplay scoring logic remains deterministic and isolated from persistence side effects
+- Persistence should be triggered through explicit application-layer calls at startup and game-over boundaries rather than being interwoven into core gameplay state transitions
+- Preserve maintainability for future packaged-desktop evolution
+
+Persistence and runtime requirements:
+- Use native SQLite, not `sql.js`
+- Store the database as an on-disk file created next to the packaged application
+- If the database is missing on startup, recreate it automatically
+- Track exactly one persistent best score for a single local player
+- Load the saved best score at application startup and expose it to the UI for display
+- When a game ends, compare the final score against the saved best score
+- If the final score is strictly greater, persist the new best score and return a result that causes the UI to show a congratulations message
+- If the final score is equal to or lower than the saved best score, do not update the stored best score and do not trigger the congratulations state
+
+Planning priorities:
+- Research the most appropriate SQLite integration approach for Tauri in this application
+- Research Windows-specific implications of keeping the SQLite database next to the application in a portable deployment model
+- Define a clear command/interface contract between the frontend and the Tauri/native layer for startup score loading and end-of-game score submission
+- Keep the data model minimal and focused on the single best-score record
+- Include first-run behavior, missing-database behavior, startup behavior, and persistence across restarts
+- Do not expand scope into cloud sync, user accounts, multi-profile support, online features, or broader statistics/history systems
+
+Assume the current web application is the migration baseline. Reuse existing frontend and gameplay code where appropriate, but plan the persistence transition as a deliberate move from browser-managed storage to native desktop-managed storage.
+
+The plan should optimize for maintainable architecture, explicit responsibility boundaries, and a practical Windows-portable deployment model rather than for cross-platform scope.
