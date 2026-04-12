@@ -104,6 +104,6 @@ tests/
 
 ## Complexity Tracking
 
-| Violation | Why Needed | Simpler Alternative Rejected Because |
-|-----------|------------|-------------------------------------|
-| Dedicated performance budget omitted as a release gate | Feature scope is Windows packaging and persistence correctness; the approved scope explicitly treats formal performance benchmarking as non-gating for this work | Adding a benchmarked startup budget and review procedure would expand scope beyond the user-valued behavior change and add low-signal validation work for this migration slice |
+| Impacted Principle | Violation | Business Reason | Simpler Alternative Rejected Because | Owner | Expiration / Removal Condition |
+|--------------------|-----------|-----------------|--------------------------------------|-------|-------------------------------|
+| IV. Performance Budgets Are Defined Up Front | Dedicated performance budget omitted as a release gate | Feature scope is Windows packaging and persistence correctness; the approved scope explicitly treats formal performance benchmarking as non-gating for this work | Adding a benchmarked startup budget and review procedure would expand scope beyond the user-valued behavior change and add low-signal validation work for this migration slice | Feature implementation owner for `003-windows-desktop-packaging` | Exception expires when this feature reaches desktop-release hardening or when startup/gameplay responsiveness becomes a release blocker; at that point a measurable desktop performance budget must be added before further scope expansion |

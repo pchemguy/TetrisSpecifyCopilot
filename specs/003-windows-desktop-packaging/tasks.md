@@ -95,7 +95,6 @@
 
 - [ ] T029 [P] [US3] Add startup recovery contract tests for missing-database recreation and corrupt-file backup rename in src-tauri/tests/startup_recovery_contract.rs
 - [ ] T030 [P] [US3] Add integration coverage for fallback-path and database-reset startup notices in tests/integration/app/desktop-startup-notices.spec.tsx
-- [ ] T031 [US3] Add portable desktop smoke coverage for offline local startup and play in tests/e2e/portable-desktop-offline.spec.ts
 
 ### Implementation for User Story 3
 
@@ -105,6 +104,7 @@
 - [ ] T035 [US3] Render desktop fallback and reset notices in src/components/overlays/PersistenceWarning.tsx
 - [ ] T036 [US3] Add Windows file-system and command capability permissions in src-tauri/capabilities/default.json
 - [ ] T037 [US3] Finalize portable Windows bundle settings for desktop distribution in src-tauri/tauri.conf.json
+- [ ] T031 [US3] Add portable desktop smoke coverage for offline local startup and play in tests/e2e/portable-desktop-offline.spec.ts
 
 **Checkpoint**: The desktop build runs as a portable local Windows app, recovers from missing or corrupt databases, and surfaces only event-scoped startup notices.
 
@@ -112,11 +112,14 @@
 
 ## Phase 6: Polish & Cross-Cutting Concerns
 
-**Purpose**: Remove obsolete browser best-score persistence artifacts and capture final validation notes.
+**Purpose**: Run release-quality validation, preserve gameplay behavior, and remove obsolete browser best-score artifacts.
 
-- [ ] T038 [P] Remove obsolete browser best-score local-storage code in src/persistence/local-storage/bestScoreStore.ts
-- [ ] T039 [P] Remove obsolete browser best-score unit coverage in tests/unit/persistence/best-score-store.spec.ts
-- [ ] T040 Run the desktop quickstart validation flow and record any Windows-specific execution notes in specs/003-windows-desktop-packaging/quickstart.md
+- [ ] T038 [P] Run frontend lint and TypeScript/Vitest validation from package.json and record results in specs/003-windows-desktop-packaging/quickstart.md
+- [ ] T039 [P] Run native Rust unit and contract validation from src-tauri/Cargo.toml and record results in specs/003-windows-desktop-packaging/quickstart.md
+- [ ] T040 Validate desktop gameplay and scoring regression coverage using tests/integration/app/core-gameplay.spec.tsx and tests/e2e/core-gameplay.spec.ts, then record any desktop-specific findings in specs/003-windows-desktop-packaging/quickstart.md
+- [ ] T041 Run the portable desktop build and offline smoke validation using src-tauri/tauri.conf.json and record Windows execution notes plus ordinary responsiveness observations in specs/003-windows-desktop-packaging/quickstart.md
+- [ ] T042 [P] Remove obsolete browser best-score local-storage code in src/persistence/local-storage/bestScoreStore.ts
+- [ ] T043 [P] Remove obsolete browser best-score unit coverage in tests/unit/persistence/best-score-store.spec.ts
 
 ---
 
@@ -152,7 +155,7 @@
 - **US1**: T008 and T009 can run in parallel.
 - **US2**: T017, T018, and T019 can run in parallel; T020 should follow once the primary command/UI assertions are clear.
 - **US3**: T029 and T030 can run in parallel; T031 should follow after the portable build path is available.
-- **Polish**: T038 and T039 can run in parallel.
+- **Polish**: T038 and T039 can run in parallel; T042 and T043 can run in parallel after validation work is complete.
 
 ---
 
