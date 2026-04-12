@@ -27,7 +27,8 @@
         },
         "cargo check": true,
         "rustfmt": true,
-        "/c/Users/evgeny/.cargo/bin/rustfmt.exe": true
+        "/c/Users/evgeny/.cargo/bin/rustfmt.exe": true,
+        "git push": true
     },
     "terminal.explorerKind": "integrated"
 }
