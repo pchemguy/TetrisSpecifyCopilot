@@ -14,7 +14,11 @@ import {
   type UIStateDocument,
   type UserSettingsDocument,
 } from '../../types/persistence';
-import type { DesktopStorageMode, SubmitGameOverScoreResponse } from '../../types/desktopPersistence';
+import type {
+  DesktopStartupNotice,
+  DesktopStorageMode,
+  SubmitGameOverScoreResponse,
+} from '../../types/desktopPersistence';
 import type { ReplayEnvelope } from '../../types/replay';
 import { desktopPersistenceClient } from '../services/desktopPersistenceClient';
 import { initializeSQLiteDatabase, type SQLiteDatabaseHandle } from '../../persistence/sqlite/database';
@@ -43,6 +47,7 @@ export interface PersistenceContextValue {
   startupBestScore: number;
   showStartupBestScore: boolean;
   storageMode: DesktopStorageMode | null;
+  startupNotice: DesktopStartupNotice | null;
   latestGameOverSubmission: SubmitGameOverScoreResponse | null;
   health: PersistenceHealth;
   warnings: readonly PersistenceWarning[];
@@ -62,6 +67,7 @@ export function PersistenceProvider({ children }: PropsWithChildren) {
   const [startupBestScore, setStartupBestScore] = useState(0);
   const [showStartupBestScore, setShowStartupBestScore] = useState(false);
   const [storageMode, setStorageMode] = useState<DesktopStorageMode | null>(null);
+  const [startupNotice, setStartupNotice] = useState<DesktopStartupNotice | null>(null);
   const [latestGameOverSubmission, setLatestGameOverSubmission] = useState<SubmitGameOverScoreResponse | null>(null);
   const [health, setHealth] = useState<PersistenceHealth>('hydrating');
   const [warnings, setWarnings] = useState<PersistenceWarning[]>([]);
@@ -71,6 +77,7 @@ export function PersistenceProvider({ children }: PropsWithChildren) {
     const nextWarnings: PersistenceWarning[] = [];
     let nextHealth: PersistenceHealth = 'ready';
 
+    setStartupNotice(null);
     setLatestGameOverSubmission(null);
 
     try {
@@ -93,6 +100,7 @@ export function PersistenceProvider({ children }: PropsWithChildren) {
         setStartupBestScore(startupState.bestScore);
         setShowStartupBestScore(startupState.showBestScore);
         setStorageMode(startupState.storageMode);
+        setStartupNotice(startupState.notice);
       } catch (error) {
         nextWarnings.push({
           code: 'desktop_persistence_unavailable',
@@ -105,6 +113,7 @@ export function PersistenceProvider({ children }: PropsWithChildren) {
         setStartupBestScore(0);
         setShowStartupBestScore(false);
         setStorageMode(null);
+        setStartupNotice(null);
         nextHealth = 'warning';
       }
     } catch (error) {
@@ -118,6 +127,7 @@ export function PersistenceProvider({ children }: PropsWithChildren) {
       setStartupBestScore(0);
       setShowStartupBestScore(false);
       setStorageMode(null);
+      setStartupNotice(null);
       nextHealth = 'warning';
     }
 
@@ -206,6 +216,7 @@ export function PersistenceProvider({ children }: PropsWithChildren) {
     startupBestScore,
     showStartupBestScore,
     storageMode,
+    startupNotice,
     latestGameOverSubmission,
     health,
     warnings,

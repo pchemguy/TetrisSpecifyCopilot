@@ -1,5 +1,6 @@
 use std::fs;
 use std::path::Path;
+use std::time::{SystemTime, UNIX_EPOCH};
 
 use rusqlite::Connection;
 
@@ -13,10 +14,44 @@ pub struct BestScoreState {
     pub has_completed_game: bool,
 }
 
-pub fn load_or_initialize_best_score_state(database_path: &Path) -> Result<BestScoreState, AppError> {
-    let connection = open_best_score_database(database_path)?;
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct LoadBestScoreStateOutcome {
+    pub state: BestScoreState,
+    pub database_reset: bool,
+}
 
-    read_best_score_state(&connection)
+pub fn load_or_initialize_best_score_state(database_path: &Path) -> Result<BestScoreState, AppError> {
+    let outcome = load_or_initialize_best_score_state_with_recovery(database_path)?;
+
+    Ok(outcome.state)
+}
+
+pub fn load_or_initialize_best_score_state_with_recovery(
+    database_path: &Path,
+) -> Result<LoadBestScoreStateOutcome, AppError> {
+    match attempt_load_best_score_state(database_path) {
+        Ok(state) => Ok(LoadBestScoreStateOutcome {
+            state,
+            database_reset: false,
+        }),
+        Err(AppError::Sqlite(_)) => recover_corrupt_database(database_path),
+        Err(error) => Err(error),
+    }
+}
+
+fn recover_corrupt_database(database_path: &Path) -> Result<LoadBestScoreStateOutcome, AppError> {
+    if database_path.exists() {
+        let backup_path = corrupt_backup_path(database_path);
+        fs::rename(database_path, backup_path)?;
+    }
+
+    let connection = open_best_score_database(database_path)?;
+    let state = read_best_score_state(&connection)?;
+
+    Ok(LoadBestScoreStateOutcome {
+        state,
+        database_reset: true,
+    })
 }
 
 pub fn open_best_score_database(database_path: &Path) -> Result<Connection, AppError> {
@@ -88,6 +123,19 @@ pub fn read_best_score_state(connection: &Connection) -> Result<BestScoreState, 
         .map_err(AppError::from)
 }
 
+fn corrupt_backup_path(database_path: &Path) -> std::path::PathBuf {
+    let file_name = database_path
+        .file_name()
+        .expect("database path should include a file name")
+        .to_string_lossy();
+    let timestamp = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .expect("system clock should be after the Unix epoch")
+        .as_nanos();
+
+    database_path.with_file_name(format!("{file_name}.corrupt.{timestamp}"))
+}
+
 #[cfg(test)]
 mod tests {
     use std::fs;
@@ -155,4 +203,10 @@ mod tests {
         drop(connection);
         fs::remove_dir_all(temp_directory).expect("temporary directory should be removed");
     }
+}
+
+fn attempt_load_best_score_state(database_path: &Path) -> Result<BestScoreState, AppError> {
+    let connection = open_best_score_database(database_path)?;
+
+    read_best_score_state(&connection)
 }

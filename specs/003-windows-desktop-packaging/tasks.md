@@ -98,13 +98,13 @@
 
 ### Implementation for User Story 3
 
-- [ ] T032 [US3] Implement corrupt-database backup rename and recreation in src-tauri/src/persistence/database.rs
-- [ ] T033 [US3] Emit fallback and reset notices from load_best_score_state in src-tauri/src/commands/load_best_score_state.rs
-- [ ] T034 [US3] Surface startup notice payloads in desktop persistence state in src/app/providers/PersistenceProvider.tsx
-- [ ] T035 [US3] Render desktop fallback and reset notices in src/components/overlays/PersistenceWarning.tsx
-- [ ] T036 [US3] Add Windows file-system and command capability permissions in src-tauri/capabilities/default.json
-- [ ] T037 [US3] Finalize portable Windows bundle settings for desktop distribution in src-tauri/tauri.conf.json
-- [ ] T031 [US3] Add portable desktop smoke coverage for offline local startup and play in tests/e2e/portable-desktop-offline.spec.ts
+- [X] T032 [US3] Implement corrupt-database backup rename and recreation in src-tauri/src/persistence/database.rs
+- [X] T033 [US3] Emit fallback and reset notices from load_best_score_state in src-tauri/src/commands/load_best_score_state.rs
+- [X] T034 [US3] Surface startup notice payloads in desktop persistence state in src/app/providers/PersistenceProvider.tsx
+- [X] T035 [US3] Render desktop fallback and reset notices in src/components/overlays/PersistenceWarning.tsx
+- [X] T036 [US3] Add Windows file-system and command capability permissions in src-tauri/capabilities/default.json
+- [X] T037 [US3] Finalize portable Windows bundle settings for desktop distribution in src-tauri/tauri.conf.json
+- [X] T031 [US3] Add portable desktop smoke coverage for offline local startup and play in tests/e2e/portable-desktop-offline.spec.ts
 
 **Checkpoint**: The desktop build runs as a portable local Windows app, recovers from missing or corrupt databases, and surfaces only event-scoped startup notices.
 

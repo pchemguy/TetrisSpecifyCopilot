@@ -12,6 +12,7 @@
   "app": {
     "windows": [
       {
+        "label": "main",
         "title": "Classic Tetris Desktop",
         "width": 1280,
         "height": 960,
@@ -20,7 +21,7 @@
     ]
   },
   "bundle": {
-    "active": false,
+    "active": true,
     "targets": "all"
   }
 }

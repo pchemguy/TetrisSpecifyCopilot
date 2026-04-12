@@ -1,14 +1,22 @@
+import type { DesktopStartupNotice } from '../../types/desktopPersistence';
 import type { PersistenceWarning as PersistenceWarningType } from '../../types/persistence';
 
 export interface PersistenceWarningProps {
-  warning: PersistenceWarningType;
+  warning?: PersistenceWarningType;
+  notice?: DesktopStartupNotice | null;
 }
 
-export function PersistenceWarning({ warning }: PersistenceWarningProps) {
+export function PersistenceWarning({ warning, notice }: PersistenceWarningProps) {
+  const message = notice?.message ?? warning?.message;
+
+  if (!message) {
+    return null;
+  }
+
   return (
     <div className="persistence-warning" role="status" aria-label="Persistence warning">
-      <strong>Persistence warning</strong>
-      <p>{warning.message}</p>
+      <strong>{notice ? 'Persistence notice' : 'Persistence warning'}</strong>
+      <p>{message}</p>
     </div>
   );
 }

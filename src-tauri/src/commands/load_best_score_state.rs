@@ -1,8 +1,13 @@
 use serde::Serialize;
 
 use crate::errors::AppError;
-use crate::persistence::database::load_or_initialize_best_score_state;
-use crate::runtime::storage_path::{resolve_storage_path, StorageMode, StorageResolution};
+use crate::persistence::database::load_or_initialize_best_score_state_with_recovery;
+use crate::runtime::storage_path::{
+    resolve_storage_path,
+    StorageMode,
+    StorageNotice,
+    StorageResolution,
+};
 
 #[derive(Clone, Debug, PartialEq, Eq, Serialize)]
 #[serde(rename_all = "snake_case")]
@@ -30,14 +35,27 @@ pub struct LoadBestScoreStateResponse {
 pub fn load_best_score_state_from_storage(
     storage: &StorageResolution,
 ) -> Result<LoadBestScoreStateResponse, AppError> {
-    let best_score_state = load_or_initialize_best_score_state(&storage.database_path)?;
+    let outcome = load_or_initialize_best_score_state_with_recovery(&storage.database_path)?;
+    let notice = if outcome.database_reset {
+        Some(StartupNotice {
+            code: StartupNoticeCode::DatabaseReset,
+            message: "Desktop persistence was reset after recovering from a corrupt database.".into(),
+        })
+    } else if storage.notice == Some(StorageNotice::StorageFallback) {
+        Some(StartupNotice {
+            code: StartupNoticeCode::StorageFallback,
+            message: "Desktop storage moved to LocalAppData because the app folder was not writable.".into(),
+        })
+    } else {
+        None
+    };
 
     Ok(LoadBestScoreStateResponse {
-        best_score: best_score_state.best_score,
-        has_completed_game: best_score_state.has_completed_game,
-        show_best_score: best_score_state.has_completed_game,
+        best_score: outcome.state.best_score,
+        has_completed_game: outcome.state.has_completed_game,
+        show_best_score: outcome.state.has_completed_game,
         storage_mode: storage.mode,
-        notice: None,
+        notice,
     })
 }
 

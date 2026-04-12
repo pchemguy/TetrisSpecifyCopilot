@@ -16,6 +16,7 @@ export default function App() {
     health,
     isHydrated,
     latestGameOverSubmission,
+    startupNotice,
     showStartupBestScore,
     startupBestScore,
     settings,
@@ -83,7 +84,8 @@ export default function App() {
                 {performanceSummary.withinInputBudget ? 'healthy' : 'attention needed'}.
               </p>
             </div>
-            {warnings[0] ? <PersistenceWarning warning={warnings[0]} /> : null}
+            {startupNotice ? <PersistenceWarning notice={startupNotice} /> : null}
+            {!startupNotice && warnings[0] ? <PersistenceWarning warning={warnings[0]} /> : null}
           </>
         }
       >
