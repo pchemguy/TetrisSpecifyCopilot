@@ -41,9 +41,8 @@ pub fn load_best_score_state_from_storage(
     })
 }
 
-#[tauri::command]
-pub fn load_best_score_state() -> Result<LoadBestScoreStateResponse, String> {
-    let storage = resolve_storage_path().map_err(|error| error.to_string())?;
+pub fn load_best_score_state() -> Result<LoadBestScoreStateResponse, AppError> {
+    let storage = resolve_storage_path()?;
 
-    load_best_score_state_from_storage(&storage).map_err(|error| error.to_string())
+    load_best_score_state_from_storage(&storage)
 }

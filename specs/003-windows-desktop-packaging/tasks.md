@@ -48,7 +48,7 @@
 - [X] T010 [US1] Implement native SQLite bootstrap and single-row best-score initialization in src-tauri/src/persistence/database.rs
 - [X] T011 [US1] Implement executable-adjacent database path resolution with LocalAppData fallback metadata in src-tauri/src/runtime/storage_path.rs
 - [X] T012 [US1] Implement the load_best_score_state command response mapping in src-tauri/src/commands/load_best_score_state.rs
-- [ ] T013 [US1] Register the startup hydration command in src-tauri/src/main.rs
+- [X] T013 [US1] Register the startup hydration command in src-tauri/src/main.rs
 - [ ] T014 [US1] Replace browser best-score hydration with desktop command loading in src/app/providers/PersistenceProvider.tsx
 - [ ] T015 [US1] Hide or reveal the startup best-score panel from hydration state in src/components/hud/BestScorePanel.tsx
 - [ ] T016 [US1] Update startup shell copy to remove browser-specific persistence wording in src/app/App.tsx
