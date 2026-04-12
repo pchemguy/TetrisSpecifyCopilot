@@ -85,3 +85,21 @@ Additional points:
 - Combo bonuses: none
 
 Level increases each time total cleared lines crosses a 10-line threshold, which increases gravity speed.
+
+## Persistence and Best Score
+
+The game stores local data in your browser:
+
+- `localStorage`: settings and UI state
+- Browser SQLite database (persisted via IndexedDB): sessions, scores, and replay metadata
+
+Best score remains available after page reload because it is loaded from local browser data.
+
+## Seeded Demo Data
+
+On first launch in an empty browser profile, the app seeds:
+
+- default settings/UI state
+- demo rows in browser SQLite tables for sessions, scores, and replay metadata
+
+Seeded data exists to make review and verification easier. It must not overwrite a player's best score.
