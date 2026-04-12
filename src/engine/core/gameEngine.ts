@@ -4,6 +4,13 @@ import { applyGameCommand, sortCommandsForProcessing } from '../commands/gameCom
 import { canPlacePiece, translatePiece } from '../rules/collision';
 import { ENGINE_TICK_MS, advanceClock, commitLockedPiece, createInitialGameState, createInitialLockState, createSpawnPiece, deriveGravityInterval, reduceCommandEffects, refillPreviewQueue, syncLockState } from './gameState';
 
+const LOCK_RESET_COMMAND_TYPES = new Set<EngineCommand['type']>([
+  'move_left',
+  'move_right',
+  'rotate_cw',
+  'rotate_ccw',
+]);
+
 export interface EngineUpdate {
   state: GameState;
   processedCommands: readonly QueuedCommand[];
@@ -79,6 +86,14 @@ export class GameEngine {
       lock: createInitialLockState(),
       gravityTimerMs: 0,
     });
+  }
+
+  private ensureSpawnedState(state: GameState): GameState {
+    if (!state.activePiece && state.status !== 'game_over') {
+      return this.spawnNextPiece(state);
+    }
+
+    return state;
   }
 
   private processCommands(state: GameState, processedCommands: readonly QueuedCommand[]): GameState {
@@ -193,28 +208,23 @@ export class GameEngine {
     return syncLockState(nextState);
   }
 
+  private shouldSkipLockCountdown(processedCommands: readonly QueuedCommand[], state: GameState): boolean {
+    return processedCommands.some((command) => LOCK_RESET_COMMAND_TYPES.has(command.type))
+      && state.lock.isResting
+      && state.lock.remainingMs === state.config.lockDelayMs;
+  }
+
   advanceBy(elapsedMs: number): EngineUpdate {
     this.accumulatorMs += elapsedMs;
 
     const processedCommands = this.queue.drainUpTo(this.state.elapsedMs + elapsedMs);
-    let nextState = this.state;
-
-    if (!nextState.activePiece && nextState.status !== 'game_over') {
-      nextState = this.spawnNextPiece(nextState);
-    }
+    let nextState = this.ensureSpawnedState(this.state);
 
     nextState = this.processCommands(nextState, processedCommands);
 
-    const skipLockCountdown = processedCommands.some((command) => (
-      command.type === 'move_left'
-      || command.type === 'move_right'
-      || command.type === 'rotate_cw'
-      || command.type === 'rotate_ccw'
-    )) && nextState.lock.isResting && nextState.lock.remainingMs === nextState.config.lockDelayMs;
+    const skipLockCountdown = this.shouldSkipLockCountdown(processedCommands, nextState);
 
-    if (!nextState.activePiece && nextState.status === 'active') {
-      nextState = this.spawnNextPiece(nextState);
-    }
+    nextState = this.ensureSpawnedState(nextState);
 
     nextState = this.advanceSimulation(nextState, elapsedMs, skipLockCountdown);
 

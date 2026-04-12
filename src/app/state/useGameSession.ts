@@ -6,6 +6,11 @@ import type { EngineCommandName, GameState } from '../../types/game';
 import type { OverlayState, ScoreRecord, SessionRecord } from '../../types/persistence';
 import type { ReplayEnvelope } from '../../types/replay';
 
+interface SessionRuntime {
+  engine: GameEngine;
+  performanceTracker: PerformanceTracker;
+}
+
 export interface CompletedSessionArtifacts {
   session: SessionRecord;
   score: ScoreRecord;
@@ -21,6 +26,25 @@ export interface UseGameSessionResult {
   state: GameState;
   dispatchCommand: (type: EngineCommandName) => void;
   lastInputLatencyMs: number | null;
+}
+
+function createSessionRuntime(bestScore: number): SessionRuntime {
+  return {
+    engine: new GameEngine({ seed: 'browser-session', bestScore }),
+    performanceTracker: new PerformanceTracker(),
+  };
+}
+
+function deriveOverlayState(status: GameState['status']): OverlayState {
+  if (status === 'paused') {
+    return 'paused';
+  }
+
+  if (status === 'game_over') {
+    return 'game_over';
+  }
+
+  return 'none';
 }
 
 function createCompletedSessionArtifacts(
@@ -60,22 +84,28 @@ function createCompletedSessionArtifacts(
 }
 
 export function useGameSession(bestScore: number, options: UseGameSessionOptions = {}): UseGameSessionResult {
-  const [engine] = useState(() => new GameEngine({ seed: 'browser-session', bestScore }));
-  const [performanceTracker] = useState(() => new PerformanceTracker());
-  const [state, setState] = useState<GameState>(() => engine.getState());
+  const [runtime] = useState(() => createSessionRuntime(bestScore));
+  const [state, setState] = useState<GameState>(() => runtime.engine.getState());
   const [lastInputLatencyMs, setLastInputLatencyMs] = useState<number | null>(null);
   const startedAtRef = useRef(0);
-  const replayRecorderRef = useRef(new ReplayRecorder(engine.getState().sessionId, engine.getState().seed, 0));
+  const replayRecorderRef = useRef(new ReplayRecorder(runtime.engine.getState().sessionId, runtime.engine.getState().seed, 0));
   const completedSessionIdRef = useRef<string | null>(null);
+  const completedSessionHandlerRef = useRef(options.onCompletedSession);
+  const overlayStateHandlerRef = useRef(options.onOverlayStateChange);
 
   useEffect(() => {
-    const nextState = engine.getState();
+    completedSessionHandlerRef.current = options.onCompletedSession;
+    overlayStateHandlerRef.current = options.onOverlayStateChange;
+  }, [options.onCompletedSession, options.onOverlayStateChange]);
+
+  useEffect(() => {
+    const nextState = runtime.engine.getState();
 
     if (bestScore <= nextState.metrics.bestScore) {
       return;
     }
 
-    const replacedState = engine.replaceState({
+    const replacedState = runtime.engine.replaceState({
       ...nextState,
       metrics: {
         ...nextState.metrics,
@@ -90,7 +120,7 @@ export function useGameSession(bestScore: number, options: UseGameSessionOptions
     return () => {
       window.clearTimeout(timerId);
     };
-  }, [bestScore, engine]);
+  }, [bestScore, runtime]);
 
   useEffect(() => {
     replayRecorderRef.current = new ReplayRecorder(state.sessionId, state.seed, Date.now());
@@ -99,14 +129,8 @@ export function useGameSession(bestScore: number, options: UseGameSessionOptions
   }, [state.sessionId, state.seed]);
 
   useEffect(() => {
-    options.onOverlayStateChange?.(
-      state.status === 'paused'
-        ? 'paused'
-        : state.status === 'game_over'
-          ? 'game_over'
-          : 'none',
-    );
-  }, [options, state.status]);
+    overlayStateHandlerRef.current?.(deriveOverlayState(state.status));
+  }, [state.status]);
 
   useEffect(() => {
     if (state.status !== 'game_over' || completedSessionIdRef.current === state.sessionId) {
@@ -115,10 +139,10 @@ export function useGameSession(bestScore: number, options: UseGameSessionOptions
 
     completedSessionIdRef.current = state.sessionId;
     const replay = replayRecorderRef.current.finalize(state, new Date().toISOString());
-    void options.onCompletedSession?.(
+    void completedSessionHandlerRef.current?.(
       createCompletedSessionArtifacts(state, startedAtRef.current, bestScore, replay),
     );
-  }, [bestScore, options, state]);
+  }, [bestScore, state]);
 
   useEffect(() => {
     let animationFrameId = 0;
@@ -128,11 +152,11 @@ export function useGameSession(bestScore: number, options: UseGameSessionOptions
       const elapsedMs = Math.min(timestamp - previousTimestamp, 250);
       previousTimestamp = timestamp;
 
-      const update = engine.advanceBy(elapsedMs);
+      const update = runtime.engine.advanceBy(elapsedMs);
 
       if (update.processedCommands.length > 0 || update.simulatedTicks > 0) {
         setState(update.state);
-        setLastInputLatencyMs(performanceTracker.consumeLatency());
+        setLastInputLatencyMs(runtime.performanceTracker.consumeLatency());
       }
 
       animationFrameId = window.requestAnimationFrame(tick);
@@ -143,20 +167,20 @@ export function useGameSession(bestScore: number, options: UseGameSessionOptions
     return () => {
       window.cancelAnimationFrame(animationFrameId);
     };
-  }, [engine, performanceTracker]);
+  }, [runtime]);
 
   const dispatchCommand = (type: EngineCommandName) => {
-    performanceTracker.markInput();
-    replayRecorderRef.current.record(type, engine.getState().currentTick);
-    engine.enqueue({
+    runtime.performanceTracker.markInput();
+    replayRecorderRef.current.record(type, runtime.engine.getState().currentTick);
+    runtime.engine.enqueue({
       type,
-      issuedAtMs: engine.getState().elapsedMs,
+      issuedAtMs: runtime.engine.getState().elapsedMs,
       source: 'keyboard',
     });
 
-    const update = engine.advanceBy(0);
+    const update = runtime.engine.advanceBy(0);
     setState(update.state);
-    setLastInputLatencyMs(performanceTracker.consumeLatency());
+    setLastInputLatencyMs(runtime.performanceTracker.consumeLatency());
   };
 
   return {

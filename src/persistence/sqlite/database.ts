@@ -39,44 +39,51 @@ function openDatabaseStore(): Promise<IDBDatabase> {
   });
 }
 
-async function readPersistedDatabase(): Promise<Uint8Array | null> {
+async function runReadRequest<T>(
+  operation: (store: IDBObjectStore) => IDBRequest<T>,
+  errorMessage: string,
+): Promise<T> {
   const database = await openDatabaseStore();
 
   return new Promise((resolve, reject) => {
     const transaction = database.transaction(STORE_NAME, 'readonly');
-    const store = transaction.objectStore(STORE_NAME);
-    const request = store.get(DATABASE_FILE_KEY);
+    const request = operation(transaction.objectStore(STORE_NAME));
 
     request.onerror = () => {
-      reject(request.error ?? new Error('Failed to read SQLite database from IndexedDB.'));
+      reject(request.error ?? new Error(errorMessage));
     };
 
     request.onsuccess = () => {
-      const result = request.result;
-      if (!result) {
-        resolve(null);
-        return;
-      }
-
-      resolve(new Uint8Array(result as ArrayBuffer));
+      resolve(request.result);
     };
 
     transaction.oncomplete = () => {
       database.close();
     };
+
+    transaction.onabort = () => {
+      database.close();
+      reject(transaction.error ?? new Error(errorMessage));
+    };
   });
 }
 
-async function writePersistedDatabase(binary: Uint8Array): Promise<void> {
+async function runWriteTransaction(
+  operation: (store: IDBObjectStore) => void,
+  errorMessage: string,
+): Promise<void> {
   const database = await openDatabaseStore();
 
   await new Promise<void>((resolve, reject) => {
     const transaction = database.transaction(STORE_NAME, 'readwrite');
-    const store = transaction.objectStore(STORE_NAME);
-    store.put(binary, DATABASE_FILE_KEY);
+    operation(transaction.objectStore(STORE_NAME));
 
     transaction.onerror = () => {
-      reject(transaction.error ?? new Error('Failed to write SQLite database to IndexedDB.'));
+      reject(transaction.error ?? new Error(errorMessage));
+    };
+
+    transaction.onabort = () => {
+      reject(transaction.error ?? new Error(errorMessage));
     };
 
     transaction.oncomplete = () => {
@@ -85,6 +92,41 @@ async function writePersistedDatabase(binary: Uint8Array): Promise<void> {
   });
 
   database.close();
+}
+
+function createHydratedDatabase(sqlJs: SqlJsStatic, persistedBinary: Uint8Array | null): {
+  database: Database;
+  schemaVersion: number;
+} {
+  const database = persistedBinary ? new sqlJs.Database(persistedBinary) : new sqlJs.Database();
+  const schemaVersion = ensureSchema(database);
+
+  return {
+    database,
+    schemaVersion,
+  };
+}
+
+async function readPersistedDatabase(): Promise<Uint8Array | null> {
+  const result = await runReadRequest(
+    (store) => store.get(DATABASE_FILE_KEY),
+    'Failed to read SQLite database from IndexedDB.',
+  );
+
+  if (!result) {
+    return null;
+  }
+
+  return new Uint8Array(result as ArrayBuffer);
+}
+
+async function writePersistedDatabase(binary: Uint8Array): Promise<void> {
+  await runWriteTransaction(
+    (store) => {
+      store.put(binary, DATABASE_FILE_KEY);
+    },
+    'Failed to write SQLite database to IndexedDB.',
+  );
 }
 
 export function loadSqlJs(): Promise<SqlJsStatic> {
@@ -112,17 +154,13 @@ export interface SQLiteDatabaseHandle {
 
 export async function createSqlDatabase(): Promise<Database> {
   const sqlJs = await loadSqlJs();
-  const database = new sqlJs.Database();
-  ensureSchema(database);
-  return database;
+  return createHydratedDatabase(sqlJs, null).database;
 }
 
 export async function initializeSQLiteDatabase(): Promise<SQLiteDatabaseHandle> {
   const sqlJs = await loadSqlJs();
   const persistedBinary = await readPersistedDatabase();
-  const database = persistedBinary ? new sqlJs.Database(persistedBinary) : new sqlJs.Database();
-
-  const schemaVersion = ensureSchema(database);
+  const { database, schemaVersion } = createHydratedDatabase(sqlJs, persistedBinary);
 
   return {
     database,
@@ -136,23 +174,12 @@ export async function initializeSQLiteDatabase(): Promise<SQLiteDatabaseHandle> 
 }
 
 export async function resetSQLiteDatabase(): Promise<void> {
-  const database = await openDatabaseStore();
-
-  await new Promise<void>((resolve, reject) => {
-    const transaction = database.transaction(STORE_NAME, 'readwrite');
-    const store = transaction.objectStore(STORE_NAME);
-    store.delete(DATABASE_FILE_KEY);
-
-    transaction.onerror = () => {
-      reject(transaction.error ?? new Error('Failed to reset persisted SQLite database.'));
-    };
-
-    transaction.oncomplete = () => {
-      resolve();
-    };
-  });
-
-  database.close();
+  await runWriteTransaction(
+    (store) => {
+      store.delete(DATABASE_FILE_KEY);
+    },
+    'Failed to reset persisted SQLite database.',
+  );
 }
 
 export const SQLITE_PERSISTENCE_INFO = {
