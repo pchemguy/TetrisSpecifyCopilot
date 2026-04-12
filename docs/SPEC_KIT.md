@@ -374,17 +374,20 @@ Issue content:
 - Include enough context from the task/plan/spec so the issue is actionable without unnecessary extra interpretation
 
 Mapping artifact:
+
 - Produce a task-to-issue mapping table
 - Save it next to tasks.md as `task-to-issue.md`
 - Include at minimum: task ID, short task description, GitHub issue number, and GitHub issue URL
 - Preserve the task order from tasks.md in the mapping document
 
 Labels and milestones:
+
 - Create or reuse a small, consistent label set for the generated issues
 - Apply labels that improve traceability, such as feature, phase/story, platform, and key implementation area where appropriate
 - Create or reuse a milestone for this feature and update the new issues to use it
 
 Operational discipline:
+
 - Do not create issues in any repository other than the one derived from the current Git remote
 - Do not guess mappings, labels, milestone application, or file outputs if tooling does not support them
 - If any requested action cannot be completed, report exactly what was completed and what remains outstanding
