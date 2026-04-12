@@ -1,5 +1,7 @@
 ---
-url: https://chatgpt.com/g/g-p-69ca8410ab7c819198782233666b1069-spec-kit/c/69d94e2a-f79c-838c-b016-9c714cc1759e
+urls:
+  - https://chatgpt.com/g/g-p-69ca8410ab7c819198782233666b1069-spec-kit/c/69d94e2a-f79c-838c-b016-9c714cc1759e
+  - https://chatgpt.com/g/g-p-69db58392fb48191849a03dcc4483741-tetrisspeckitcopilotreacttypescriptnodejs/c/69db5996-0688-8393-b81b-5cf5a3a04812
 ide: VS Code
 agent: Copilot
 framework: Spec Kit
@@ -174,7 +176,7 @@ I need to create detailed comprehensive professional user (`docs/user/`) and dev
 
 I want to transform the web app into a Tauri packaged portable, ideally, single executable app. I am primarily focusing on Windows for now. I want have a strong architectural design. I want to switch to sqlite3 as the backend and have a database created next to the app. I want to keep the the best score in the database and show it at startup. I also want a congratulations message when the game is over, if the final score is larger than the saved best score (and update the saved best score).
 
-### spec
+### [spec](https://chatgpt.com/g/g-p-69db58392fb48191849a03dcc4483741-tetrisspeckitcopilotreacttypescriptnodejs/c/69db5996-0688-8393-b81b-5cf5a3a04812)
 
 Create a feature specification for converting the current browser-based Tetris application into a Windows-first packaged desktop application for portable local use.
 
