@@ -55,6 +55,7 @@ fn persists_a_strictly_greater_game_over_score_as_the_new_best() {
     let temp_directory = create_temp_directory("submit-greater");
     let database_path = temp_directory.join("best-score.sqlite3");
     let connection = seed_best_score_state(&database_path, 3200);
+    drop(connection);
     let storage = portable_storage_resolution(database_path);
 
     let response = submit_game_over_score_from_storage(
@@ -72,7 +73,6 @@ fn persists_a_strictly_greater_game_over_score_as_the_new_best() {
     assert!(response.show_congratulations);
     assert!(response.show_best_score);
 
-    drop(connection);
     fs::remove_dir_all(temp_directory).expect("temporary directory should be removed");
 }
 
@@ -81,6 +81,7 @@ fn leaves_the_stored_best_score_unchanged_for_an_equal_game_over_score() {
     let temp_directory = create_temp_directory("submit-equal");
     let database_path = temp_directory.join("best-score.sqlite3");
     let connection = seed_best_score_state(&database_path, 3200);
+    drop(connection);
     let storage = portable_storage_resolution(database_path);
 
     let response = submit_game_over_score_from_storage(
@@ -98,7 +99,6 @@ fn leaves_the_stored_best_score_unchanged_for_an_equal_game_over_score() {
     assert!(!response.show_congratulations);
     assert!(response.show_best_score);
 
-    drop(connection);
     fs::remove_dir_all(temp_directory).expect("temporary directory should be removed");
 }
 
@@ -107,6 +107,7 @@ fn leaves_the_stored_best_score_unchanged_for_a_lower_game_over_score() {
     let temp_directory = create_temp_directory("submit-lower");
     let database_path = temp_directory.join("best-score.sqlite3");
     let connection = seed_best_score_state(&database_path, 3200);
+    drop(connection);
     let storage = portable_storage_resolution(database_path);
 
     let response = submit_game_over_score_from_storage(
@@ -124,6 +125,5 @@ fn leaves_the_stored_best_score_unchanged_for_a_lower_game_over_score() {
     assert!(!response.show_congratulations);
     assert!(response.show_best_score);
 
-    drop(connection);
     fs::remove_dir_all(temp_directory).expect("temporary directory should be removed");
 }

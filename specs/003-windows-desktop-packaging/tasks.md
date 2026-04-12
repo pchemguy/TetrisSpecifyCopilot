@@ -72,9 +72,9 @@
 
 ### Implementation for User Story 2
 
-- [ ] T021 [US2] Implement strict-greater best-score comparison and update logic in src-tauri/src/persistence/best_score_repository.rs
-- [ ] T022 [US2] Implement the submit_game_over_score command response mapping in src-tauri/src/commands/submit_game_over_score.rs
-- [ ] T023 [US2] Register the game-over submission command in src-tauri/src/main.rs
+- [X] T021 [US2] Implement strict-greater best-score comparison and update logic in src-tauri/src/persistence/best_score_repository.rs
+- [X] T022 [US2] Implement the submit_game_over_score command response mapping in src-tauri/src/commands/submit_game_over_score.rs
+- [X] T023 [US2] Register the game-over submission command in src-tauri/src/main.rs
 - [ ] T024 [US2] Route completed-game score submissions through the desktop persistence client in src/app/providers/PersistenceProvider.tsx
 - [ ] T025 [US2] Emit explicit game_over submission payloads only when the session reaches game over in src/app/state/useGameSession.ts
 - [ ] T026 [US2] Pass new-best submission state into the playfield overlay in src/app/App.tsx

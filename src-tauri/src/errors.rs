@@ -4,6 +4,7 @@ use std::fmt::{Display, Formatter};
 pub enum AppError {
     Io(std::io::Error),
     Sqlite(rusqlite::Error),
+    InvalidCompletedReason(String),
     MissingExecutableDirectory,
     MissingLocalAppData,
 }
@@ -13,6 +14,9 @@ impl Display for AppError {
         match self {
             Self::Io(error) => write!(formatter, "I/O error: {error}"),
             Self::Sqlite(error) => write!(formatter, "SQLite error: {error}"),
+            Self::InvalidCompletedReason(reason) => {
+                write!(formatter, "Unsupported completedReason value: {reason}")
+            }
             Self::MissingExecutableDirectory => {
                 formatter.write_str("Could not resolve the application executable directory.")
             }

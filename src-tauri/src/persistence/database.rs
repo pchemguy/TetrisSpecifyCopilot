@@ -14,13 +14,19 @@ pub struct BestScoreState {
 }
 
 pub fn load_or_initialize_best_score_state(database_path: &Path) -> Result<BestScoreState, AppError> {
+    let connection = open_best_score_database(database_path)?;
+
+    read_best_score_state(&connection)
+}
+
+pub fn open_best_score_database(database_path: &Path) -> Result<Connection, AppError> {
     ensure_parent_directory(database_path)?;
 
     let connection = Connection::open(database_path)?;
     initialize_schema(&connection)?;
     ensure_single_row(&connection)?;
 
-    read_best_score_state(&connection)
+    Ok(connection)
 }
 
 fn ensure_parent_directory(database_path: &Path) -> Result<(), AppError> {
@@ -63,7 +69,7 @@ fn ensure_single_row(connection: &Connection) -> Result<(), AppError> {
     Ok(())
 }
 
-fn read_best_score_state(connection: &Connection) -> Result<BestScoreState, AppError> {
+pub fn read_best_score_state(connection: &Connection) -> Result<BestScoreState, AppError> {
     connection
         .query_row(
             "
