@@ -273,6 +273,10 @@ Assume the current web application is the migration baseline. Reuse existing fro
 
 The plan should optimize for maintainable architecture, explicit responsibility boundaries, and a practical Windows-portable deployment model rather than for cross-platform scope.
 
+### [checklist](https://chatgpt.com/g/g-p-69db58392fb48191849a03dcc4483741-tetrisspeckitcopilotreacttypescriptnodejs/c/69db5996-0688-8393-b81b-5cf5a3a04812)
+
+
+
 ### [tasks](https://chatgpt.com/g/g-p-69db58392fb48191849a03dcc4483741-tetrisspeckitcopilotreacttypescriptnodejs/c/69db5996-0688-8393-b81b-5cf5a3a04812)
 
 Generate tasks for this feature with a strong bias toward small, dependency-ordered, independently verifiable increments that support incremental implementation, review, and commits.
