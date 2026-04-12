@@ -11,6 +11,8 @@ agent_local: "true"
 agent_approval_mode: selective
 ---
 
+## Core
+
 ### `speckit.constitution`
 
 Create principles focused on code quality, testing standards, user experience consistency, and performance requirements. Include governance for how these principles should guide technical decisions and implementation choices.
@@ -163,3 +165,64 @@ Implement current feature. Make sure to link and update GitHub Issues. Commit an
 
 Execute (**Pass 1**)
 Execute (**Pass 2**)
+
+## Docs
+
+I need to create detailed comprehensive professional user (`docs/user/`) and dev (`docs/dev/`) Markdown project docs. Make sure to create a proper `README.md` and `DEVELOPMENT.md`.
+
+## Packaging
+
+I want to transform the web app into a Tauri packaged portable, ideally, single executable app. I am primarily focusing on Windows for now. I want have a strong architectural design. I want to switch to sqlite3 as the backend and have a database created next to the app. I want to keep the the best score in the database and show it at startup. I also want a congratulations message when the game is over, if the final score is larger than the saved best score (and update the saved best score).
+
+### spec
+
+Create a feature specification for converting the current browser-based Tetris application into a Windows-first packaged desktop application for portable local use.
+
+This feature is for a single local player using the game on their own Windows machine. The desktop application must run fully locally without requiring a separate server, online service, or externally managed database. Portable local distribution is required. A single executable distribution is preferred, but it is not a mandatory acceptance condition for this feature.
+
+The feature should preserve the current core gameplay experience while adding packaged desktop operation and local persistent best-score tracking. The resulting product should remain maintainable, with clear separation between gameplay behavior, desktop application/runtime responsibilities, and persistence responsibilities.
+
+Primary user story:
+
+As a player using the packaged desktop version of the game, I want the game to remember my best score between launches and show it when the app starts, so that I can immediately see my current record and feel that my progress is preserved locally.
+
+Key behavior to specify:
+
+- On first launch, if no local database exists next to the application, the application must create it automatically.
+- The application must store exactly one persistent best score for the local player in a local on-disk database located next to the application.
+- On every startup, the application must load the saved best score from that database and display it to the player at startup.
+- When a game ends, the application must compare the final score with the saved best score.
+- If the final score is strictly greater than the saved best score, the application must update the stored best score and show a congratulations message indicating that a new best score was achieved.
+- If the final score is equal to or lower than the saved best score, the application must not update the stored best score and must not show the congratulations message.
+
+Scope constraints:
+
+- Windows is the only required platform in this feature.
+- The application is local-only for this feature.
+- The persistent record is limited to a single saved best score.
+- The database must be application-local and stored next to the packaged app.
+- The feature must include first-run behavior, missing-database behavior, startup display behavior, and persistence across application restarts.
+
+Out of scope:
+
+- online sync
+- cloud backup
+- multiplayer
+- user accounts
+- multiple player profiles
+- general statistics/history tracking beyond the single best score
+- non-Windows packaging requirements
+
+Assumptions:
+
+- There is only one local player context for this feature.
+- The best score is represented as a single numeric record.
+- If the database file is missing at launch, the application recreates it automatically.
+- “Portable” means the app can be run locally without separate infrastructure dependencies.
+
+Success-oriented expectations:
+
+- A player can launch the packaged desktop app and immediately see the currently saved best score.
+- A player who achieves a new record is clearly informed at game over and sees that record preserved on the next launch.
+- A player who does not beat the saved best score does not receive a false congratulatory message and does not lose the previously saved best score.
+- The local best score survives normal application shutdown and restart.
