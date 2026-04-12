@@ -52,3 +52,36 @@ Open the local URL shown by Vite in your desktop browser.
 
 - Supported: latest desktop Chromium, Firefox, and Safari releases with WebAssembly and IndexedDB enabled
 - Not supported: mobile browsers for this release
+
+## Controls Reference
+
+| Key | Action |
+| --- | --- |
+| `ArrowLeft` | Move left |
+| `ArrowRight` | Move right |
+| `ArrowDown` | Soft drop |
+| `ArrowUp` or `X` | Rotate clockwise |
+| `Z` | Rotate counter-clockwise |
+| `Space` | Hard drop |
+| `C` or `ShiftLeft` | Hold piece |
+| `P` or `Escape` | Pause/resume |
+| `R` | Restart |
+
+## Scoring
+
+Line clear score is multiplied by current level:
+
+| Clear Type | Points |
+| --- | --- |
+| Single | `100 x level` |
+| Double | `300 x level` |
+| Triple | `500 x level` |
+| Tetris (4 lines) | `800 x level` |
+
+Additional points:
+
+- Soft drop: `+1` per row
+- Hard drop: `+2` per row
+- Combo bonuses: none
+
+Level increases each time total cleared lines crosses a 10-line threshold, which increases gravity speed.
