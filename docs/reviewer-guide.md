@@ -24,3 +24,9 @@ Validated from [specs/002-project-docs/quickstart.md](../specs/002-project-docs/
 - Include Playwright remediation (`npx playwright install chromium`) before E2E if binaries are missing.
 - Validate E2E with the three scoped Playwright commands from quickstart.
 - Validate final build with `npm run build`.
+
+## Terminology and Consistency Rules
+
+- Canonical terms: tetromino, ghost piece, hold, hard drop, soft drop, pause/resume, best score.
+- Cross-link targets: [User Guide](./user-guide.md), [Developer Guide](./developer-guide.md), [Persistence Reference](./persistence-reference.md).
+- Reviewer wording must stay aligned with command names and outcomes documented in developer guidance.

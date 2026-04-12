@@ -26,3 +26,9 @@ Validated from [specs/002-project-docs/quickstart.md](../specs/002-project-docs/
 - `npx playwright test tests/e2e/hud-and-strategy.spec.ts --project=chromium --reporter=line`
 - `npx playwright test tests/e2e/session-persistence.spec.ts --project=chromium --reporter=line`
 - `npm run build`: production build validation.
+
+## Terminology and Consistency Rules
+
+- Canonical terms: tetromino, ghost piece, hold, hard drop, soft drop, pause/resume, best score.
+- Cross-link targets: [User Guide](./user-guide.md), [Reviewer Guide](./reviewer-guide.md), [Persistence Reference](./persistence-reference.md).
+- Keep command names, script names, and expected outcomes consistent with reviewer documentation.
