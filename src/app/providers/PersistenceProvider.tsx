@@ -14,7 +14,7 @@ import {
   type UIStateDocument,
   type UserSettingsDocument,
 } from '../../types/persistence';
-import type { DesktopStorageMode } from '../../types/desktopPersistence';
+import type { DesktopStorageMode, SubmitGameOverScoreResponse } from '../../types/desktopPersistence';
 import type { ReplayEnvelope } from '../../types/replay';
 import { desktopPersistenceClient } from '../services/desktopPersistenceClient';
 import { initializeSQLiteDatabase, type SQLiteDatabaseHandle } from '../../persistence/sqlite/database';
@@ -29,6 +29,10 @@ export interface CompletedSessionPayload {
   session: SessionRecord;
   score: ScoreRecord;
   replay: ReplayEnvelope;
+  submission: {
+    finalScore: number;
+    completedReason: 'game_over';
+  };
 }
 
 export interface PersistenceContextValue {
@@ -39,6 +43,7 @@ export interface PersistenceContextValue {
   startupBestScore: number;
   showStartupBestScore: boolean;
   storageMode: DesktopStorageMode | null;
+  latestGameOverSubmission: SubmitGameOverScoreResponse | null;
   health: PersistenceHealth;
   warnings: readonly PersistenceWarning[];
   isHydrated: boolean;
@@ -57,6 +62,7 @@ export function PersistenceProvider({ children }: PropsWithChildren) {
   const [startupBestScore, setStartupBestScore] = useState(0);
   const [showStartupBestScore, setShowStartupBestScore] = useState(false);
   const [storageMode, setStorageMode] = useState<DesktopStorageMode | null>(null);
+  const [latestGameOverSubmission, setLatestGameOverSubmission] = useState<SubmitGameOverScoreResponse | null>(null);
   const [health, setHealth] = useState<PersistenceHealth>('hydrating');
   const [warnings, setWarnings] = useState<PersistenceWarning[]>([]);
   const [isHydrated, setIsHydrated] = useState(false);
@@ -64,6 +70,8 @@ export function PersistenceProvider({ children }: PropsWithChildren) {
   async function initializePersistence() {
     const nextWarnings: PersistenceWarning[] = [];
     let nextHealth: PersistenceHealth = 'ready';
+
+    setLatestGameOverSubmission(null);
 
     try {
       seedLocalPersistence();
@@ -125,6 +133,27 @@ export function PersistenceProvider({ children }: PropsWithChildren) {
   }
 
   async function recordCompletedSession(payload: CompletedSessionPayload): Promise<void> {
+    let submissionResponse: SubmitGameOverScoreResponse | null = null;
+
+    try {
+      submissionResponse = await desktopPersistenceClient.submitGameOverScore(payload.submission);
+      setBestScore(submissionResponse.bestScore);
+      setStartupBestScore(submissionResponse.bestScore);
+      setShowStartupBestScore(submissionResponse.showBestScore);
+      setLatestGameOverSubmission(submissionResponse);
+    } catch (error) {
+      setLatestGameOverSubmission(null);
+      setWarnings((currentWarnings) => ([
+        ...currentWarnings,
+        {
+          code: 'desktop_persistence_unavailable',
+          message: error instanceof Error ? error.message : 'Desktop persistence is unavailable.',
+          recoverable: true,
+        },
+      ]));
+      setHealth('warning');
+    }
+
     if (!databaseHandle) {
       return;
     }
@@ -132,11 +161,11 @@ export function PersistenceProvider({ children }: PropsWithChildren) {
     try {
       insertSessionRecord(databaseHandle.database, {
         ...payload.session,
-        best_score_at_end: Math.max(bestScore, payload.score.final_score),
+        best_score_at_end: submissionResponse?.bestScore ?? Math.max(bestScore, payload.score.final_score),
       });
       insertScoreRecord(databaseHandle.database, {
         ...payload.score,
-        is_personal_best: payload.score.final_score >= bestScore,
+        is_personal_best: submissionResponse?.isNewBest ?? payload.score.is_personal_best,
       });
       insertReplayEnvelope(databaseHandle.database, payload.replay);
       await databaseHandle.persist();
@@ -177,6 +206,7 @@ export function PersistenceProvider({ children }: PropsWithChildren) {
     startupBestScore,
     showStartupBestScore,
     storageMode,
+    latestGameOverSubmission,
     health,
     warnings,
     isHydrated,

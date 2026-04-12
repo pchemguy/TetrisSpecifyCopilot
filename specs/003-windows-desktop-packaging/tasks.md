@@ -75,11 +75,11 @@
 - [X] T021 [US2] Implement strict-greater best-score comparison and update logic in src-tauri/src/persistence/best_score_repository.rs
 - [X] T022 [US2] Implement the submit_game_over_score command response mapping in src-tauri/src/commands/submit_game_over_score.rs
 - [X] T023 [US2] Register the game-over submission command in src-tauri/src/main.rs
-- [ ] T024 [US2] Route completed-game score submissions through the desktop persistence client in src/app/providers/PersistenceProvider.tsx
-- [ ] T025 [US2] Emit explicit game_over submission payloads only when the session reaches game over in src/app/state/useGameSession.ts
-- [ ] T026 [US2] Pass new-best submission state into the playfield overlay in src/app/App.tsx
-- [ ] T027 [US2] Render congratulations messaging only for strict new records in src/components/overlays/GameOverOverlay.tsx
-- [ ] T028 [US2] Update saved-best-score copy for desktop-local persistence in src/components/hud/BestScorePanel.tsx
+- [X] T024 [US2] Route completed-game score submissions through the desktop persistence client in src/app/providers/PersistenceProvider.tsx
+- [X] T025 [US2] Emit explicit game_over submission payloads only when the session reaches game over in src/app/state/useGameSession.ts
+- [X] T026 [US2] Pass new-best submission state into the playfield overlay in src/app/App.tsx
+- [X] T027 [US2] Render congratulations messaging only for strict new records in src/components/overlays/GameOverOverlay.tsx
+- [X] T028 [US2] Update saved-best-score copy for desktop-local persistence in src/components/hud/BestScorePanel.tsx
 
 **Checkpoint**: The desktop app completes the core best-score lifecycle: startup load, game-over submission, strict-greater persistence, congratulations messaging, and relaunch verification.
 

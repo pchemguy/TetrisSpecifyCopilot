@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { GameEngine } from '../../engine/core/gameEngine';
 import { PerformanceTracker } from '../../engine/core/performance';
 import { ReplayRecorder } from '../../engine/replay/replayRecorder';
+import type { SubmitGameOverScoreRequest } from '../../types/desktopPersistence';
 import type { EngineCommandName, GameState } from '../../types/game';
 import type { OverlayState, ScoreRecord, SessionRecord } from '../../types/persistence';
 import type { ReplayEnvelope } from '../../types/replay';
@@ -15,6 +16,7 @@ export interface CompletedSessionArtifacts {
   session: SessionRecord;
   score: ScoreRecord;
   replay: ReplayEnvelope;
+  submission: SubmitGameOverScoreRequest;
 }
 
 export interface UseGameSessionOptions {
@@ -80,6 +82,10 @@ function createCompletedSessionArtifacts(
       is_personal_best: state.metrics.score >= bestScore,
     },
     replay,
+    submission: {
+      finalScore: state.metrics.score,
+      completedReason: 'game_over',
+    },
   };
 }
 

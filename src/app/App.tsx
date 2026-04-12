@@ -15,6 +15,7 @@ export default function App() {
     bestScore,
     health,
     isHydrated,
+    latestGameOverSubmission,
     showStartupBestScore,
     startupBestScore,
     settings,
@@ -100,7 +101,11 @@ export default function App() {
             />
             {state.status === 'paused' ? <PauseOverlay /> : null}
             {state.status === 'game_over' ? (
-              <GameOverOverlay score={state.metrics.score} onRestart={() => dispatchCommand('restart')} />
+              <GameOverOverlay
+                score={state.metrics.score}
+                showCongratulations={latestGameOverSubmission?.showCongratulations ?? false}
+                onRestart={() => dispatchCommand('restart')}
+              />
             ) : null}
           </div>
           <p className="card-copy">

@@ -26,6 +26,7 @@ vi.mock('../../../src/app/providers/PersistenceProvider', () => ({
     startupBestScore: 1200,
     showStartupBestScore: true,
     storageMode: 'portable_adjacent',
+    latestGameOverSubmission: null,
     health: 'ready',
     warnings: [],
     isHydrated: true,
