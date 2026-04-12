@@ -427,3 +427,8 @@ Implementation discipline:
 - Avoid broad refactors unless they are required by the current task
 - Keep persistence logic on the Tauri/native side and interact with it through explicit command boundaries
 - Preserve incremental implementability and auditability throughout the run
+
+---
+
+rustup.exe toolchain install stable-x86_64-pc-windows-msvc --profile minimal
+https://anaconda.org/channels/conda-forge/packages/rust
