@@ -272,3 +272,49 @@ Planning priorities:
 Assume the current web application is the migration baseline. Reuse existing frontend and gameplay code where appropriate, but plan the persistence transition as a deliberate move from browser-managed storage to native desktop-managed storage.
 
 The plan should optimize for maintainable architecture, explicit responsibility boundaries, and a practical Windows-portable deployment model rather than for cross-platform scope.
+
+### [tasks](https://chatgpt.com/g/g-p-69db58392fb48191849a03dcc4483741-tetrisspeckitcopilotreacttypescriptnodejs/c/69db5996-0688-8393-b81b-5cf5a3a04812)
+
+Generate tasks for this feature with a strong bias toward small, dependency-ordered, independently verifiable increments that support incremental implementation, review, and commits.
+
+Task-generation priorities:
+
+- Prefer small vertical slices of working functionality over broad horizontal layers
+- Keep tasks narrowly scoped so that each task, or a very small cluster of adjacent tasks, can be implemented and committed coherently
+- Bias toward tasks that can be completed, validated, and committed in under a modest single-session implementation pass.
+- Organize work so each user story phase produces a runnable or verifiable increment
+- Minimize the Foundational phase to only truly blocking prerequisites
+- Push as much work as possible into story-specific phases rather than shared umbrella tasks
+- Preserve clear separation between frontend/UI tasks, Tauri/native command tasks, persistence tasks, and explicit integration tasks at their boundaries
+- Prefer tasks that modify as few files as practical while still delivering a meaningful increment
+- Avoid tasks that span frontend, native runtime, and persistence layers simultaneously unless the task is explicitly an integration step that depends on prior layer-specific tasks
+- Use exact file paths in every task and avoid vague multi-file “wire everything together” descriptions
+- Mark tasks as parallel only when they are genuinely independent and do not create likely merge or dependency conflicts
+
+Testing expectations:
+
+- Include test tasks for high-value behavior and edge cases, especially:
+    - first-run database creation
+    - missing-database recovery
+    - startup best-score loading and display
+    - end-of-game score submission
+    - strict greater-than best-score update logic
+    - congratulations message only when a new best score is actually achieved
+- Prefer tests that validate user-visible behavior or stable command/persistence contracts
+- Keep tests scoped to the increment they validate
+
+Implementation focus:
+
+- Target a Windows-first Tauri desktop app using native SQLite persistence
+- Assume the migration baseline is the existing React + TypeScript + Vite app
+- Keep persistence ownership on the Tauri/native side and interaction through explicit command boundaries
+- Favor an MVP-first sequence that delivers the complete best-score lifecycle early:
+    1. packaged app startup
+    2. database bootstrap/creation
+    3. startup best-score read/display
+    4. end-of-game score submission
+    5. new-best persistence update and congratulations flow
+
+Each user story phase should be completable and reviewable in isolation, with a clear independent validation path before moving to the next story.
+
+The resulting tasks should be immediately actionable by an LLM, with each task specific enough to implement without additional hidden context.
