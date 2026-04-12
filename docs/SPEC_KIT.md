@@ -354,6 +354,41 @@ Each user story phase should be completable and reviewable in isolation, with a 
 
 The resulting tasks should be immediately actionable by an LLM, with each task specific enough to implement without additional hidden context.
 
+### [taskstoissues](https://chatgpt.com/g/g-p-69db58392fb48191849a03dcc4483741-tetrisspeckitcopilotreacttypescriptnodejs/c/69db5996-0688-8393-b81b-5cf5a3a04812)
+
+Create GitHub issues from the current tasks.md with strict one-task-to-one-issue mapping.
+
+Requirements:
+
+- Create exactly one GitHub issue per task
+- Do not merge, bundle, or combine multiple tasks into one issue
+- Preserve task granularity, ordering, and dependency intent from tasks.md
+- Keep each created issue focused, small, testable, and implementation-ready
+
+Issue content:
+
+- Format issue titles so they begin with the task ID, followed by a concise task title
+- Include the task description, relevant file paths, and any story/phase context in the issue body
+- Where possible, include task dependencies or blocking predecessor task IDs in the issue body
+- Keep the issue scope limited to the originating task only
+- Include enough context from the task/plan/spec so the issue is actionable without unnecessary extra interpretation
+
+Mapping artifact:
+- Produce a task-to-issue mapping table
+- Save it next to tasks.md as `task-to-issue.md`
+- Include at minimum: task ID, short task description, GitHub issue number, and GitHub issue URL
+- Preserve the task order from tasks.md in the mapping document
+
+Labels and milestones:
+- Create or reuse a small, consistent label set for the generated issues
+- Apply labels that improve traceability, such as feature, phase/story, platform, and key implementation area where appropriate
+- Create or reuse a milestone for this feature and update the new issues to use it
+
+Operational discipline:
+- Do not create issues in any repository other than the one derived from the current Git remote
+- Do not guess mappings, labels, milestone application, or file outputs if tooling does not support them
+- If any requested action cannot be completed, report exactly what was completed and what remains outstanding
+
 ### [implement](https://chatgpt.com/g/g-p-69db58392fb48191849a03dcc4483741-tetrisspeckitcopilotreacttypescriptnodejs/c/69db5996-0688-8393-b81b-5cf5a3a04812)
 
 Implement the current feature strictly according to the generated tasks.md, plan.md, and related design artifacts.
