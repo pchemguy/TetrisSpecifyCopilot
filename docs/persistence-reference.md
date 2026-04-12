@@ -120,3 +120,12 @@ Recovery steps for maintainers:
 1. Reproduce in a browser profile with storage enabled.
 2. Reload and verify persistence health returns to `ready`.
 3. Complete one short game and confirm new `sessions`, `scores`, and `replays` rows persist after reload.
+
+## Seed/Persistence Verification Checklist
+
+Use this quick pass after persistence changes:
+
+1. Start from an empty browser profile and confirm demo rows are inserted only once for `sessions`, `scores`, and `replays`.
+2. Set a player best score above demo score and confirm subsequent launches do not lower it.
+3. Temporarily block IndexedDB and verify the app still runs with a visible persistence warning.
+4. Restore storage, reload, and verify new completed sessions are persisted again.
