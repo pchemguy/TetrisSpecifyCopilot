@@ -16,7 +16,15 @@
         "git add": true,
         "git commit": true,
         "git rev-parse": true,
-        "npx eslint": true
+        "npx eslint": true,
+        "/^cd /b/GH/TetrisSpecifyCopilot && bash \\.specify/scripts/bash/setup-plan\\.sh --json$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd /b/GH/TetrisSpecifyCopilot && bash \\.specify/scripts/bash/update-agent-context\\.sh copilot && git status --short$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
     },
     "terminal.explorerKind": "integrated"
 }
