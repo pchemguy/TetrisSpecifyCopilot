@@ -49,7 +49,7 @@
 - [x] T008 [P] [US1] Add the controls reference and exact scoring table in docs/user-guide.md
 - [x] T009 [P] [US1] Add persistence, best-score, and seeded demo data sections in docs/user-guide.md
 - [x] T010 [US1] Add troubleshooting guidance, including blocked localStorage/IndexedDB fallback messaging, in docs/user-guide.md
-- [ ] T011 [US1] Run the player onboarding walkthrough and revise docs/user-guide.md to satisfy SC-001 and SC-004
+- [x] T011 [US1] Run the player onboarding walkthrough and revise docs/user-guide.md to satisfy SC-001 and SC-004
 
 **Checkpoint**: User Story 1 is independently usable as an MVP player guide.
 

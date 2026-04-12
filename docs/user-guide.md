@@ -126,3 +126,14 @@ Seeded data exists to make review and verification easier. It must not overwrite
 - Some private browsing modes or strict browser settings can block local persistence.
 - Gameplay still works, but progress and best score may not persist across reloads.
 - If this happens, switch to a browser/profile that allows localStorage and IndexedDB, then relaunch.
+
+## Player Onboarding Validation
+
+Use this quick check to validate this guide against SC-001 and SC-004:
+
+1. Run `npm install` and `npm run dev` using only this guide.
+2. Open the local Vite URL and confirm the game loads in under five minutes from starting setup.
+3. Press each documented control key once and confirm behavior matches the controls table.
+4. Reload the page and confirm persisted best score behavior is explained and observable.
+
+If any step fails, update this guide before release sign-off.
