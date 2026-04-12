@@ -45,7 +45,7 @@
 
 ### Implementation for User Story 1
 
-- [ ] T007 [US1] Draft prerequisites, installation, launch, and desktop-browser support sections in docs/user-guide.md
+- [x] T007 [US1] Draft prerequisites, installation, launch, and desktop-browser support sections in docs/user-guide.md
 - [ ] T008 [P] [US1] Add the controls reference and exact scoring table in docs/user-guide.md
 - [ ] T009 [P] [US1] Add persistence, best-score, and seeded demo data sections in docs/user-guide.md
 - [ ] T010 [US1] Add troubleshooting guidance, including blocked localStorage/IndexedDB fallback messaging, in docs/user-guide.md

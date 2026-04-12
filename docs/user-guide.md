@@ -27,3 +27,28 @@ Validated from [specs/002-project-docs/research.md](../specs/002-project-docs/re
 - Canonical terms: tetromino, ghost piece, hold, hard drop, soft drop, pause/resume, best score.
 - Cross-link targets: [Developer Guide](./developer-guide.md), [Reviewer Guide](./reviewer-guide.md), [Persistence Reference](./persistence-reference.md).
 - Use canonical terms consistently and avoid alternate naming for the same in-game concept.
+
+## Prerequisites
+
+- Node.js 22 LTS or newer
+- npm 10 or newer
+- A modern desktop browser with WebAssembly and IndexedDB support
+
+## Install
+
+```bash
+npm install
+```
+
+## Launch
+
+```bash
+npm run dev
+```
+
+Open the local URL shown by Vite in your desktop browser.
+
+## Desktop Browser Support
+
+- Supported: latest desktop Chromium, Firefox, and Safari releases with WebAssembly and IndexedDB enabled
+- Not supported: mobile browsers for this release
