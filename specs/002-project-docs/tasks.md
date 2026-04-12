@@ -81,7 +81,7 @@
 
 ### Implementation for User Story 3
 
-- [ ] T017 [US3] Draft the numbered validation checklist with at most 12 top-level steps in docs/reviewer-guide.md
+- [x] T017 [US3] Draft the numbered validation checklist with at most 12 top-level steps in docs/reviewer-guide.md
 - [ ] T018 [P] [US3] Add copy-paste validation commands and expected outcomes in docs/reviewer-guide.md
 - [ ] T019 [P] [US3] Add offline verification, Playwright install remedy, and failed-command exception workflow in docs/reviewer-guide.md
 - [ ] T020 [US3] Tune the reviewer sequence and wording in docs/reviewer-guide.md to satisfy NFR-004, NFR-005, and SC-003

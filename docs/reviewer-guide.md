@@ -30,3 +30,16 @@ Validated from [specs/002-project-docs/quickstart.md](../specs/002-project-docs/
 - Canonical terms: tetromino, ghost piece, hold, hard drop, soft drop, pause/resume, best score.
 - Cross-link targets: [User Guide](./user-guide.md), [Developer Guide](./developer-guide.md), [Persistence Reference](./persistence-reference.md).
 - Reviewer wording must stay aligned with command names and outcomes documented in developer guidance.
+
+## Reviewer Checklist
+
+1. Verify prerequisites are met.
+2. Install project dependencies.
+3. Start the application locally.
+4. Run gameplay smoke checks.
+5. Verify persistence behavior after reload.
+6. Run lint and unit/integration tests.
+7. Run scoped E2E tests.
+8. Run build validation.
+9. Verify offline behavior after initial load.
+10. Record results and sign off or open corrections.
