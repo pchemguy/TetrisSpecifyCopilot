@@ -353,3 +353,6 @@ Implementation focus:
 Each user story phase should be completable and reviewable in isolation, with a clear independent validation path before moving to the next story.
 
 The resulting tasks should be immediately actionable by an LLM, with each task specific enough to implement without additional hidden context.
+
+### [implement](https://chatgpt.com/g/g-p-69db58392fb48191849a03dcc4483741-tetrisspeckitcopilotreacttypescriptnodejs/c/69db5996-0688-8393-b81b-5cf5a3a04812)
+
