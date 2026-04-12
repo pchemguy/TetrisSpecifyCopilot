@@ -1,18 +1,19 @@
-# User Guide: Classic Browser Tetris
+# User Guide: Classic Tetris Desktop
 
 ## Overview
 
-This guide helps players install, run, and play Classic Browser Tetris.
+This guide helps players and local testers run, play, and understand the Windows-first desktop version of Classic Tetris.
 
 ## Shell Prerequisite
 
-Windows users require Git Bash (for example, Git for Windows) or WSL; PowerShell is not supported.
+Windows users require Git Bash (for example, Git for Windows) or WSL when running from source. PowerShell is not supported.
 
 ## Related Docs
 
 - [Developer Guide](./developer-guide.md)
 - [Reviewer Guide](./reviewer-guide.md)
 - [Persistence Reference](./persistence-reference.md)
+- [Packaging Guide](./packaging/packaging.md)
 
 ## Release-Gate Status
 
@@ -21,42 +22,60 @@ Windows users require Git Bash (for example, Git for Windows) or WSL; PowerShell
 
 ## Source-of-Truth Baseline
 
-Validated from [specs/002-project-docs/research.md](../specs/002-project-docs/research.md):
+Validated from [specs/003-windows-desktop-packaging/quickstart.md](../specs/003-windows-desktop-packaging/quickstart.md):
 
 - Controls: desktop keyboard mapping is authoritative and must match runtime behavior.
-- Scoring: line clears use classic values (single 100x level, double 300x level, triple 500x level, tetris 800x level), plus soft drop +1/row and hard drop +2/row.
-- Seed data: first-run seeded demo records are for review visibility and must never overwrite player best score behavior.
+- Scoring: line clears use classic values (single `100 x level`, double `300 x level`, triple `500 x level`, tetris `800 x level`), plus soft drop `+1` per row and hard drop `+2` per row.
+- Best score visibility: the best-score panel stays hidden until at least one completed game exists.
+- New-record messaging: the congratulations message appears only when a final score is strictly greater than the stored best score.
+- Seed data: reviewer-focused demo records must never overwrite the player's best score.
 
 ## Terminology and Consistency Rules
 
 - Canonical terms: tetromino, ghost piece, hold, hard drop, soft drop, pause/resume, best score.
-- Cross-link targets: [Developer Guide](./developer-guide.md), [Reviewer Guide](./reviewer-guide.md), [Persistence Reference](./persistence-reference.md).
-- Use canonical terms consistently and avoid alternate naming for the same in-game concept.
+- Cross-link targets: [Developer Guide](./developer-guide.md), [Reviewer Guide](./reviewer-guide.md), [Persistence Reference](./persistence-reference.md), [Packaging Guide](./packaging/packaging.md).
 
 ## Prerequisites
 
+For packaged desktop use:
+
+- Windows 10 or Windows 11
+- WebView2 runtime available on the machine
+
+For running from source:
+
 - Node.js 22 LTS or newer
 - npm 10 or newer
-- A modern desktop browser with WebAssembly and IndexedDB support
+- Rust stable toolchain
 
-## Install
+## Launch Options
+
+### Packaged Desktop App
+
+Launch `tetris-desktop.exe` from the packaged Windows bundle or release output.
+
+### Desktop Runtime From Source
 
 ```bash
 npm install
+npm run tauri dev
 ```
 
-## Launch
+### Frontend-Only Preview
 
 ```bash
+npm install
 npm run dev
 ```
 
 Open the local URL shown by Vite in your desktop browser.
 
-## Desktop Browser Support
+Use frontend-only preview for UI iteration only. It does not exercise native desktop best-score storage.
 
-- Supported: latest desktop Chromium, Firefox, and Safari releases with WebAssembly and IndexedDB enabled
-- Not supported: mobile browsers for this release
+## Windows Support
+
+- Supported: Windows 10 and Windows 11 with WebView2
+- Not supported: mobile devices or non-Windows packaged releases for this feature
 
 ## Controls Reference
 
@@ -93,52 +112,72 @@ Level increases each time total cleared lines crosses a 10-line threshold, which
 
 ## Persistence and Best Score
 
-The game stores local data in your browser:
+The desktop app stores data locally in three places:
 
-- `localStorage`: settings and UI state
-- Browser SQLite database (persisted via IndexedDB): sessions, scores, and replay metadata
+- native SQLite file for the best score
+- `localStorage` for settings and UI state
+- local `sql.js` data persisted in browser or webview storage for sessions, scores, and replay metadata
 
-Best score remains available after page reload because it is loaded from local browser data.
+Best-score behavior is intentional:
+
+- the best-score panel stays hidden until at least one game reaches `game_over`
+- a zero-score completed game still marks the panel as eligible to appear
+- the congratulations message appears only when a final score is strictly greater than the stored best score
+- quitting or restarting mid-run does not update the stored best score
+
+## Desktop Storage Location
+
+The desktop best-score database file is named `best-score.sqlite3`.
+
+- If the app directory is writable, the file is stored next to the executable.
+- If the app directory is not writable, storage falls back to `%LOCALAPPDATA%/Classic Browser Tetris/`.
 
 ## Seeded Demo Data
 
-On first launch in an empty browser profile, the app seeds:
+On first launch, the app seeds:
 
-- default settings/UI state
-- demo rows in browser SQLite tables for sessions, scores, and replay metadata
+- default settings and UI state if they are missing
+- demo rows for sessions, scores, and replay metadata when structured history storage is empty
 
-Seeded data exists to make review and verification easier. It must not overwrite a player's best score.
+Seeded data exists for review visibility. It never writes or lowers the player's desktop best score.
 
 ## Troubleshooting
 
 ### App Does Not Start
 
-- Re-run `npm install` to confirm dependencies are present.
-- Start again with `npm run dev` and open the URL shown by Vite.
+- For packaged use, confirm WebView2 is installed.
+- For source use, re-run `npm install` and start again with `npm run tauri dev`.
 
 ### Controls Not Responding
 
-- Click inside the game page so keyboard input focus is active.
+- Click inside the game window so keyboard input focus is active.
 - Confirm you are using the keys listed in the controls reference.
 
 ### Best Score Not Appearing
 
-- Reload the page once to allow persisted state hydration.
-- If browser storage was cleared, best score history resets until new sessions are played.
+- This is expected on first launch before any completed game exists.
+- Finish one game so the app records that a completed session exists.
+- If a database-reset notice appears, the old best-score file was replaced during corruption recovery and the new best score starts from a clean state.
 
-### IndexedDB or localStorage Is Blocked
+### Storage Fallback Notice Appears
 
-- Some private browsing modes or strict browser settings can block local persistence.
-- Gameplay still works, but progress and best score may not persist across reloads.
-- If this happens, switch to a browser/profile that allows localStorage and IndexedDB, then relaunch.
+- The app folder was not writable.
+- The database was moved to `%LOCALAPPDATA%/Classic Browser Tetris/`.
+- Gameplay continues normally and best-score persistence remains available.
+
+### Frontend-Only Preview Behaves Differently
+
+- `npm run dev` does not exercise native desktop best-score commands.
+- Use `npm run tauri dev` when validating packaged-desktop behavior.
 
 ## Player Onboarding Validation
 
-Use this quick check to validate this guide against SC-001 and SC-004:
+Use this quick check to validate this guide:
 
-1. Run `npm install` and `npm run dev` using only this guide.
-2. Open the local Vite URL and confirm the game loads in under five minutes from starting setup.
-3. Press each documented control key once and confirm behavior matches the controls table.
-4. Reload the page and confirm persisted best score behavior is explained and observable.
+1. Launch the packaged app or run `npm run tauri dev` using only this guide.
+2. Confirm the game window opens and documented controls behave as listed.
+3. Finish one game and confirm the best-score panel becomes eligible to appear only after that completed session.
+4. Finish a later game with a strictly higher score and confirm the congratulations message appears.
+5. Relaunch the app and confirm the saved best score is shown at startup.
 
 If any step fails, update this guide before release sign-off.
