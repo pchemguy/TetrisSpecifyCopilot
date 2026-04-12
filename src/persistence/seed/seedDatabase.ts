@@ -1,7 +1,6 @@
 import type { Database } from 'sql.js';
 import { DEFAULT_UI_STATE, DEFAULT_USER_SETTINGS, type SeededPersistenceState } from '../../types/persistence';
 import type { ReplayEnvelope } from '../../types/replay';
-import { readBestScore } from '../local-storage/bestScoreStore';
 import { writeSettings } from '../local-storage/settingsStore';
 import { writeUIState } from '../local-storage/uiStateStore';
 import { DEMO_REPLAY, DEMO_SCORE, DEMO_SESSION, DEMO_UI_STATE, DEMO_USER_SETTINGS } from './demoData';
@@ -50,10 +49,6 @@ export function seedLocalPersistence(): void {
 
   if (!window.localStorage.getItem('tetris.ui.v1')) {
     writeUIState(DEMO_UI_STATE ?? DEFAULT_UI_STATE);
-  }
-
-  if (readBestScore() < 0) {
-    window.localStorage.removeItem('tetris.best-score.v1');
   }
 }
 

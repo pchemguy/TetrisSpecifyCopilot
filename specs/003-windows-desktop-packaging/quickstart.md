@@ -74,3 +74,12 @@ npm run tauri build
 - quit/restart-mid-run never updates best score
 - startup fallback and corruption recovery notices are visible exactly when required
 - portable folder artifact is sufficient for Windows acceptance even if single-file bundling is not used
+
+## Validation Log
+
+- T038 frontend validation passed with `npm run lint && npm run test`; Vitest reported 16 passing files and 47 passing tests.
+- T039 native validation passed with `cargo test --manifest-path src-tauri/Cargo.toml`; Rust unit and desktop command contract suites completed without failures.
+- T040 regression validation passed with `npx vitest run tests/integration/app/core-gameplay.spec.tsx` and `npx playwright test tests/e2e/core-gameplay.spec.ts --project=chromium --reporter=line`; gameplay and scoring behavior remained unchanged.
+- T041 portable validation passed with `npm run tauri build`; the Windows bundle output was produced under `src-tauri/target/release/bundle/` and the release executable was built at `src-tauri/target/release/tetris-desktop.exe`.
+- T041 offline smoke passed with `npx playwright test tests/e2e/portable-desktop-offline.spec.ts --project=chromium --reporter=line`; the desktop-local play path stayed responsive under ordinary interaction and completed 1 passing test with browser networking disabled.
+- T042 and T043 cleanup validation passed with `npm run lint`, `npm run test`, and `cargo test --manifest-path src-tauri/Cargo.toml`; the obsolete browser best-score store was removed and the remaining suite completed with 15 passing test files, 44 passing frontend tests, and all native tests passing.

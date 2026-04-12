@@ -1,4 +1,4 @@
-import { invoke } from '@tauri-apps/api/core';
+import { invoke, type InvokeArgs } from '@tauri-apps/api/core';
 import {
   DESKTOP_PERSISTENCE_COMMANDS,
   type DesktopPersistenceCommandName,
@@ -7,11 +7,14 @@ import {
   type SubmitGameOverScoreResponse,
 } from '../../types/desktopPersistence';
 
-async function invokeDesktopPersistenceCommand<TResponse>(
+async function invokeDesktopPersistenceCommand<
+  TResponse,
+  TPayload extends object | undefined = undefined,
+>(
   commandName: DesktopPersistenceCommandName,
-  payload?: Record<string, unknown>,
+  payload?: TPayload,
 ): Promise<TResponse> {
-  return invoke<TResponse>(commandName, payload);
+  return invoke<TResponse>(commandName, payload as InvokeArgs | undefined);
 }
 
 async function loadBestScoreState(): Promise<LoadBestScoreStateResponse> {
@@ -23,7 +26,10 @@ async function loadBestScoreState(): Promise<LoadBestScoreStateResponse> {
 async function submitGameOverScore(
   payload: SubmitGameOverScoreRequest,
 ): Promise<SubmitGameOverScoreResponse> {
-  return invokeDesktopPersistenceCommand<SubmitGameOverScoreResponse>(
+  return invokeDesktopPersistenceCommand<
+    SubmitGameOverScoreResponse,
+    SubmitGameOverScoreRequest
+  >(
     DESKTOP_PERSISTENCE_COMMANDS.submitGameOverScore,
     payload,
   );

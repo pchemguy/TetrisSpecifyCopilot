@@ -5,7 +5,18 @@ import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
   {
-    ignores: ['dist/**', 'build/**', 'coverage/**', 'playwright-report/**', 'test-results/**', 'node_modules/**', '*.min.js'],
+    ignores: [
+      'dist/**',
+      'build/**',
+      'coverage/**',
+      'playwright-report/**',
+      'test-results/**',
+      'node_modules/**',
+      'src-tauri/gen/**',
+      'src-tauri/target/**',
+      '.tmp/**',
+      '*.min.js',
+    ],
   },
   js.configs.recommended,
   ...tseslint.configs.recommended,

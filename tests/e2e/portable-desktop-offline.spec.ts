@@ -2,6 +2,14 @@ import { expect, test } from './fixtures';
 
 test('starts and continues local play after networking is disabled', async ({ page, openApp }) => {
   await page.addInitScript(() => {
+    const tauriWindow = window as typeof window & {
+      __TAURI_INTERNALS__: {
+        invoke: (command: string, payload?: Record<string, unknown>) => Promise<unknown>;
+        transformCallback: () => number;
+        unregisterCallback: () => undefined;
+        convertFileSrc: (filePath: string) => string;
+      };
+    };
     const storageKey = 'desktop-best-score-state';
 
     const loadState = () => {
@@ -18,7 +26,7 @@ test('starts and continues local play after networking is disabled', async ({ pa
       window.localStorage.setItem(storageKey, JSON.stringify(state));
     };
 
-    window.__TAURI_INTERNALS__ = {
+    tauriWindow.__TAURI_INTERNALS__ = {
       invoke: async (command: string, payload?: Record<string, unknown>) => {
         const currentState = loadState();
 

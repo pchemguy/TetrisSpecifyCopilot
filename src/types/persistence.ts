@@ -1,7 +1,6 @@
 export const LOCAL_STORAGE_KEYS = {
   settings: 'tetris.settings.v1',
   uiState: 'tetris.ui.v1',
-  bestScore: 'tetris.best-score.v1',
 } as const;
 
 export type IsoTimestamp = string;

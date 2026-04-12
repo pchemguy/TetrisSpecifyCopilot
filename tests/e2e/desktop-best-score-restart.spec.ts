@@ -2,6 +2,14 @@ import { expect, test } from './fixtures';
 
 test('persists a newly saved best score across a desktop-style restart', async ({ page, openApp }) => {
   await page.addInitScript(() => {
+    const tauriWindow = window as typeof window & {
+      __TAURI_INTERNALS__: {
+        invoke: (command: string, payload?: Record<string, unknown>) => Promise<unknown>;
+        transformCallback: () => number;
+        unregisterCallback: () => undefined;
+        convertFileSrc: (filePath: string) => string;
+      };
+    };
     const storageKey = 'desktop-best-score-state';
     const loadState = () => {
       const serialized = window.localStorage.getItem(storageKey);
@@ -17,7 +25,7 @@ test('persists a newly saved best score across a desktop-style restart', async (
       window.localStorage.setItem(storageKey, JSON.stringify(state));
     };
 
-    window.__TAURI_INTERNALS__ = {
+    tauriWindow.__TAURI_INTERNALS__ = {
       invoke: async (command: string, payload?: Record<string, unknown>) => {
         const currentState = loadState();
 

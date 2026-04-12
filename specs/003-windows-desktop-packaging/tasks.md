@@ -114,12 +114,12 @@
 
 **Purpose**: Run release-quality validation, preserve gameplay behavior, and remove obsolete browser best-score artifacts.
 
-- [ ] T038 [P] Run frontend lint and TypeScript/Vitest validation from package.json and record results in specs/003-windows-desktop-packaging/quickstart.md
-- [ ] T039 [P] Run native Rust unit and contract validation from src-tauri/Cargo.toml and record results in specs/003-windows-desktop-packaging/quickstart.md
-- [ ] T040 Validate desktop gameplay and scoring regression coverage using tests/integration/app/core-gameplay.spec.tsx and tests/e2e/core-gameplay.spec.ts, then record any desktop-specific findings in specs/003-windows-desktop-packaging/quickstart.md
-- [ ] T041 Run the portable desktop build and offline smoke validation using src-tauri/tauri.conf.json and record Windows execution notes plus ordinary responsiveness observations in specs/003-windows-desktop-packaging/quickstart.md
-- [ ] T042 [P] Remove obsolete browser best-score local-storage code in src/persistence/local-storage/bestScoreStore.ts
-- [ ] T043 [P] Remove obsolete browser best-score unit coverage in tests/unit/persistence/best-score-store.spec.ts
+- [X] T038 [P] Run frontend lint and TypeScript/Vitest validation from package.json and record results in specs/003-windows-desktop-packaging/quickstart.md
+- [X] T039 [P] Run native Rust unit and contract validation from src-tauri/Cargo.toml and record results in specs/003-windows-desktop-packaging/quickstart.md
+- [X] T040 Validate desktop gameplay and scoring regression coverage using tests/integration/app/core-gameplay.spec.tsx and tests/e2e/core-gameplay.spec.ts, then record any desktop-specific findings in specs/003-windows-desktop-packaging/quickstart.md
+- [X] T041 Run the portable desktop build and offline smoke validation using src-tauri/tauri.conf.json and record Windows execution notes plus ordinary responsiveness observations in specs/003-windows-desktop-packaging/quickstart.md
+- [X] T042 [P] Remove obsolete browser best-score local-storage code in src/persistence/local-storage/bestScoreStore.ts
+- [X] T043 [P] Remove obsolete browser best-score unit coverage in tests/unit/persistence/best-score-store.spec.ts
 
 ---
 
