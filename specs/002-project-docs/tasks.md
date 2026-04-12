@@ -29,7 +29,7 @@
 
 **⚠️ CRITICAL**: No user story work should be treated as complete until this phase is done.
 
-- [ ] T004 Validate and extract the source-of-truth inventory for controls, scoring, and seed-data behavior from specs/002-project-docs/research.md for use in docs/user-guide.md and docs/persistence-reference.md
+- [x] T004 Validate and extract the source-of-truth inventory for controls, scoring, and seed-data behavior from specs/002-project-docs/research.md for use in docs/user-guide.md and docs/persistence-reference.md
 - [ ] T005 [P] Validate and extract the source-of-truth command set and expected outputs from specs/002-project-docs/quickstart.md for use in docs/developer-guide.md and docs/reviewer-guide.md
 - [ ] T006 [P] Record the canonical terminology, cross-link targets, and consistency rules to follow from specs/002-project-docs/contracts/documentation-interfaces.md while drafting docs/user-guide.md, docs/developer-guide.md, docs/reviewer-guide.md, and docs/persistence-reference.md
 

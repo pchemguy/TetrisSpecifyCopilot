@@ -13,3 +13,11 @@ Windows users require Git Bash (for example, Git for Windows) or WSL; PowerShell
 - [Developer Guide](./developer-guide.md)
 - [Reviewer Guide](./reviewer-guide.md)
 - [Persistence Reference](./persistence-reference.md)
+
+## Source-of-Truth Baseline
+
+Validated from [specs/002-project-docs/research.md](../specs/002-project-docs/research.md):
+
+- Controls: desktop keyboard mapping is authoritative and must match runtime behavior.
+- Scoring: line clears use classic values (single 100x level, double 300x level, triple 500x level, tetris 800x level), plus soft drop +1/row and hard drop +2/row.
+- Seed data: first-run seeded demo records are for review visibility and must never overwrite player best score behavior.
