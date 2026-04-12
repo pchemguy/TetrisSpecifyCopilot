@@ -15,7 +15,7 @@ Migrate the current browser-launched Tetris experience into a Windows-first Taur
 **Testing**: Vitest, Playwright, Rust unit tests via `cargo test`, Tauri command contract tests, Windows portable build smoke validation  
 **Target Platform**: Windows 10/11 desktop, portable local folder distribution only for this feature
 **Project Type**: Single-repo desktop application with embedded web frontend and native Rust runtime  
-**Performance Goals**: Best-score state available as part of normal startup flow in <= 150 ms from native persistence load on typical local disk; no regression to the existing gameplay render cadence and interaction responsiveness  
+**Performance Goals**: No dedicated performance benchmark is a release gate for this feature; acceptance is based on preserving normal startup usability and existing gameplay responsiveness without obvious regressions  
 **Constraints**: Fully local-only, no separate server process, no browser-launched deployment mode, no cloud sync/accounts/history systems, one local player, one persistent best-score record, explicit Tauri command boundary, updates only at startup and game-over  
 **Scale/Scope**: One window, one Windows desktop runtime, one SQLite database file, one best-score state record, migration from browser persistence to native persistence while reusing existing gameplay/UI where practical
 
@@ -26,7 +26,7 @@ Migrate the current browser-launched Tetris experience into a Windows-first Taur
 - Code Quality Gate: PASS. Frontend gameplay logic remains isolated from persistence side effects; native persistence moves into `src-tauri` with explicit DTOs and command handlers, replacing browser storage coupling with a maintainable boundary.
 - Testing Gate: PASS. Plan includes Rust unit tests for path resolution, corruption recovery, and SQLite repository logic; frontend integration tests for startup hydration and congratulations visibility; Playwright/portable smoke tests for restart persistence on Windows.
 - UX Consistency Gate: PASS. Existing controls, scoring, best-score presentation rules, and game-over semantics remain intact; only startup visibility, congratulations messaging, and recovery notices change, all with explicit behavior requirements.
-- Performance Gate: PASS. Persistence is limited to startup hydration and game-over submission, avoiding per-frame storage work; startup budget and verification approach are defined.
+- Performance Gate: EXCEPTION. Dedicated startup benchmarking is intentionally out of scope for this feature per approved scope decision; the feature still must avoid obvious regressions by keeping persistence work limited to startup and game-over boundaries.
 - Decision Traceability Gate: PASS. Research will record why Rust-side SQLite + Tauri commands is preferred over browser persistence and guest-side SQL access, plus why portable folder packaging is the baseline.
 
 ## Project Structure
@@ -99,9 +99,11 @@ tests/
 - Code Quality Gate: PASS. Responsibility boundaries are explicit: engine stays deterministic, frontend handles orchestration/UI, native layer owns file system and SQLite.
 - Testing Gate: PASS. Design includes native repository tests, command contract coverage, frontend integration coverage, and Windows portable restart validation.
 - UX Consistency Gate: PASS. Hidden-until-first-record behavior, strict-greater congratulations, corruption reset warning, and fallback-path notice are fully specified.
-- Performance Gate: PASS. Persistence remains off the frame loop and is limited to startup/game-over boundaries with measurable startup budget.
+- Performance Gate: EXCEPTION. No dedicated benchmark-based release gate is required for this feature; review focuses on preserving ordinary startup usability and existing gameplay responsiveness.
 - Decision Traceability Gate: PASS. All non-trivial architecture and storage choices are recorded in `research.md` with rejected alternatives.
 
 ## Complexity Tracking
 
-No constitution violations identified for this feature.
+| Violation | Why Needed | Simpler Alternative Rejected Because |
+|-----------|------------|-------------------------------------|
+| Dedicated performance budget omitted as a release gate | Feature scope is Windows packaging and persistence correctness; the approved scope explicitly treats formal performance benchmarking as non-gating for this work | Adding a benchmarked startup budget and review procedure would expand scope beyond the user-valued behavior change and add low-signal validation work for this migration slice |

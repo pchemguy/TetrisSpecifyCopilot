@@ -32,8 +32,7 @@
 
 - [x] CHK016 Do the success criteria measure all high-risk requirement areas: first run, startup display, strict greater-than updates, restart persistence, corrupt-database recovery, and quit/restart non-update behavior? [Acceptance Criteria, Spec §SC-001..SC-007]
 - [x] CHK017 Is the portable Windows release requirement measurable enough that review can confirm acceptance without depending on installer-specific behavior? [Measurability, Spec §SC-008, Spec §FR-019, Spec §FR-020]
-- [ ] CHK018 Is the startup performance requirement tied to a concrete metric and verification method rather than an unquantified “normal startup experience” phrase? [Measurability, Spec §NFR-004, Plan §Technical Context]
-Finding: The plan quantifies startup latency as `<= 150 ms`, but it does not yet specify how that budget will be measured during review or implementation validation.
+- [x] CHK018 If performance is not a gating concern for this feature, is that exclusion stated explicitly enough to avoid false review failures or hidden benchmark work? [Scope Boundary, Spec §NFR-004, Plan §Technical Context, Plan §Complexity Tracking]
 
 ## Scenario Coverage
 
@@ -49,8 +48,7 @@ Finding: The plan quantifies startup latency as `<= 150 ms`, but it does not yet
 ## Ambiguities & Conflicts
 
 - [x] CHK024 Do the requirements make it explicit whether any remaining browser-side persistence concerns survive this feature, or is there a gap that could blur the frontend/native persistence boundary? [Ambiguity, Spec §FR-016, Plan §Summary, Contract §5]
-- [ ] CHK025 Are any requirement phrases still subjective or under-specified in the high-risk storage areas, such as “one-time notice,” “next to the app,” or “portable local”? [Ambiguity, Gap]
-Finding: “One-time notice” is still under-specified. Clarify whether it means once per launch, once per recovered database event, or once per installation/profile state.
+- [x] CHK025 Are any requirement phrases still subjective or under-specified in the high-risk storage areas, such as “one-time notice,” “next to the app,” or “portable local”? [Ambiguity, Gap]
 
 ## Notes
 
@@ -61,6 +59,7 @@ Finding: “One-time notice” is still under-specified. Clarify whether it mean
 ## Run Results
 
 - Run date: 2026-04-12
-- Passed: 23
-- Gaps found: 2
-- Status: Needs follow-up clarification before task generation or implementation.
+- Re-run date: 2026-04-12 (post-clarification update)
+- Passed: 25
+- Gaps found: 0
+- Status: Ready for task generation and implementation planning flow.

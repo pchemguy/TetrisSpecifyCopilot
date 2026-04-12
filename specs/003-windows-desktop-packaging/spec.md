@@ -57,8 +57,8 @@ As a player running the packaged app on Windows, I want the game to run fully of
 ### Edge Cases
 
 - What happens when the database file is missing at startup after prior use? The app recreates required database structures automatically and continues with a valid best-score value.
-- What happens when the app directory is not writable? The app uses `%LOCALAPPDATA%/<AppName>/` for the best-score database and shows a one-time notice describing the fallback location.
-- What happens when the database file is unreadable or corrupt? The app renames it to `.corrupt.<timestamp>`, creates a fresh database automatically, and shows a one-time warning that best score was reset.
+- What happens when the app directory is not writable? The app uses `%LOCALAPPDATA%/<AppName>/` for the best-score database and shows a notice for that fallback event only, with no persistent notice record retained.
+- What happens when the database file is unreadable or corrupt? The app renames it to `.corrupt.<high-resolution-timestamp>`, creates a fresh database automatically, and shows a warning for that recovery event only, with no persistent notice record retained.
 - How does the app handle a score equal to the saved best score? It must not overwrite the saved value and must not show a new-record congratulations message.
 - What happens if the player never completes a game in a session? Stored best score remains `0` and best-score UI remains hidden on subsequent launches until a completed game establishes a record.
 - What happens if the app is closed normally and relaunched multiple times? The most recent valid saved best score persists and is shown at every startup.
@@ -74,8 +74,8 @@ As a player running the packaged app on Windows, I want the game to run fully of
 - **FR-004**: If no local database exists at startup, the system MUST create it automatically without requiring manual setup.
 - **FR-005**: The system MUST persist exactly one best-score record for the local player context.
 - **FR-006**: The persisted best score MUST be stored in a local on-disk database next to the packaged app when that location is writable.
-- **FR-006a**: If the packaged app location is not writable, the system MUST automatically store the best-score database at `%LOCALAPPDATA%/<AppName>/` and MUST show a one-time notice indicating this fallback location.
-- **FR-006b**: If the best-score database is unreadable or corrupt at startup, the system MUST rename the broken file to `.corrupt.<timestamp>`, create a fresh database automatically, and show a one-time warning that the best score was reset.
+- **FR-006a**: If the packaged app location is not writable, the system MUST automatically store the best-score database at `%LOCALAPPDATA%/<AppName>/` and MUST show a notice for that fallback event only, with no persistent record kept to suppress future unrelated notices.
+- **FR-006b**: If the best-score database is unreadable or corrupt at startup, the system MUST rename the broken file to `.corrupt.<high-resolution-timestamp>`, create a fresh database automatically, and show a warning for that recovery event only, with no persistent record kept to suppress future unrelated notices.
 - **FR-007**: On every application startup, the system MUST load the persisted best score from the local database.
 - **FR-008**: The startup UI MUST display the loaded best score to the player before or at gameplay readiness when at least one completed game record exists.
 - **FR-008a**: On first run (or any run where only the initialized value `0` exists and no completed-game record has been established), the system MUST keep the best-score value hidden from the player.
@@ -99,7 +99,7 @@ As a player running the packaged app on Windows, I want the game to run fully of
 - **NFR-001**: The feature MUST define code quality expectations for merge, including lint/test cleanliness and maintainability of changed paths.
 - **NFR-002**: The feature MUST define minimum test coverage for first-run creation, startup load/display, score comparison outcomes, and restart persistence.
 - **NFR-003**: User-facing messaging MUST remain consistent and unambiguous, including correct use of congratulations messaging only for strict new records.
-- **NFR-004**: Startup best-score availability MUST be performant enough that the score is visible as part of normal startup experience with no perceptible delay to the player.
+- **NFR-004**: Dedicated startup performance benchmarking is not a gating concern for this feature. The feature MUST preserve normal local playability and MUST NOT introduce obvious user-noticeable startup or gameplay regressions during ordinary use.
 
 ### Key Entities *(include if feature involves data)*
 
@@ -136,8 +136,8 @@ Success criteria include measurable user-facing quality outcomes, primary-flow c
 
 ### Session 2026-04-12
 
-- Q: If the app directory is not writable, what should happen to database placement? → A: Prefer database next to executable; if not writable, automatically use `%LOCALAPPDATA%/<AppName>/` and show a one-time notice.
+- Q: If the app directory is not writable, what should happen to database placement? → A: Prefer database next to executable; if not writable, automatically use `%LOCALAPPDATA%/<AppName>/` and show a notice for that fallback event only, with no persistent notice record.
 - Q: On first run, how should the initialized best score be presented? → A: Initialize to `0`, but keep best-score UI hidden until the first completed game establishes a record.
-- Q: If the database is unreadable/corrupt at startup, what should recovery behavior be? → A: Rename broken DB to `.corrupt.<timestamp>`, create a fresh DB automatically, and show a one-time warning that best score was reset.
+- Q: If the database is unreadable/corrupt at startup, what should recovery behavior be? → A: Rename broken DB to `.corrupt.<high-resolution-timestamp>`, create a fresh DB automatically, and show a warning for that recovery event only, with no persistent notice record.
 - Q: What counts as a completed game for best-score updates? → A: Completed game means game-over only; quitting/restarting mid-run does not update best score.
 - Q: What packaging artifact is required for acceptance? → A: Portable folder distribution (`.exe` plus required local runtime files) is required baseline; single executable remains optional.

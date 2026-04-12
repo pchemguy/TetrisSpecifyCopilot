@@ -22,14 +22,15 @@ Response payload:
 | `hasCompletedGame` | `boolean` | Whether a completed game has established a visible record |
 | `showBestScore` | `boolean` | Whether UI should display the best score on startup |
 | `storageMode` | `'portable_adjacent' \| 'localappdata_fallback'` | Chosen storage location mode |
-| `notice` | `null \| { code: 'storage_fallback' \| 'database_reset', message: string }` | One-time startup notice for fallback or reset conditions |
+| `notice` | `null \| { code: 'storage_fallback' \| 'database_reset', message: string }` | Event-scoped startup notice emitted only when a fallback or reset occurs in the current startup |
 
 Behavior rules:
 
 - If the database file is missing, the command creates it automatically and returns a valid initialized state.
-- If the executable directory is not writable, the command resolves storage under `%LOCALAPPDATA%/<AppName>/` and returns a fallback notice.
-- If the database is corrupt/unreadable, the command backup-renames it, recreates a fresh database, and returns a reset notice.
+- If the executable directory is not writable, the command resolves storage under `%LOCALAPPDATA%/<AppName>/` and returns a fallback notice for that startup event only.
+- If the database is corrupt/unreadable, the command backup-renames it to `.corrupt.<high-resolution-timestamp>`, recreates a fresh database, and returns a reset notice for that startup event only.
 - If `hasCompletedGame` is `false`, `showBestScore` must be `false` even though `bestScore` is initialized to `0`.
+- The native layer does not persist notice-acknowledgement state; notices are derived only from the current fallback or recovery event.
 
 ## 3. Game Over Submission Contract
 

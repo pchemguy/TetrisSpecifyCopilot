@@ -35,6 +35,7 @@ This feature introduces a minimal native desktop persistence model centered on a
   - `portable_adjacent` is used only when the executable directory is writable
   - `localappdata_fallback` must resolve under `%LOCALAPPDATA%/<AppName>/`
   - `notice_code` is emitted at most once per relevant startup event
+  - `notice_code` is event-scoped only and is not persisted as acknowledgement state across launches
 
 ### Startup Hydration Result
 
@@ -77,7 +78,7 @@ This feature introduces a minimal native desktop persistence model centered on a
 
 - Database file contains only the tables and metadata needed for this feature.
 - Migration approach may use SQLite user version or an explicit migration table, but the first release only needs a single initial schema.
-- Corrupt-database recovery is handled outside normal schema migration by backup-renaming the unreadable file and recreating a fresh database.
+- Corrupt-database recovery is handled outside normal schema migration by backup-renaming the unreadable file with a high-resolution timestamp suffix and recreating a fresh database.
 
 ## Relationships
 
