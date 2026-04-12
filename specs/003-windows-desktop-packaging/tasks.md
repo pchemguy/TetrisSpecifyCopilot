@@ -12,7 +12,7 @@
 **Purpose**: Add the minimum desktop scaffolding required to build and run a Tauri-based Windows app.
 
 - [X] T001 Add Tauri npm scripts and desktop dependencies in package.json
-- [ ] T002 [P] Create the native Rust crate manifest with bundled SQLite dependencies in src-tauri/Cargo.toml
+- [X] T002 [P] Create the native Rust crate manifest with bundled SQLite dependencies in src-tauri/Cargo.toml
 - [ ] T003 [P] Create the Tauri Rust build script in src-tauri/build.rs
 - [ ] T004 [P] Create the Windows Tauri application configuration in src-tauri/tauri.conf.json
 - [ ] T005 Create the native desktop entrypoint and command registration shell in src-tauri/src/main.rs
