@@ -10,6 +10,7 @@
 
 ```bash
 npm install
+npx playwright install chromium
 ```
 
 ## Start the Application
@@ -45,12 +46,28 @@ This allows reviewers to verify persistence, best-score display, and history-dri
 ```bash
 npm run lint
 npm run test
-npm run test:e2e
+npx playwright test tests/e2e/core-gameplay.spec.ts --project=chromium --reporter=line
+npx playwright test tests/e2e/hud-and-strategy.spec.ts --project=chromium --reporter=line
+npx playwright test tests/e2e/session-persistence.spec.ts --project=chromium --reporter=line
 ```
+
+## Reviewer Flow
+
+1. Start the app with `npm run dev` and open the local Vite URL in Chromium.
+2. Confirm the playfield canvas, next queue, hold slot, controls legend, and best-score panel render immediately.
+3. Press `Space`, `C`, `P`, and `R` to verify drop, hold, pause, and restart behavior.
+4. Reload the page and confirm the best-score panel still renders persisted local state.
+5. Repeat the browser checks with DevTools network throttling disabled and the page set offline after the first load to confirm no runtime network dependency.
 
 ## Reset Local Data
 
 During development, clear the browser's localStorage and IndexedDB for the app origin to simulate a first-run experience.
+
+## Runtime Notes
+
+- The app is expected to run fully client-side after the initial asset load.
+- Seeded demo rows are for reviewer visibility only and must not replace the player's best score.
+- If SQLite hydration fails, gameplay should still remain available with a non-blocking persistence warning.
 
 ## Expected Development Outcome
 
