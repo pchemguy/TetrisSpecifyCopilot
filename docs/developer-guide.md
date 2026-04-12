@@ -14,6 +14,11 @@ Windows users require Git Bash (for example, Git for Windows) or WSL; PowerShell
 - [Reviewer Guide](./reviewer-guide.md)
 - [Persistence Reference](./persistence-reference.md)
 
+## Release-Gate Status
+
+- Last full quickstart acceptance pass: 2026-04-12
+- Status: pass
+
 ## Validated Command Baseline
 
 Validated from [specs/002-project-docs/quickstart.md](../specs/002-project-docs/quickstart.md):
