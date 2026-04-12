@@ -13,3 +13,14 @@ Windows users require Git Bash (for example, Git for Windows) or WSL; PowerShell
 - [User Guide](./user-guide.md)
 - [Developer Guide](./developer-guide.md)
 - [Persistence Reference](./persistence-reference.md)
+
+## Validated Command Baseline
+
+Validated from [specs/002-project-docs/quickstart.md](../specs/002-project-docs/quickstart.md):
+
+- Use Bash commands only.
+- Validate install (`npm install`) and app start (`npm run dev`).
+- Validate quality baseline (`npm run lint`, `npm run test`).
+- Include Playwright remediation (`npx playwright install chromium`) before E2E if binaries are missing.
+- Validate E2E with the three scoped Playwright commands from quickstart.
+- Validate final build with `npm run build`.
