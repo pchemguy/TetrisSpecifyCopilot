@@ -45,7 +45,7 @@
 
 ### Implementation for User Story 1
 
-- [ ] T010 [US1] Implement native SQLite bootstrap and single-row best-score initialization in src-tauri/src/persistence/database.rs
+- [X] T010 [US1] Implement native SQLite bootstrap and single-row best-score initialization in src-tauri/src/persistence/database.rs
 - [ ] T011 [US1] Implement executable-adjacent database path resolution with LocalAppData fallback metadata in src-tauri/src/runtime/storage_path.rs
 - [ ] T012 [US1] Implement the load_best_score_state command response mapping in src-tauri/src/commands/load_best_score_state.rs
 - [ ] T013 [US1] Register the startup hydration command in src-tauri/src/main.rs
