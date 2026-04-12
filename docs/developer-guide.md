@@ -127,3 +127,14 @@ This runs TypeScript checks and produces the production bundle.
 - Do not introduce PowerShell command variants.
 - Ensure terminology remains canonical across user, developer, reviewer, and persistence docs.
 - Treat failing validation commands as blockers until corrected.
+
+## Contributor Walkthrough Validation
+
+Use this check to validate SC-002:
+
+1. Follow only this guide to install dependencies and run the app.
+2. Run `npm run lint`, `npm run test`, and the scoped Playwright commands.
+3. Locate the primary runtime areas (`src/engine/`, `src/canvas/`, `src/persistence/`, `src/app/`) using the directory map.
+4. Confirm the input-to-render flow in this guide is sufficient to trace where to make a small change.
+
+If this walkthrough fails, revise this guide before release sign-off.

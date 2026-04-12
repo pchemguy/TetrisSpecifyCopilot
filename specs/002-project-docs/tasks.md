@@ -67,7 +67,7 @@
 - [x] T013 [P] [US2] Add the repository directory map and architecture overview in docs/developer-guide.md
 - [x] T014 [P] [US2] Add the Mermaid data-flow diagram and step-by-step prose explanation in docs/developer-guide.md
 - [x] T015 [P] [US2] Add testing strategy, build workflow, and code quality expectations in docs/developer-guide.md
-- [ ] T016 [US2] Run the contributor walkthrough and revise docs/developer-guide.md to satisfy SC-002
+- [x] T016 [US2] Run the contributor walkthrough and revise docs/developer-guide.md to satisfy SC-002
 
 **Checkpoint**: User Stories 1 and 2 both work independently.
 
