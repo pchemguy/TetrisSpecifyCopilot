@@ -18,7 +18,7 @@
 **Purpose**: Create the deliverable files and shared authoring baseline for all four documentation outputs.
 
 - [x] T001 Create initial document skeletons with top-level headings in docs/user-guide.md, docs/developer-guide.md, docs/reviewer-guide.md, and docs/persistence-reference.md
-- [ ] T002 [P] Add the shared Bash prerequisite note and top-level cross-links in docs/user-guide.md and docs/developer-guide.md
+- [x] T002 [P] Add the shared Bash prerequisite note and top-level cross-links in docs/user-guide.md and docs/developer-guide.md
 - [ ] T003 [P] Add the shared Bash prerequisite note and top-level cross-links in docs/reviewer-guide.md and docs/persistence-reference.md
 
 ---
