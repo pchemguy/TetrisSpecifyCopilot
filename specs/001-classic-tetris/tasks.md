@@ -134,7 +134,7 @@ description: "Task list for Classic Browser Tetris implementation"
 - [x] T042 [P] Update developer and reviewer guidance in `specs/001-classic-tetris/quickstart.md` and `.github/copilot-instructions.md`
 - [x] T043 Refactor shared gameplay and persistence seams for maintainability in `src/engine/core/gameEngine.ts`, `src/app/state/useGameSession.ts`, and `src/persistence/sqlite/database.ts`
 - [x] T044 [P] Add regression coverage for replay determinism and performance-budget enforcement in `tests/unit/engine/replay.spec.ts` and `tests/integration/app/performance-budget.spec.tsx`
-- [ ] T045 [P] Run final desktop validation for quickstart, UX consistency, seeded data behavior, and no-network runtime operation in `tests/e2e/core-gameplay.spec.ts`, `tests/e2e/hud-and-strategy.spec.ts`, and `tests/e2e/session-persistence.spec.ts`
+- [x] T045 [P] Run final desktop validation for quickstart, UX consistency, seeded data behavior, and no-network runtime operation in `tests/e2e/core-gameplay.spec.ts`, `tests/e2e/hud-and-strategy.spec.ts`, and `tests/e2e/session-persistence.spec.ts`
 
 ---
 
