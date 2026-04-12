@@ -44,6 +44,12 @@ Validated from [specs/002-project-docs/quickstart.md](../specs/002-project-docs/
 9. Verify offline behavior after initial load.
 10. Record results and sign off or open corrections.
 
+Checklist constraints:
+
+- Top-level steps must remain at or below 12.
+- Each step should stay concise and map to one or more commands or observable outcomes.
+- Reviewers should be able to execute the full flow in under 30 minutes on a prepared machine.
+
 ## Validation Commands and Expected Outcomes
 
 ### Install and Start
