@@ -104,3 +104,26 @@ Step-by-step:
 3. The engine emits updated game state for playfield, metrics, and overlays.
 4. Canvas rendering consumes gameplay state to draw board, active piece, and ghost piece.
 5. React HUD state and persistence adapters consume the same state update for UI and storage synchronization.
+
+## Testing Strategy
+
+- Unit and integration validation: `npm run test`
+- End-to-end validation: `npm run test:e2e` or the three scoped Playwright commands
+- Lint validation: `npm run lint`
+
+The preferred local sequence is lint, tests, then E2E.
+
+## Build Workflow
+
+```bash
+npm run build
+```
+
+This runs TypeScript checks and produces the production bundle.
+
+## Code Quality Expectations
+
+- Keep documentation and command examples aligned with runtime behavior.
+- Do not introduce PowerShell command variants.
+- Ensure terminology remains canonical across user, developer, reviewer, and persistence docs.
+- Treat failing validation commands as blockers until corrected.
