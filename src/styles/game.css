@@ -1,0 +1,50 @@
+:root {
+  --tetromino-cyan: rgba(70, 213, 255, 0.18);
+  --tetromino-yellow: rgba(245, 211, 77, 0.18);
+  --tetromino-violet: rgba(157, 109, 255, 0.18);
+  --tetromino-green: rgba(81, 211, 125, 0.18);
+  --tetromino-red: rgba(248, 107, 113, 0.18);
+  --tetromino-blue: rgba(79, 140, 255, 0.18);
+  --tetromino-orange: rgba(255, 155, 74, 0.18);
+}
+
+.tetromino-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 88px;
+  margin: 10px 0 0;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.05);
+  font-weight: 700;
+}
+
+.tetromino-cyan {
+  background: var(--tetromino-cyan);
+}
+
+.tetromino-yellow {
+  background: var(--tetromino-yellow);
+}
+
+.tetromino-violet {
+  background: var(--tetromino-violet);
+}
+
+.tetromino-green {
+  background: var(--tetromino-green);
+}
+
+.tetromino-red {
+  background: var(--tetromino-red);
+}
+
+.tetromino-blue {
+  background: var(--tetromino-blue);
+}
+
+.tetromino-orange {
+  background: var(--tetromino-orange);
+}
