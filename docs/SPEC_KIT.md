@@ -356,3 +356,36 @@ The resulting tasks should be immediately actionable by an LLM, with each task s
 
 ### [implement](https://chatgpt.com/g/g-p-69db58392fb48191849a03dcc4483741-tetrisspeckitcopilotreacttypescriptnodejs/c/69db5996-0688-8393-b81b-5cf5a3a04812)
 
+Implement the current feature strictly according to the generated tasks.md, plan.md, and related design artifacts.
+
+Execution priorities:
+
+- Follow task order and dependency constraints exactly
+- Preserve the intended architecture boundaries between frontend/UI, Tauri/native runtime, and SQLite persistence
+- Do not batch large unrelated changes together
+- Complete work in small, reviewable increments that keep the project in a working state after each validated step
+- Mark a task complete in tasks.md only after its required implementation and relevant validation for that increment have succeeded
+
+Validation and progress:
+
+- After completing each task, run the smallest relevant validation for that increment before marking it done
+- Report progress by task ID and summarize what was completed, what was validated, and what changed
+- Do not skip ahead over incomplete blocking tasks
+- If a task cannot be completed safely, stop and report the blocker clearly rather than guessing
+
+Git and GitHub workflow:
+
+- Keep implementation progress aligned with the corresponding GitHub issue using task-to-issue mapping `task-to-issue.md`
+- Update the linked GitHub issue with progress or completion notes as work advances
+- Default to one validated commit per completed task unless two adjacent tasks are too tightly coupled to separate cleanly
+- Push commits to origin after each validated incremental commit
+- Include the task ID and issue reference in commit messages when that mapping is available
+- Close a GitHub issue only when its mapped scope has been fully implemented and validated
+- Do not guess task-to-issue mappings and do not close issues speculatively
+
+Implementation discipline:
+
+- Prefer narrow, file-local changes where possible
+- Avoid broad refactors unless they are required by the current task
+- Keep persistence logic on the Tauri/native side and interact with it through explicit command boundaries
+- Preserve incremental implementability and auditability throughout the run
