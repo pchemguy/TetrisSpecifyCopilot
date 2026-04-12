@@ -91,7 +91,7 @@ As a project maintainer, I want a concise reference for the storage model and sc
 - **FR-001**: The User Guide MUST include a prerequisites section listing minimum Node.js and npm versions and browser requirements (WebAssembly, IndexedDB support).
 - **FR-002**: The User Guide MUST include a numbered installation procedure that a new player can follow without prior project knowledge.
 - **FR-003**: The User Guide MUST include a complete controls reference table mapping every keyboard key to its in-game action.
-- **FR-004**: The User Guide MUST explain the scoring system: how points are awarded per line clear, how combos or multi-line clears are scored,  and how level progression affects gravity speed.
+- **FR-004**: The User Guide MUST explain the scoring system using the exact values from the implementation: single line = 100 × level, double = 300 × level, triple = 500 × level, Tetris (4 lines) = 800 × level; soft drop = +1 point per row; hard drop = +2 points per row. There are no combo bonuses. The guide MUST also explain how crossing each 10-line threshold increases the level and raises the gravity speed.
 - **FR-005**: The User Guide MUST explain what data is persisted locally (best score, settings, session history, replay metadata), where it is stored (localStorage keys vs. SQLite), and what happens on first launch (seed data behavior).
 - **FR-006**: The User Guide MUST include a troubleshooting section covering at least: game fails to start, controls unresponsive, best score not appearing, IndexedDB quota errors.
 - **FR-007**: The User Guide MUST describe demo seed data: what it is, why it exists, and that it never overwrites a player's personal best score.
@@ -102,7 +102,7 @@ As a project maintainer, I want a concise reference for the storage model and sc
 - **FR-009**: The Developer Guide MUST document all npm scripts (`dev`, `build`, `lint`, `test`, `test:watch`, `test:e2e`) with a one-line description of each.
 - **FR-010**: The Developer Guide MUST include a directory structure table mapping each top-level folder and key sub-folder to its responsibility.
 - **FR-011**: The Developer Guide MUST include an architecture overview describing the four primary concerns: game engine (deterministic state machine), rendering (Canvas), application state (React hooks), and persistence (SQLite WASM + IndexedDB).
-- **FR-012**: The Developer Guide MUST include a data-flow narrative or diagram showing how a key press travels from DOM event through the game engine to a canvas repaint.
+- **FR-012**: The Developer Guide MUST include a data-flow section showing how a key press travels from DOM event through the game engine to a canvas repaint. The section MUST contain both a Mermaid flowchart (in a fenced `mermaid` code block, rendered natively by GitHub) and a short prose description of each step.
 - **FR-013**: The Developer Guide MUST document the test suite structure: what Vitest covers (unit and integration), what Playwright covers (end-to-end), and how to run each subset independently.
 - **FR-014**: The Developer Guide MUST document code quality requirements: linting rules enforced by ESLint, TypeScript strict mode, and the expected state of lint and tests before a change is considered complete.
 - **FR-015**: The Developer Guide MUST include a section on the persistence layer: how the SQLite WASM database is initialized, how IndexedDB is used to store and reload the binary database blob, and what the schema migration strategy is.
@@ -121,8 +121,8 @@ As a project maintainer, I want a concise reference for the storage model and sc
 
 **Cross-cutting**
 
-- **FR-022**: All documentation MUST be accurate with respect to the actual implementation at the time of writing; no placeholder or aspirational content is permitted.
-- **FR-023**: All command examples MUST be tested and confirmed to execute without error on a clean install on Windows (Bash via MSYS) and work equivalently on Linux/macOS.
+- **FR-022**: All documentation MUST be accurate with respect to the actual implementation at the time of writing; no placeholder or aspirational content is permitted. All four files MUST be placed under `docs/` at the repository root.
+- **FR-023**: All command examples MUST use Bash syntax only. The prerequisites section of every document that contains shell commands MUST include the note: "Windows users require Git Bash (e.g., Git for Windows) or WSL; PowerShell is not supported." No PowerShell variants are provided.
 - **FR-024**: Documentation MUST be written in plain English comprehensible to a non-specialist reader; implementation-specific jargon MUST be explained on first use.
 
 ### Non-Functional Requirements
@@ -151,10 +151,22 @@ As a project maintainer, I want a concise reference for the storage model and sc
 - **SC-006**: The persistence reference correctly describes every SQLite table and localStorage key present in the actual implementation with no omissions or inaccuracies.
 - **SC-007**: Zero contradictions exist between documentation sections (e.g., the controls table in the User Guide matches the controls listed in the Reviewer Guide).
 
+## Clarifications
+
+### Session 2026-04-12
+
+- Q: Where should the four documentation files be placed in the repository? → A: All four documents go in `docs/` at the repo root (`docs/user-guide.md`, `docs/developer-guide.md`, `docs/reviewer-guide.md`, `docs/persistence-reference.md`).
+- Q: What is the exact scoring system to document? → A: Classic Guideline, no combo bonus: single=100×level, double=300×level, triple=500×level, Tetris=800×level; soft drop +1pt/row; hard drop +2pt/row.
+- Q: What format should the data-flow diagram use? → A: Mermaid flowchart embedded in a fenced code block (rendered natively by GitHub).
+- Q: Should command examples include PowerShell variants for Windows? → A: Bash only; Windows users receive a prerequisite note stating Git Bash or WSL is required.
+- Q: Should command examples include PowerShell variants for Windows? → A: Bash only; Windows users receive a prerequisite note stating Git Bash or WSL is required.
+- Q: Should a Markdown linter be introduced for documentation quality enforcement? → A: No Markdown linter; NFR-001 is scoped to ESLint (TypeScript files unchanged) plus a manual broken-link check during review.
+- **NFR-001**: No Markdown linter is introduced by this feature. The existing ESLint configuration MUST continue to pass without modification (`npm run lint`). All documentation files MUST contain no broken internal Markdown links; link correctness is verified manually during the review pass.
+
 ## Assumptions
 
 - Documentation is written for the current state of the `001-prepare-spec-branch` implementation; it targets the completed Classic Browser Tetris feature only.
-- All documentation will be authored in Markdown and stored within the repository under `docs/` (player-facing) and inline within `specs/001-classic-tetris/` or a new `docs/` root for developer/reviewer content.
+- All four documentation files (User Guide, Developer Guide, Reviewer Guide, Persistence Reference) are authored in Markdown and stored under `docs/` at the repository root. The `specs/` tree remains reserved for spec-kit planning artifacts.
 - The primary development and validation environment is Windows with Bash (MSYS), per the `AGENTS.md` shell selection rule; commands are validated there first.
 - Mobile browser support is explicitly out of scope; the User Guide MUST note that only desktop browsers are supported.
 - No external documentation hosting (e.g., GitHub Pages, ReadTheDocs) is required for this feature; Markdown rendered on GitHub is sufficient.
