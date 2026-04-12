@@ -275,7 +275,38 @@ The plan should optimize for maintainable architecture, explicit responsibility 
 
 ### [checklist](https://chatgpt.com/g/g-p-69db58392fb48191849a03dcc4483741-tetrisspeckitcopilotreacttypescriptnodejs/c/69db5996-0688-8393-b81b-5cf5a3a04812)
 
+Create a requirements-quality checklist for this feature as a review gate for the specification.
 
+Audience and use:
+
+- Primary audience: feature author and reviewer
+- Timing: design/spec review before or alongside implementation planning and task generation
+- Depth: reviewer-grade, with enough rigor to catch requirement gaps that would cause architectural drift, rework, or ambiguous implementation
+
+Focus areas:
+
+- packaged Windows desktop application requirements
+- portable deployment requirements
+- local-only operation assumptions
+- clarity of architecture-related responsibility boundaries
+- local SQLite persistence requirements
+- database file placement next to the application
+- startup best-score loading/display requirements
+- end-of-game best-score update and congratulations-message requirements
+- first-run, missing-database, exception, recovery, and non-functional scenario coverage
+
+Checklist priorities:
+
+- Evaluate whether the requirements and planning artifacts clearly define the boundary between frontend/UI responsibilities, Tauri/native responsibilities, and persistence responsibilities
+- Evaluate whether the Windows-only scope and portable deployment assumptions are explicit, bounded, and free of hidden contradictions
+- Evaluate whether “database next to the app” is specified precisely enough to guide implementation and review
+- Evaluate whether the feature clearly defines first-run behavior, missing-database behavior, startup display behavior, strict greater-than update behavior, and non-update behavior when the score is not a new record
+- Evaluate whether out-of-scope items are clearly excluded, especially online sync, accounts, multi-profile support, cloud behavior, and broader statistics/history expansion
+- Emphasize clarity, completeness, consistency, measurability, scenario coverage, dependencies, assumptions, ambiguities, and conflicts
+- Bias the checklist toward identifying requirement weaknesses that would allow persistence logic, desktop runtime concerns, and gameplay/UI concerns to become blurred or under-specified across layers
+- Treat portable deployment assumptions and writable-on-disk database placement as high-risk requirement areas that deserve explicit ambiguity, dependency, recovery, and boundary checks
+
+Prefer a concise, high-leverage checklist that surfaces the most important requirement-quality risks for this feature rather than a long low-signal list.
 
 ### [tasks](https://chatgpt.com/g/g-p-69db58392fb48191849a03dcc4483741-tetrisspeckitcopilotreacttypescriptnodejs/c/69db5996-0688-8393-b81b-5cf5a3a04812)
 
