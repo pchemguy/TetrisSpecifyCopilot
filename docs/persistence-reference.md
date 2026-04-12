@@ -129,3 +129,23 @@ Use this quick pass after persistence changes:
 2. Set a player best score above demo score and confirm subsequent launches do not lower it.
 3. Temporarily block IndexedDB and verify the app still runs with a visible persistence warning.
 4. Restore storage, reload, and verify new completed sessions are persisted again.
+
+## SC-006 Maintainer Verification Pass
+
+Verification target: every SQLite table and localStorage key in implementation appears in this document with no omissions.
+
+Source-of-truth files checked:
+
+- `src/persistence/sqlite/schema.ts`
+- `src/persistence/sqlite/database.ts`
+- `src/types/persistence.ts`
+- `src/persistence/local-storage/settingsStore.ts`
+- `src/persistence/local-storage/uiStateStore.ts`
+- `src/persistence/local-storage/bestScoreStore.ts`
+
+Verification result:
+
+- SQLite tables found in code: `app_meta`, `sessions`, `scores`, `replays`, `replay_events`.
+- localStorage keys found in code: `tetris.settings.v1`, `tetris.ui.v1`, `tetris.best-score.v1`.
+- IndexedDB identifiers found in code: database `classic-browser-tetris`, store `sqlite`, key `main`.
+- Status: pass, no omissions detected.
