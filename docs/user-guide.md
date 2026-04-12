@@ -103,3 +103,26 @@ On first launch in an empty browser profile, the app seeds:
 - demo rows in browser SQLite tables for sessions, scores, and replay metadata
 
 Seeded data exists to make review and verification easier. It must not overwrite a player's best score.
+
+## Troubleshooting
+
+### App Does Not Start
+
+- Re-run `npm install` to confirm dependencies are present.
+- Start again with `npm run dev` and open the URL shown by Vite.
+
+### Controls Not Responding
+
+- Click inside the game page so keyboard input focus is active.
+- Confirm you are using the keys listed in the controls reference.
+
+### Best Score Not Appearing
+
+- Reload the page once to allow persisted state hydration.
+- If browser storage was cleared, best score history resets until new sessions are played.
+
+### IndexedDB or localStorage Is Blocked
+
+- Some private browsing modes or strict browser settings can block local persistence.
+- Gameplay still works, but progress and best score may not persist across reloads.
+- If this happens, switch to a browser/profile that allows localStorage and IndexedDB, then relaunch.
