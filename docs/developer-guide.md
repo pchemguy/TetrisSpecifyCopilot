@@ -59,3 +59,27 @@ npm run dev
 | `npm run test` | Runs Vitest in run mode |
 | `npm run test:watch` | Runs Vitest in watch mode |
 | `npm run test:e2e` | Runs Playwright E2E suite |
+
+## Repository Directory Map
+
+| Path | Responsibility |
+| --- | --- |
+| `docs/` | End-user, developer, reviewer, and persistence documentation |
+| `specs/` | Spec Kit feature artifacts (spec, plan, tasks, analyses) |
+| `src/app/` | React app-level orchestration and state boundaries |
+| `src/canvas/` | Gameplay rendering integration |
+| `src/components/` | UI components and panels |
+| `src/engine/` | Deterministic game engine and rules |
+| `src/persistence/` | localStorage and SQLite/IndexedDB adapters |
+| `tests/` | Contract, integration, unit, and E2E test suites |
+
+## Architecture Overview
+
+Core concerns are separated into four areas:
+
+1. Game engine: deterministic state transitions and gameplay rules.
+2. Rendering: canvas-based visual output driven by engine state.
+3. Application state: React-level orchestration of UI and runtime boundaries.
+4. Persistence: browser-local storage for settings and structured history.
+
+This separation keeps rule behavior testable and documentation traceable to runtime sources.
