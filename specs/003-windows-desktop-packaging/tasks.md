@@ -65,10 +65,10 @@
 
 ### Tests for User Story 2 ⚠️
 
-- [ ] T017 [P] [US2] Add game-over command contract tests for greater-than, equal, and lower score outcomes in src-tauri/tests/submit_game_over_score_contract.rs
-- [ ] T018 [P] [US2] Add unit coverage for game-over-only score submission triggering in tests/unit/app/useGameSession.spec.ts
-- [ ] T019 [P] [US2] Add desktop restart-persistence end-to-end coverage for a newly saved best score in tests/e2e/desktop-best-score-restart.spec.ts
-- [ ] T020 [US2] Add integration coverage for congratulations visibility and live best-score updates in tests/integration/app/desktop-game-over-score.spec.tsx
+- [X] T017 [P] [US2] Add game-over command contract tests for greater-than, equal, and lower score outcomes in src-tauri/tests/submit_game_over_score_contract.rs
+- [X] T018 [P] [US2] Add unit coverage for game-over-only score submission triggering in tests/unit/app/useGameSession.spec.ts
+- [X] T019 [P] [US2] Add desktop restart-persistence end-to-end coverage for a newly saved best score in tests/e2e/desktop-best-score-restart.spec.ts
+- [X] T020 [US2] Add integration coverage for congratulations visibility and live best-score updates in tests/integration/app/desktop-game-over-score.spec.tsx
 
 ### Implementation for User Story 2
 
