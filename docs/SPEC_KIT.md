@@ -228,3 +228,4 @@ Success-oriented expectations:
 - A player who achieves a new record is clearly informed at game over and sees that record preserved on the next launch.
 - A player who does not beat the saved best score does not receive a false congratulatory message and does not lose the previously saved best score.
 - The local best score survives normal application shutdown and restart.
+
