@@ -63,7 +63,7 @@
 
 ### Implementation for User Story 2
 
-- [ ] T012 [US2] Draft contributor setup and npm scripts reference in docs/developer-guide.md
+- [x] T012 [US2] Draft contributor setup and npm scripts reference in docs/developer-guide.md
 - [ ] T013 [P] [US2] Add the repository directory map and architecture overview in docs/developer-guide.md
 - [ ] T014 [P] [US2] Add the Mermaid data-flow diagram and step-by-step prose explanation in docs/developer-guide.md
 - [ ] T015 [P] [US2] Add testing strategy, build workflow, and code quality expectations in docs/developer-guide.md
