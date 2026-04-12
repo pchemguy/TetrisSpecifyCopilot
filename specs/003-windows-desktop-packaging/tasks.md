@@ -25,7 +25,7 @@
 
 **Purpose**: Define the shared frontend/native command boundary used by all stories.
 
-- [ ] T006 Define shared desktop persistence DTOs and command names in src/types/desktopPersistence.ts
+- [X] T006 Define shared desktop persistence DTOs and command names in src/types/desktopPersistence.ts
 - [ ] T007 Create the frontend desktop persistence invoke wrapper in src/app/services/desktopPersistenceClient.ts
 
 **Checkpoint**: Frontend code has a single explicit boundary for calling native persistence commands.
