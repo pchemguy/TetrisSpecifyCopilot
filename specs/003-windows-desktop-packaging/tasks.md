@@ -40,8 +40,8 @@
 
 ### Tests for User Story 1 ⚠️
 
-- [ ] T008 [P] [US1] Add startup command contract tests for first-run database creation and existing-score hydration in src-tauri/tests/load_best_score_state_contract.rs
-- [ ] T009 [P] [US1] Add app hydration integration coverage for hidden-until-first-record and startup best-score display in tests/integration/app/desktop-startup-hydration.spec.tsx
+- [X] T008 [P] [US1] Add startup command contract tests for first-run database creation and existing-score hydration in src-tauri/tests/load_best_score_state_contract.rs
+- [X] T009 [P] [US1] Add app hydration integration coverage for hidden-until-first-record and startup best-score display in tests/integration/app/desktop-startup-hydration.spec.tsx
 
 ### Implementation for User Story 1
 
