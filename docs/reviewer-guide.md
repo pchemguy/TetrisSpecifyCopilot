@@ -43,3 +43,41 @@ Validated from [specs/002-project-docs/quickstart.md](../specs/002-project-docs/
 8. Run build validation.
 9. Verify offline behavior after initial load.
 10. Record results and sign off or open corrections.
+
+## Validation Commands and Expected Outcomes
+
+### Install and Start
+
+```bash
+npm install
+npm run dev
+```
+
+Expected outcome: dependencies install successfully and Vite prints a local URL.
+
+### Quality Baseline
+
+```bash
+npm run lint
+npm run test
+```
+
+Expected outcome: both commands exit with code 0.
+
+### End-to-End Validation
+
+```bash
+npx playwright test tests/e2e/core-gameplay.spec.ts --project=chromium --reporter=line
+npx playwright test tests/e2e/hud-and-strategy.spec.ts --project=chromium --reporter=line
+npx playwright test tests/e2e/session-persistence.spec.ts --project=chromium --reporter=line
+```
+
+Expected outcome: all three specs pass with no unexpected failures.
+
+### Build Validation
+
+```bash
+npm run build
+```
+
+Expected outcome: production build completes without errors.
