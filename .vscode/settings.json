@@ -15,8 +15,11 @@
         "set": true,
         "git add": true,
         "git commit": true,
+        "git push": true,
         "git rev-parse": true,
         "npx eslint": true,
+        "cargo check": true,
+        "rustfmt": true,
         "/^cd /b/GH/TetrisSpecifyCopilot && bash \\.specify/scripts/bash/setup-plan\\.sh --json$/": {
             "approve": true,
             "matchCommandLine": true
@@ -24,11 +27,7 @@
         "/^cd /b/GH/TetrisSpecifyCopilot && bash \\.specify/scripts/bash/update-agent-context\\.sh copilot && git status --short$/": {
             "approve": true,
             "matchCommandLine": true
-        },
-        "cargo check": true,
-        "rustfmt": true,
-        "/c/Users/evgeny/.cargo/bin/rustfmt.exe": true,
-        "git push": true
+        }
     },
     "terminal.explorerKind": "integrated"
 }
