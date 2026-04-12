@@ -121,6 +121,18 @@ npm run build
 
 This runs TypeScript checks and produces the production bundle.
 
+## Verified Validation Outcomes
+
+Latest command-validation pass (Phase 7 / T026) confirmed:
+
+- `npm run lint`: exits with code 0.
+- `npm run test`: all test files pass (`12 passed`, `39 passed`).
+- `npx playwright install chromium`: browser binary remediation command succeeds.
+- `npx playwright test tests/e2e/core-gameplay.spec.ts --project=chromium --reporter=line`: `1 passed`.
+- `npx playwright test tests/e2e/hud-and-strategy.spec.ts --project=chromium --reporter=line`: `1 passed`.
+- `npx playwright test tests/e2e/session-persistence.spec.ts --project=chromium --reporter=line`: `2 passed`.
+- `npm run build`: exits with code 0 and emits production assets under `dist/`.
+
 ## Code Quality Expectations
 
 - Keep documentation and command examples aligned with runtime behavior.

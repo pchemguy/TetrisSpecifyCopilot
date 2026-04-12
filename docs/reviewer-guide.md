@@ -88,6 +88,18 @@ npm run build
 
 Expected outcome: production build completes without errors.
 
+## Verified Command Outcomes (Current Baseline)
+
+The latest command-validation pass produced these results:
+
+- `npm run lint`: completed without reported lint failures.
+- `npm run test`: `12` test files passed and `39` tests passed.
+- `npx playwright install chromium`: completed successfully.
+- `core-gameplay.spec.ts`: `1 passed`.
+- `hud-and-strategy.spec.ts`: `1 passed`.
+- `session-persistence.spec.ts`: `2 passed`.
+- `npm run build`: completed successfully and produced `dist/` build artifacts.
+
 ## Playwright Browser Remedy
 
 If Playwright cannot launch Chromium because browser binaries are missing, run:
