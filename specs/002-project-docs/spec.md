@@ -127,7 +127,7 @@ As a project maintainer, I want a concise reference for the storage model and sc
 
 ### Non-Functional Requirements
 
-- **NFR-001**: All documentation files MUST pass the project linter where applicable (Markdown linting if configured) and contain no broken internal links.
+- **NFR-001**: No Markdown linter is introduced by this feature. The existing ESLint configuration MUST continue to pass without modification (`npm run lint`). All documentation files MUST contain no broken internal Markdown links; link correctness is verified manually during the review pass.
 - **NFR-002**: Each document section MUST be independently reviewable; a reader interested only in controls should not need to read the architecture section first.
 - **NFR-003**: Documentation language MUST be consistent with the project's existing voice and terminology; terms like "tetromino," "ghost piece," "hard drop," and "hold" MUST match the in-game UI labels.
 - **NFR-004**: The Reviewer Guide MUST be completable end-to-end in under thirty minutes on a machine that already has Node.js and a Chromium-based browser installed.
@@ -159,9 +159,7 @@ As a project maintainer, I want a concise reference for the storage model and sc
 - Q: What is the exact scoring system to document? → A: Classic Guideline, no combo bonus: single=100×level, double=300×level, triple=500×level, Tetris=800×level; soft drop +1pt/row; hard drop +2pt/row.
 - Q: What format should the data-flow diagram use? → A: Mermaid flowchart embedded in a fenced code block (rendered natively by GitHub).
 - Q: Should command examples include PowerShell variants for Windows? → A: Bash only; Windows users receive a prerequisite note stating Git Bash or WSL is required.
-- Q: Should command examples include PowerShell variants for Windows? → A: Bash only; Windows users receive a prerequisite note stating Git Bash or WSL is required.
 - Q: Should a Markdown linter be introduced for documentation quality enforcement? → A: No Markdown linter; NFR-001 is scoped to ESLint (TypeScript files unchanged) plus a manual broken-link check during review.
-- **NFR-001**: No Markdown linter is introduced by this feature. The existing ESLint configuration MUST continue to pass without modification (`npm run lint`). All documentation files MUST contain no broken internal Markdown links; link correctness is verified manually during the review pass.
 
 ## Assumptions
 
