@@ -159,5 +159,7 @@ Execute. Make sure to link and update GitHub Issues. Commit after implementation
 
 Implement 001-prepare-spec-branch feature. Make sure to link and update GitHub Issues. Commit after implementation of each task/ GitHub issue. Close GH issue after successful implementation. Create pull requests.
 
+Implement current feature. Make sure to link and update GitHub Issues. Commit and push to origin after implementation of each task/ GitHub issue. Close GH issue after successful implementation.
+
 Execute (**Pass 1**)
 Execute (**Pass 2**)
