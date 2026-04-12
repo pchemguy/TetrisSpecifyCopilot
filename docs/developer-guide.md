@@ -83,3 +83,24 @@ Core concerns are separated into four areas:
 4. Persistence: browser-local storage for settings and structured history.
 
 This separation keeps rule behavior testable and documentation traceable to runtime sources.
+
+## Input-to-Render Data Flow
+
+```mermaid
+flowchart LR
+	A[Keyboard Event] --> B[Input Normalization]
+	B --> C[Engine Command Queue]
+	C --> D[Deterministic Engine Tick]
+	D --> E[Updated Game State]
+	E --> F[Canvas Render Pass]
+	E --> G[HUD React State]
+	E --> H[Persistence Adapters]
+```
+
+Step-by-step:
+
+1. Browser keyboard events are normalized into known gameplay commands.
+2. Commands are queued and consumed by deterministic engine ticks.
+3. The engine emits updated game state for playfield, metrics, and overlays.
+4. Canvas rendering consumes gameplay state to draw board, active piece, and ghost piece.
+5. React HUD state and persistence adapters consume the same state update for UI and storage synchronization.
