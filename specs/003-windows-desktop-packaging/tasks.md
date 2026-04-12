@@ -93,8 +93,8 @@
 
 ### Tests for User Story 3 ⚠️
 
-- [ ] T029 [P] [US3] Add startup recovery contract tests for missing-database recreation and corrupt-file backup rename in src-tauri/tests/startup_recovery_contract.rs
-- [ ] T030 [P] [US3] Add integration coverage for fallback-path and database-reset startup notices in tests/integration/app/desktop-startup-notices.spec.tsx
+- [X] T029 [P] [US3] Add startup recovery contract tests for missing-database recreation and corrupt-file backup rename in src-tauri/tests/startup_recovery_contract.rs
+- [X] T030 [P] [US3] Add integration coverage for fallback-path and database-reset startup notices in tests/integration/app/desktop-startup-notices.spec.tsx
 
 ### Implementation for User Story 3
 
