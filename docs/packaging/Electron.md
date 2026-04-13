@@ -2,9 +2,7 @@
 url: https://chatgpt.com/g/g-p-69db58392fb48191849a03dcc4483741-tetrisspeckitcopilotreacttypescriptnodejs/c/69dc7f2f-60ac-8386-9cff-d188a454d6d2
 ---
 
-# Electron Packaging Baseline
-
-## Prompt
+# Seed Prompt - Packaging Web App
 
 Given tech stack
 
@@ -33,7 +31,7 @@ Runtime / architecture
 
 I am looking for a simpl and robust approach to turn this web app into a packaged desktop app with crossplatform compatibility, but present focus on Windows. It must be well suitable for agentic development on Windows/Conda/VS Code/Git Bash/Coding Agents. I tried Tauri, but implementation was pain and even the simplest persistence was not implemented.
 
-## Synopsis
+# Electron Packaging Baseline
 
 **Electron + Vite + React + TypeScript + `sql.js`**, with a disciplined architecture that keeps the app mostly a browser app and uses Electron only as a thin desktop shell.
 
