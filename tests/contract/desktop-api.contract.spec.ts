@@ -36,6 +36,23 @@ describe('desktop preload contract', () => {
     expect(invoke).toHaveBeenCalledWith('runtime:get-info');
   });
 
+  it('preserves platform and version metadata without narrowing the desktop contract to Windows only', async () => {
+    invoke.mockResolvedValue({
+      runtime: 'desktop',
+      platform: 'darwin',
+      appVersion: '1.2.3',
+    });
+
+    const { createRuntimeInfoBridge } = await import('../../electron/preload');
+    const bridge = createRuntimeInfoBridge();
+
+    await expect(bridge.getRuntimeInfo()).resolves.toEqual({
+      runtime: 'desktop',
+      platform: 'darwin',
+      appVersion: '1.2.3',
+    });
+  });
+
   it('exposes the desktop API on window.desktopApi', async () => {
     const { exposeDesktopApi } = await import('../../electron/preload');
     const bridge = {
