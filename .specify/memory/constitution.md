@@ -1,15 +1,9 @@
 <!--
 Sync Impact Report
-Version change: 1.2.0 -> 1.3.0
+Version change: 1.3.0 -> 1.4.0
 Modified principles:
-- Code Quality Is A Release Gate -> I. Specification And Documentation Are The Source Of Truth
-- Tests Prove Behavior -> II. Delivery Proceeds In Small, Testable Increments
-- UX Consistency Is A Product Requirement -> III. Validation Evidence Is Mandatory
-- Performance Budgets Are Defined Up Front -> IV. Scope, Decisions, And Exceptions Must Be Traceable
-- Technical Decisions Must Be Traceable -> V. Architecture And Environment Constraints Must Be Respected
-Added sections:
-- Spec Kit Workflow Requirements
-- Agentic Delivery Requirements
+- Separation Of Concerns-> II. Delivery Proceeds In Small, Testable Increments
+- Design Must Preserve Separation Of Concerns -> VI. Architecture And Decomposition Must Preserve Separation Of Concerns
 Removed sections:
 - None
 Templates requiring updates:
@@ -49,12 +43,13 @@ Work MUST be decomposed into small, reviewable, and independently testable units
 To support that requirement:
 
 - specifications MUST be structured so that user stories or feature slices can be implemented and validated incrementally;
-- plans, task lists, and GitHub issues MUST avoid bundling unrelated work; and
-- implementation SHOULD prefer the smallest change that produces meaningful progress while preserving repository correctness.
+- plans, task lists, and GitHub issues MUST avoid bundling unrelated work;
+- implementation SHOULD prefer the smallest change that produces meaningful progress while preserving repository correctness; and
+- where feasible, the sequence of work MUST be organized to deliver a minimal viable path or tracer bullet as early as possible, then evolve it through staged follow-on increments.
 
 Large or tightly coupled changes require explicit justification in the plan.
 
-Rationale: small increments reduce agent error, simplify review, improve rollback safety, and enable more deterministic progress.
+Rationale: small increments reduce agent error, simplify review, improve rollback safety, and enable more deterministic progress. Early delivery of an MVP or tracer bullet provides a working baseline that reduces integration risk and supports staged evolution.
 
 ### III. Validation Evidence Is Mandatory
 
@@ -95,6 +90,14 @@ Accordingly:
 
 Rationale: agentic development is most reliable when architectural seams and execution constraints are explicit, stable, and enforced.
 
+### VI. Architecture And Decomposition Must Preserve Separation Of Concerns
+
+System design and implementation MUST preserve clear separation of concerns at every relevant level of decomposition, including module boundaries, feature slices, service interfaces, data handling, runtime integration points, and cross-cutting concerns. Responsibilities SHOULD be assigned so that components remain understandable, independently testable, maintainable, and extensible without unnecessary coupling.
+
+Plans and implementation tasks MUST identify the intended decomposition for non-trivial changes and MUST avoid designs that mix unrelated responsibilities, hide boundaries, or force broad changes for localized behavior. Where a design introduces shared infrastructure or abstractions, that structure MUST be justified by concrete maintainability, testability, or extensibility needs rather than speculative generalization.
+
+Rationale: strong separation of concerns reduces regression risk, improves local reasoning, enables more reliable testing, and allows the system to evolve in controlled increments.
+
 ## Spec Kit Workflow Requirements
 
 Specifications MUST define:
@@ -109,11 +112,13 @@ Implementation plans MUST translate the constitutional principles into concrete 
 
 - constitution checks tied to the current feature;
 - architectural constraints and approved technology choices;
+- architectural decomposition and separation-of-concerns strategy;
 - validation strategy and required evidence;
+- explicit MVP or tracer-bullet scope and the staged evolution path beyond it;
 - complexity tracking for justified deviations; and
 - explicit sequencing that supports incremental implementation.
 
-Task lists MUST be organized to support independent execution and verification. Where applicable, they MUST separate foundational work from user-story work and MUST include the validation, documentation, and integration tasks required to prove completion.
+Task lists MUST be organized to support independent execution and verification. Where applicable, they MUST separate foundational work from user-story work, reflect the intended architectural decomposition, and order work to deliver an MVP or tracer bullet as early as feasible before staged follow-on evolution. They MUST include the validation, documentation, and integration tasks required to prove completion.
 
 ## Agentic Delivery Requirements
 
@@ -124,6 +129,8 @@ Tasks and issues MUST therefore be:
 - small enough to implement safely in one focused pass;
 - explicit about inputs, outputs, constraints, and dependencies; and
 - clear about the acceptance checks and validation evidence required for completion.
+
+When tasks are converted into implementation issues, the issue set MUST preserve both the intended architectural decomposition and the staged delivery sequence. Where feasible, issue ordering, labels, and milestones MUST make the MVP or tracer-bullet stage explicit and distinguish it from subsequent evolution stages.
 
 Repository guidance MUST explicitly define shell selection, environment assumptions, architectural boundaries, and forbidden shortcuts where omission would cause agents to drift from the intended implementation path.
 
@@ -138,8 +145,10 @@ The constitution check MUST confirm that the feature:
 - is grounded in an explicit specification;
 - is decomposed into small, testable increments;
 - defines the evidence required for completion;
-- records key decisions, assumptions, and exceptions; and
-- respects the repository's architecture and environment constraints.
+- records key decisions, assumptions, and exceptions;
+- respects the repository's architecture and environment constraints;
+- preserves clear architectural decomposition and separation of concerns; and
+- is sequenced to deliver an MVP or tracer bullet early, followed by staged evolution where feasible.
 
 Reviewers MUST reject changes that are too large to review confidently, lack validation evidence, exceed approved scope without amendment, or violate architectural or environment constraints without a recorded justification.
 
@@ -177,4 +186,4 @@ Constitutional principles take precedence over feature-level preferences. The or
 4. Approved task or issue definition
 5. Local coding preference
 
-**Version**: 1.3.0 | **Ratified**: 2026-04-10 | **Last Amended**: 2026-04-13
+**Version**: 1.4.0 | **Ratified**: 2026-04-10 | **Last Amended**: 2026-04-13
