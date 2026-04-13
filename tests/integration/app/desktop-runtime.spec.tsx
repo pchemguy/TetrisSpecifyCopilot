@@ -57,8 +57,8 @@ describe('desktop runtime integration', () => {
   it('surfaces desktop runtime metadata when the preload bridge is available', async () => {
     window.desktopApi = {
       getRuntimeInfo: vi.fn(async () => ({
-        runtime: 'desktop',
-        platform: 'win32',
+        runtime: 'desktop' as const,
+        platform: 'win32' as const,
         appVersion: '0.1.0',
       })),
     };

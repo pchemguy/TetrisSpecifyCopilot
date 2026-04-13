@@ -35,9 +35,13 @@ export function getRendererEntry(): { type: 'url' | 'file'; value: string } {
     };
   }
 
+  const applicationRoot = app.isPackaged
+    ? app.getAppPath()
+    : path.resolve(getCurrentDirectory(), '..', '..');
+
   return {
     type: 'file',
-    value: path.join(app.getAppPath(), 'dist', 'index.html'),
+    value: path.join(applicationRoot, 'dist', 'index.html'),
   };
 }
 

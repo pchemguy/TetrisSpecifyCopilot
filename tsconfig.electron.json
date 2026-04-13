@@ -11,6 +11,6 @@
     "types": ["node"],
     "isolatedModules": false
   },
-  "include": ["electron/**/*.ts", "src/types/global.d.ts"],
+  "include": ["electron/**/*.ts", "src/platform/runtime.ts", "src/types/global.d.ts"],
   "exclude": ["dist", "dist-electron", "node_modules", "tests"]
 }
