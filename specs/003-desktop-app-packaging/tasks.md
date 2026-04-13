@@ -32,7 +32,7 @@
 - [X] T004 Add shared Electron dependencies and script scaffolding in package.json
 - [X] T005 [P] Add Electron TypeScript build configuration in tsconfig.electron.json and tsconfig.json
 - [X] T006 [P] Create Electron shell scaffolds in electron/main.ts and electron/preload.ts
-- [ ] T007 [P] Add typed runtime detection and global desktop API declarations in src/platform/runtime.ts and src/types/global.d.ts
+- [X] T007 [P] Add typed runtime detection and global desktop API declarations in src/platform/runtime.ts and src/types/global.d.ts
 - [ ] T008 [P] Create runtime-specific persistence adapter skeletons in src/persistence/runtime/browserAdapter.ts and src/persistence/runtime/desktopAdapter.ts
 - [ ] T009 Refactor shared SQLite bootstrap to consume runtime-selected byte loaders and savers in src/persistence/sqlite/database.ts and src/app/providers/PersistenceProvider.tsx
 - [ ] T010 Capture shared packaging, persistence, and rollback guardrails in docs/desktop-architecture.md and specs/003-desktop-app-packaging/quickstart.md
