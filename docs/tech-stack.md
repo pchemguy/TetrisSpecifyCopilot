@@ -16,6 +16,10 @@ Frontend
 * React DOM 19
 * TypeScript 6
 
+Persistence
+
+* SQLite (client-side)
+
 Build and dev server
 
 * Vite 8
@@ -60,3 +64,12 @@ Scripts
 * `test`: Vitest run
 * `test:watch`: Vitest watch
 * `test:e2e`: Playwright test 
+
+Non-goals
+
+- Node backend framework such as Express or Fastify
+- Next.js
+- Tailwind, MUI, Redux, Zustand, or React Router
+- Server-side database driver
+- Non-local execution
+- User accounts/profiles/personalization/authentication
