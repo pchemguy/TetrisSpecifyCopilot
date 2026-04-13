@@ -16,8 +16,7 @@ Windows users require Git Bash (for example, Git for Windows) or WSL; PowerShell
 
 ## Release-Gate Status
 
-- Last full quickstart acceptance pass: 2026-04-12
-- Status: pass
+- Last full [Packaging Guide](packaging-overview.md)tatus: pass
 
 ## Validated Command Baseline
 
@@ -43,8 +42,7 @@ Validated from [specs/002-project-docs/quickstart.md](../specs/002-project-docs/
 3. Start the application locally.
 4. Run gameplay smoke checks.
 5. Verify persistence behavior after reload.
-6. Run lint and unit/integration tests.
-7. Run scoped E2E tests.
+6. Run li[Packaging Guide](packaging-overview.md)ed E2E tests.
 8. Run build validation.
 9. Verify offline behavior after initial load.
 10. Record results and sign off or open corrections.

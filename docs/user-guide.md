@@ -16,10 +16,7 @@ Windows users require Git Bash (for example, Git for Windows) or WSL; PowerShell
 
 ## Release-Gate Status
 
-- Last full quickstart acceptance pass: 2026-04-12
-- Status: pass
-
-## Source-of-Truth Baseline
+- Last full quickstart acceptance pass: 2026-04-1[Packaging Guide](packaging-overview.md)eline
 
 Validated from [specs/002-project-docs/research.md](../specs/002-project-docs/research.md):
 
@@ -53,9 +50,7 @@ npm run dev
 
 Open the local URL shown by Vite in your desktop browser.
 
-## Desktop Browser Support
-
-- Supported: latest desktop Chromium, Firefox, and Safari releases with WebAssembly and IndexedDB enabled
+#[Packaging Guide](packaging-overview.md)atest desktop Chromium, Firefox, and Safari releases with WebAssembly and IndexedDB enabled
 - Not supported: mobile browsers for this release
 
 ## Controls Reference
