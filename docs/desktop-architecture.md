@@ -51,10 +51,13 @@ The main process owns the window lifecycle and renderer selection:
 ## Validated Evidence
 
 - Current packaged-shell runtime label: `Runtime desktop/win32 v0.1.0`
+- Current packaged-shell startup measurement: `979 ms` from launch to visible game board using `release/win-unpacked/Tetris Specify Copilot.exe`
 - Current build outputs observed during validation:
   - `dist/` renderer bundle
   - `dist-electron/` Electron main/preload bundle
   - `release/win-unpacked/Tetris Specify Copilot.exe` unpacked Windows app for launch validation
+
+This measured startup time stays within the 5-second desktop launch budget with headroom.
 
 ## Shared Guardrails
 

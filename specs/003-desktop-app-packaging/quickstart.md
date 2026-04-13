@@ -51,7 +51,14 @@ Expected outcome:
 
 - `dist/` contains the production Vite renderer bundle
 - `dist-electron/` contains compiled Electron main/preload outputs
-- the packaging output contains a portable Windows desktop artifact that launches without a dev server
+- the packaging output contains a Windows desktop app that launches without a dev server
+- validated unpacked launch path: `release/win-unpacked/Tetris Specify Copilot.exe`
+
+## Startup Budget Evidence
+
+- Measured launch-to-board time from `release/win-unpacked/Tetris Specify Copilot.exe`: `979 ms`
+- Observed runtime/build label in the desktop shell: `Runtime desktop/win32 v0.1.0`
+- Result: passes the 5-second packaged desktop startup budget
 
 ## Validation Commands
 

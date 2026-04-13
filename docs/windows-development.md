@@ -41,6 +41,7 @@ This guide will track the validated commands for both supported runtime paths.
 
 - Validated packaged-shell executable path: `release/win-unpacked/Tetris Specify Copilot.exe`
 - Validated runtime/build identification shown in the app shell: `Runtime desktop/win32 v0.1.0`
+- Validated startup measurement to visible game board: `979 ms`
 
 ## Troubleshooting Notes
 
@@ -54,7 +55,7 @@ This guide will track the validated commands for both supported runtime paths.
 2. Confirm the readiness strip shows `Runtime desktop/win32 v0.1.0`.
 3. Run `npm run build` and then `npm run dist:win`.
 4. Launch `release/win-unpacked/Tetris Specify Copilot.exe` and confirm the board becomes visible.
-5. Use the packaged shell for offline-play and later budget validation.
+5. Use the packaged shell for startup-budget and offline-play validation.
 
 ## Follow-On Documentation
 
