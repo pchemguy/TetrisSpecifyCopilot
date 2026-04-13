@@ -1,3 +1,14 @@
+import { readBrowserRuntimeInfo } from './browser/runtime.js';
+import {
+  getDesktopApi,
+  hasCompleteDesktopApi,
+  hasDesktopApi,
+  hasRuntimeInfoMethod,
+  isElectronShell,
+} from './desktop/runtime.js';
+
+export { getDesktopApi, hasCompleteDesktopApi, hasDesktopApi, isElectronShell } from './desktop/runtime.js';
+
 export type RuntimeMode = 'browser' | 'desktop';
 
 export type DesktopPlatform = 'win32' | 'darwin' | 'linux';
@@ -58,36 +69,6 @@ export interface DesktopApi {
   writeDatabaseBytes: (bytes: Uint8Array) => Promise<DesktopDatabaseSaveResult>;
 }
 
-type WindowWithDesktopApi = {
-  desktopApi?: Partial<DesktopApi>;
-};
-
-type NavigatorLike = {
-  userAgent?: string;
-};
-
-function hasRuntimeInfoMethod(
-  api: Partial<DesktopApi> | undefined,
-): api is Partial<DesktopApi> & Pick<DesktopApi, 'getRuntimeInfo'> {
-  return hasMethod(api, 'getRuntimeInfo');
-}
-
-function hasMethod<K extends keyof DesktopApi>(
-  api: Partial<DesktopApi> | undefined,
-  method: K,
-): api is Partial<DesktopApi> & Required<Pick<DesktopApi, K>> {
-  return typeof api?.[method] === 'function';
-}
-
-export function getDesktopApi(): Partial<DesktopApi> | undefined {
-  const runtimeWindow = (globalThis as typeof globalThis & { window?: WindowWithDesktopApi }).window;
-  return runtimeWindow?.desktopApi;
-}
-
-export function hasDesktopApi(): boolean {
-  return typeof getDesktopApi() !== 'undefined';
-}
-
 export function isDesktopPersistenceErrorCode(value: unknown): value is DesktopPersistenceErrorCode {
   return value === 'desktop_bridge_unavailable'
     || value === 'desktop_data_unreadable'
@@ -97,19 +78,6 @@ export function isDesktopPersistenceErrorCode(value: unknown): value is DesktopP
     || value === 'desktop_write_locked'
     || value === 'desktop_write_no_space'
     || value === 'desktop_write_failed';
-}
-
-export function isElectronShell(): boolean {
-  const runtimeNavigator = (globalThis as typeof globalThis & { navigator?: NavigatorLike }).navigator;
-  return typeof runtimeNavigator?.userAgent === 'string' && runtimeNavigator.userAgent.includes('Electron');
-}
-
-export function hasCompleteDesktopApi(
-  api: Partial<DesktopApi> | undefined = getDesktopApi(),
-): api is DesktopApi {
-  return hasMethod(api, 'getRuntimeInfo')
-    && hasMethod(api, 'readDatabaseBytes')
-    && hasMethod(api, 'writeDatabaseBytes');
 }
 
 export function getRuntimeMode(): RuntimeMode {
@@ -124,11 +92,7 @@ export async function readRuntimeInfo(): Promise<RuntimeInfo> {
   const desktopApi = getDesktopApi();
 
   if (!hasRuntimeInfoMethod(desktopApi)) {
-    return {
-      runtime: 'browser',
-      platform: 'web',
-      appVersion: null,
-    };
+    return readBrowserRuntimeInfo();
   }
 
   return desktopApi.getRuntimeInfo();

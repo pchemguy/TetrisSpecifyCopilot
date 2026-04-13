@@ -119,7 +119,7 @@
 - [X] T033 [US3] Implement the browser runtime adapter for localStorage and IndexedDB-backed SQLite in src/persistence/runtime/browserAdapter.ts and src/platform/runtime.ts
 - [X] T034 [US3] Add the pure browser workflow command as `npm run dev:web` in package.json and keep browser server settings explicit in vite.config.ts
 - [X] T035 [US3] Remove Electron assumptions from shared renderer bootstrap in src/app/providers/PersistenceProvider.tsx and src/persistence/sqlite/database.ts
-- [ ] T036 [US3] Isolate runtime-specific behavior behind platform modules in src/platform/runtime.ts, src/platform/browser/, and src/platform/desktop/
+- [X] T036 [US3] Isolate runtime-specific behavior behind platform modules in src/platform/runtime.ts, src/platform/browser/, and src/platform/desktop/
 - [ ] T037 [US3] Validate browser-mode continuity and update the dual-runtime workflow notes in docs/desktop-architecture.md and docs/windows-development.md
 
 **Checkpoint**: User Story 3 keeps browser development and browser persistence working independently of the desktop shell. Evidence: passing T030-T032, a working `npm run dev:web` path, and updated dual-runtime workflow docs.
