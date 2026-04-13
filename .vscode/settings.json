@@ -26,7 +26,9 @@
             "matchCommandLine": true
         },
         "bash --version": true,
-        "git config": true
+        "git config": true,
+        "./.specify/extensions/git/scripts/bash/auto-commit.sh": true,
+        "printf": true
     },
     "terminal.explorerKind": "integrated"
 }
