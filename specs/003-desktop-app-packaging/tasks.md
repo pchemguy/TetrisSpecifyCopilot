@@ -141,7 +141,7 @@
 
 ### Implementation for User Story 4
 
-- [ ] T040 [US4] Normalize Windows-safe desktop and browser scripts in package.json
+- [X] T040 [US4] Normalize Windows-safe desktop and browser scripts in package.json
 - [ ] T041 [US4] Document the supported Node, Git Bash, and troubleshooting workflow in docs/windows-development.md
 - [ ] T042 [US4] Add a repeatable desktop smoke workflow and rollback checkpoints in docs/windows-development.md and specs/003-desktop-app-packaging/quickstart.md
 - [ ] T043 [US4] Update architecture and agent guardrails for preload-only desktop access in docs/desktop-architecture.md and AGENTS.md
