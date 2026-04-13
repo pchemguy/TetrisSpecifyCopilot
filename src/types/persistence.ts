@@ -33,8 +33,12 @@ export interface PersistenceWarning {
   code:
     | 'sqlite_unavailable'
     | 'desktop_bridge_unavailable'
+    | 'desktop_data_unreadable'
     | 'desktop_data_invalid'
     | 'desktop_persistence_disabled'
+    | 'desktop_write_permission_denied'
+    | 'desktop_write_locked'
+    | 'desktop_write_no_space'
     | 'desktop_write_failed'
     | 'replay_write_failed'
     | 'storage_pruned'
