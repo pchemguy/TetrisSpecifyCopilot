@@ -110,7 +110,7 @@
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T030 [P] [US3] Add unit coverage for runtime selection, absent desktop bridge behavior, and incomplete desktop bridge fallback in tests/unit/platform/runtime.spec.ts
+- [X] T030 [P] [US3] Add unit coverage for runtime selection, absent desktop bridge behavior, and incomplete desktop bridge fallback in tests/unit/platform/runtime.spec.ts
 - [ ] T031 [P] [US3] Add browser-mode integration coverage for persistence bootstrap in tests/integration/app/browser-runtime.spec.tsx
 - [ ] T032 [P] [US3] Extend browser regression coverage for `dev:web` behavior in tests/e2e/core-gameplay.spec.ts and tests/e2e/session-persistence.spec.ts
 
