@@ -46,7 +46,7 @@ export function loadSqlJs(): Promise<SqlJsStatic> {
           return `${process.cwd().replace(/\\/g, '/')}/node_modules/sql.js/dist/sql-wasm.wasm`;
         }
 
-        return wasmUrl;
+        return new URL(wasmUrl, window.location.href).toString();
       },
     });
   }
