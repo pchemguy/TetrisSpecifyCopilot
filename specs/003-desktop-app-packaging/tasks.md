@@ -79,7 +79,7 @@
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T020 [P] [US2] Add unit coverage for desktop file load/save, atomic replace, stale temp cleanup, and interrupted-save recovery in tests/unit/persistence/desktopFileStore.spec.ts
+- [X] T020 [P] [US2] Add unit coverage for desktop file load/save, atomic replace, stale temp cleanup, and interrupted-save recovery in tests/unit/persistence/desktopFileStore.spec.ts
 - [ ] T021 [P] [US2] Add renderer integration coverage for best-score hydration, bridge-unavailable fallback warnings, and persistence-disabled launch behavior in tests/integration/app/desktop-persistence.spec.tsx
 - [ ] T022 [P] [US2] Extend desktop restart persistence validation in tests/e2e/session-persistence.spec.ts
 
