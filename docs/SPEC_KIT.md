@@ -1,5 +1,7 @@
 ---
-url: https://chatgpt.com/g/g-p-69ca8410ab7c819198782233666b1069-spec-kit/c/69d94e2a-f79c-838c-b016-9c714cc1759e
+urls:
+  - https://chatgpt.com/g/g-p-69ca8410ab7c819198782233666b1069-spec-kit/c/69d94e2a-f79c-838c-b016-9c714cc1759e
+  - https://chatgpt.com/g/g-p-69db58392fb48191849a03dcc4483741-tetrisspeckitcopilotreacttypescriptnodejs/c/69db5996-0688-8393-b81b-5cf5a3a04812
 ide: VS Code
 agent: Copilot
 framework: Spec Kit
@@ -10,6 +12,8 @@ environment: pchemguy/LLM-CLI
 agent_local: "true"
 agent_approval_mode: selective
 ---
+
+## Core
 
 ### `speckit.constitution`
 
@@ -163,3 +167,263 @@ Implement current feature. Make sure to link and update GitHub Issues. Commit an
 
 Execute (**Pass 1**)
 Execute (**Pass 2**)
+
+## Docs
+
+I need to create detailed comprehensive professional user (`docs/user/`) and dev (`docs/dev/`) Markdown project docs. Make sure to create a proper `README.md` and `DEVELOPMENT.md`.
+
+## Packaging
+
+I want to transform the web app into a Tauri packaged portable, ideally, single executable app. I am primarily focusing on Windows for now. I want have a strong architectural design. I want to switch to sqlite3 as the backend and have a database created next to the app. I want to keep the the best score in the database and show it at startup. I also want a congratulations message when the game is over, if the final score is larger than the saved best score (and update the saved best score).
+
+### [spec](https://chatgpt.com/g/g-p-69db58392fb48191849a03dcc4483741-tetrisspeckitcopilotreacttypescriptnodejs/c/69db5996-0688-8393-b81b-5cf5a3a04812)
+
+Create a feature specification for converting the current browser-based Tetris application into a Windows-first packaged desktop application for portable local use.
+
+This feature is for a single local player using the game on their own Windows machine. The desktop application must run fully locally without requiring a separate server, online service, or externally managed database. Portable local distribution is required. A single executable distribution is preferred, but it is not a mandatory acceptance condition for this feature.
+
+The feature should preserve the current core gameplay experience while adding packaged desktop operation and local persistent best-score tracking. The resulting product should remain maintainable, with clear separation between gameplay behavior, desktop application/runtime responsibilities, and persistence responsibilities.
+
+Primary user story:
+
+As a player using the packaged desktop version of the game, I want the game to remember my best score between launches and show it when the app starts, so that I can immediately see my current record and feel that my progress is preserved locally.
+
+Key behavior to specify:
+
+- On first launch, if no local database exists next to the application, the application must create it automatically.
+- The application must store exactly one persistent best score for the local player in a local on-disk database located next to the application.
+- On every startup, the application must load the saved best score from that database and display it to the player at startup.
+- When a game ends, the application must compare the final score with the saved best score.
+- If the final score is strictly greater than the saved best score, the application must update the stored best score and show a congratulations message indicating that a new best score was achieved.
+- If the final score is equal to or lower than the saved best score, the application must not update the stored best score and must not show the congratulations message.
+
+Scope constraints:
+
+- Windows is the only required platform in this feature.
+- The application is local-only for this feature.
+- The persistent record is limited to a single saved best score.
+- The database must be application-local and stored next to the packaged app.
+- The feature must include first-run behavior, missing-database behavior, startup display behavior, and persistence across application restarts.
+
+Out of scope:
+
+- online sync
+- cloud backup
+- multiplayer
+- user accounts
+- multiple player profiles
+- general statistics/history tracking beyond the single best score
+- non-Windows packaging requirements
+
+Assumptions:
+
+- There is only one local player context for this feature.
+- The best score is represented as a single numeric record.
+- If the database file is missing at launch, the application recreates it automatically.
+- “Portable” means the app can be run locally without separate infrastructure dependencies.
+
+Success-oriented expectations:
+
+- A player can launch the packaged desktop app and immediately see the currently saved best score.
+- A player who achieves a new record is clearly informed at game over and sees that record preserved on the next launch.
+- A player who does not beat the saved best score does not receive a false congratulatory message and does not lose the previously saved best score.
+- The local best score survives normal application shutdown and restart.
+
+### [plan](https://chatgpt.com/g/g-p-69db58392fb48191849a03dcc4483741-tetrisspeckitcopilotreacttypescriptnodejs/c/69db5996-0688-8393-b81b-5cf5a3a04812)
+
+Create an implementation plan for this feature as a Windows-first Tauri desktop application.
+
+Use these technical constraints and architectural goals as fixed planning inputs:
+
+- Desktop framework: Tauri
+- Frontend: preserve the existing React + TypeScript + Vite application where practical
+- Persistence: replace browser-side `sql.js` persistence with native SQLite-backed persistence
+- Platform focus: Windows only for this feature
+- Distribution target: portable local desktop app
+- Single executable packaging is preferred, but it is not required if it conflicts with the selected Tauri packaging model
+- The application must run fully locally with no separate server process and no browser-launched deployment mode
+
+Architecture expectations:
+- Plan for strong separation between frontend gameplay/UI responsibilities and native desktop/runtime/persistence responsibilities
+- Database access and file-system ownership should live on the Tauri/native side, not in the frontend
+- The frontend should interact with persistence through explicit Tauri command/interface boundaries
+- Prefer a design where gameplay scoring logic remains deterministic and isolated from persistence side effects
+- Persistence should be triggered through explicit application-layer calls at startup and game-over boundaries rather than being interwoven into core gameplay state transitions
+- Preserve maintainability for future packaged-desktop evolution
+
+Persistence and runtime requirements:
+- Use native SQLite, not `sql.js`
+- Store the database as an on-disk file created next to the packaged application
+- If the database is missing on startup, recreate it automatically
+- Track exactly one persistent best score for a single local player
+- Load the saved best score at application startup and expose it to the UI for display
+- When a game ends, compare the final score against the saved best score
+- If the final score is strictly greater, persist the new best score and return a result that causes the UI to show a congratulations message
+- If the final score is equal to or lower than the saved best score, do not update the stored best score and do not trigger the congratulations state
+
+Planning priorities:
+- Research the most appropriate SQLite integration approach for Tauri in this application
+- Research Windows-specific implications of keeping the SQLite database next to the application in a portable deployment model
+- Define a clear command/interface contract between the frontend and the Tauri/native layer for startup score loading and end-of-game score submission
+- Keep the data model minimal and focused on the single best-score record
+- Include first-run behavior, missing-database behavior, startup behavior, and persistence across restarts
+- Do not expand scope into cloud sync, user accounts, multi-profile support, online features, or broader statistics/history systems
+
+Assume the current web application is the migration baseline. Reuse existing frontend and gameplay code where appropriate, but plan the persistence transition as a deliberate move from browser-managed storage to native desktop-managed storage.
+
+The plan should optimize for maintainable architecture, explicit responsibility boundaries, and a practical Windows-portable deployment model rather than for cross-platform scope.
+
+### [checklist](https://chatgpt.com/g/g-p-69db58392fb48191849a03dcc4483741-tetrisspeckitcopilotreacttypescriptnodejs/c/69db5996-0688-8393-b81b-5cf5a3a04812)
+
+Create a requirements-quality checklist for this feature as a review gate for the specification.
+
+Audience and use:
+
+- Primary audience: feature author and reviewer
+- Timing: design/spec review before or alongside implementation planning and task generation
+- Depth: reviewer-grade, with enough rigor to catch requirement gaps that would cause architectural drift, rework, or ambiguous implementation
+
+Focus areas:
+
+- packaged Windows desktop application requirements
+- portable deployment requirements
+- local-only operation assumptions
+- clarity of architecture-related responsibility boundaries
+- local SQLite persistence requirements
+- database file placement next to the application
+- startup best-score loading/display requirements
+- end-of-game best-score update and congratulations-message requirements
+- first-run, missing-database, exception, recovery, and non-functional scenario coverage
+
+Checklist priorities:
+
+- Evaluate whether the requirements and planning artifacts clearly define the boundary between frontend/UI responsibilities, Tauri/native responsibilities, and persistence responsibilities
+- Evaluate whether the Windows-only scope and portable deployment assumptions are explicit, bounded, and free of hidden contradictions
+- Evaluate whether “database next to the app” is specified precisely enough to guide implementation and review
+- Evaluate whether the feature clearly defines first-run behavior, missing-database behavior, startup display behavior, strict greater-than update behavior, and non-update behavior when the score is not a new record
+- Evaluate whether out-of-scope items are clearly excluded, especially online sync, accounts, multi-profile support, cloud behavior, and broader statistics/history expansion
+- Emphasize clarity, completeness, consistency, measurability, scenario coverage, dependencies, assumptions, ambiguities, and conflicts
+- Bias the checklist toward identifying requirement weaknesses that would allow persistence logic, desktop runtime concerns, and gameplay/UI concerns to become blurred or under-specified across layers
+- Treat portable deployment assumptions and writable-on-disk database placement as high-risk requirement areas that deserve explicit ambiguity, dependency, recovery, and boundary checks
+
+Prefer a concise, high-leverage checklist that surfaces the most important requirement-quality risks for this feature rather than a long low-signal list.
+
+### [tasks](https://chatgpt.com/g/g-p-69db58392fb48191849a03dcc4483741-tetrisspeckitcopilotreacttypescriptnodejs/c/69db5996-0688-8393-b81b-5cf5a3a04812)
+
+Generate tasks for this feature with a strong bias toward small, dependency-ordered, independently verifiable increments that support incremental implementation, review, and commits.
+
+Task-generation priorities:
+
+- Prefer small vertical slices of working functionality over broad horizontal layers
+- Keep tasks narrowly scoped so that each task, or a very small cluster of adjacent tasks, can be implemented and committed coherently
+- Bias toward tasks that can be completed, validated, and committed in under a modest single-session implementation pass.
+- Organize work so each user story phase produces a runnable or verifiable increment
+- Minimize the Foundational phase to only truly blocking prerequisites
+- Push as much work as possible into story-specific phases rather than shared umbrella tasks
+- Preserve clear separation between frontend/UI tasks, Tauri/native command tasks, persistence tasks, and explicit integration tasks at their boundaries
+- Prefer tasks that modify as few files as practical while still delivering a meaningful increment
+- Avoid tasks that span frontend, native runtime, and persistence layers simultaneously unless the task is explicitly an integration step that depends on prior layer-specific tasks
+- Use exact file paths in every task and avoid vague multi-file “wire everything together” descriptions
+- Mark tasks as parallel only when they are genuinely independent and do not create likely merge or dependency conflicts
+
+Testing expectations:
+
+- Include test tasks for high-value behavior and edge cases, especially:
+    - first-run database creation
+    - missing-database recovery
+    - startup best-score loading and display
+    - end-of-game score submission
+    - strict greater-than best-score update logic
+    - congratulations message only when a new best score is actually achieved
+- Prefer tests that validate user-visible behavior or stable command/persistence contracts
+- Keep tests scoped to the increment they validate
+
+Implementation focus:
+
+- Target a Windows-first Tauri desktop app using native SQLite persistence
+- Assume the migration baseline is the existing React + TypeScript + Vite app
+- Keep persistence ownership on the Tauri/native side and interaction through explicit command boundaries
+- Favor an MVP-first sequence that delivers the complete best-score lifecycle early:
+    1. packaged app startup
+    2. database bootstrap/creation
+    3. startup best-score read/display
+    4. end-of-game score submission
+    5. new-best persistence update and congratulations flow
+
+Each user story phase should be completable and reviewable in isolation, with a clear independent validation path before moving to the next story.
+
+The resulting tasks should be immediately actionable by an LLM, with each task specific enough to implement without additional hidden context.
+
+### [taskstoissues](https://chatgpt.com/g/g-p-69db58392fb48191849a03dcc4483741-tetrisspeckitcopilotreacttypescriptnodejs/c/69db5996-0688-8393-b81b-5cf5a3a04812)
+
+Create GitHub issues from the current tasks.md with strict one-task-to-one-issue mapping.
+
+Requirements:
+
+- Create exactly one GitHub issue per task
+- Do not merge, bundle, or combine multiple tasks into one issue
+- Preserve task granularity, ordering, and dependency intent from tasks.md
+- Keep each created issue focused, small, testable, and implementation-ready
+
+Issue content:
+
+- Format issue titles so they begin with the task ID, followed by a concise task title
+- Include the task description, relevant file paths, and any story/phase context in the issue body
+- Where possible, include task dependencies or blocking predecessor task IDs in the issue body
+- Keep the issue scope limited to the originating task only
+- Include enough context from the task/plan/spec so the issue is actionable without unnecessary extra interpretation
+
+Mapping artifact:
+
+- Produce a task-to-issue mapping table
+- Save it next to tasks.md as `task-to-issue.md`
+- Include at minimum: task ID, short task description, GitHub issue number, and GitHub issue URL
+- Preserve the task order from tasks.md in the mapping document
+
+Labels and milestones:
+
+- Create or reuse a small, consistent label set for the generated issues
+- Apply labels that improve traceability, such as feature, phase/story, platform, and key implementation area where appropriate
+- Create or reuse a milestone for this feature and update the new issues to use it
+
+Operational discipline:
+
+- Do not create issues in any repository other than the one derived from the current Git remote
+- Do not guess mappings, labels, milestone application, or file outputs if tooling does not support them
+- If any requested action cannot be completed, report exactly what was completed and what remains outstanding
+
+### [implement](https://chatgpt.com/g/g-p-69db58392fb48191849a03dcc4483741-tetrisspeckitcopilotreacttypescriptnodejs/c/69db5996-0688-8393-b81b-5cf5a3a04812)
+
+Implement the current feature strictly according to the generated tasks.md, plan.md, and related design artifacts.
+
+Execution priorities:
+
+- Follow task order and dependency constraints exactly
+- Preserve the intended architecture boundaries between frontend/UI, Tauri/native runtime, and SQLite persistence
+- Do not batch large unrelated changes together
+- Complete work in small, reviewable increments that keep the project in a working state after each validated step
+- Mark a task complete in tasks.md only after its required implementation and relevant validation for that increment have succeeded
+
+Validation and progress:
+
+- After completing each task, run the smallest relevant validation for that increment before marking it done
+- Report progress by task ID and summarize what was completed, what was validated, and what changed
+- Do not skip ahead over incomplete blocking tasks
+- If a task cannot be completed safely, stop and report the blocker clearly rather than guessing
+
+Git and GitHub workflow:
+
+- Keep implementation progress aligned with the corresponding GitHub issue using task-to-issue mapping `task-to-issue.md`
+- Update the linked GitHub issue with progress or completion notes as work advances
+- Default to one validated commit per completed task unless two adjacent tasks are too tightly coupled to separate cleanly
+- Push commits to origin after each validated incremental commit
+- Include the task ID and issue reference in commit messages when that mapping is available
+- Close a GitHub issue only when its mapped scope has been fully implemented and validated
+- Do not guess task-to-issue mappings and do not close issues speculatively
+
+Implementation discipline:
+
+- Prefer narrow, file-local changes where possible
+- Avoid broad refactors unless they are required by the current task
+- Keep persistence logic on the Tauri/native side and interact with it through explicit command boundaries
+- Preserve incremental implementability and auditability throughout the run

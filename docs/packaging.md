@@ -1,263 +1,89 @@
 ---
-urls:
-  - https://chatgpt.com/g/g-p-69db58392fb48191849a03dcc4483741-tetrisspeckitcopilotreacttypescriptnodejs/c/69db5996-0688-8393-b81b-5cf5a3a04812
----
-# Packaging as a Standalone Windows Executable with an Embedded Browser
-
-Yes. This stack is a good fit for a standalone Windows desktop executable with an embedded browser.
-
-## Electron
-
-Why Electron fits this project
-
-* You already have a React + Vite browser app.
-* Electron packages Chromium + Node.js into a desktop app.
-* It gives you a native `.exe` installer or portable app for Windows.
-* `sql.js` works well in Electron because it is still essentially a browser environment.
-
-What that would look like
-
-* Keep your current React/Vite frontend.
-* Add a small Electron main process.
-* Build the frontend into static assets.
-* Load the built app into an Electron `BrowserWindow`.
-* Package with `electron-builder` or `electron-forge`.
-
-Result
-
-* A Windows executable, typically distributed as:
-    * installer `.exe`
-    * portable `.exe`
-    * sometimes unpacked app directory
-
-## Tauri
-
-  * Much smaller binaries than Electron.
-  * Uses the system WebView rather than bundling Chromium.
-  * Better if you want lightweight distribution.
-  * Less “embedded browser” in the strict sense, because it usually uses WebView2 on Windows rather than shipping its own Chromium runtime.
-
-## Neutralino / Wails-like approaches
-
-  * Smaller, but less standard for a React desktop packaging workflow.
-
-## Important Implication for Persistence Choice
-
-* `sql.js` is an in-memory/WebAssembly SQLite engine unless you explicitly save and reload the database file.
-* In a packaged desktop app, that is still fine, but you need to decide where the DB file lives:
-    * app data directory
-    * user documents
-    * exported/imported save file
-
-If you want more native desktop persistence, you could also switch from `sql.js` to:
-
-* better-sqlite3
-* sqlite3
-
-That would give you a real on-disk SQLite database managed by Node in Electron, which is usually cleaner for desktop apps. But it is not required.
-
-## Practical recommendation
-
-* If you want the least architectural change: Electron + current React/Vite app + either:
-    * keep `sql.js` and persist exported DB bytes to disk, or
-    * migrate persistence to `better-sqlite3` in the Electron main process
-
-Minimal tool additions you would typically need
-
-* `electron`
-* `electron-builder` or `electron-forge`
-* possibly `concurrently` and `wait-on` for dev workflow
-
-Typical packaged architecture
-
-* Renderer: React/TypeScript/Vite
-* Main process: Electron bootstrap
-* Optional preload script for secure API bridging
-* Packager: electron-builder
-
-Caveats
-
-* Electron binaries are relatively large because Chromium is bundled.
-* Code signing matters if you want a polished Windows distribution.
-* Auto-update is possible, but it is additional work.
-* You should avoid enabling unrestricted Node access in the renderer; use preload + IPC instead.
-
-## Bottom line
-
-* Yes, absolutely.
-* For “standalone Windows executable with an embedded browser,” Electron is the strongest fit.
-* For “small desktop executable” rather than bundled Chromium, Tauri is worth considering.
-
-> This project can be packaged as a standalone Windows desktop application using Electron, which embeds Chromium and loads the existing React/Vite frontend as a local desktop UI. This allows distribution as a self-contained executable without requiring a separately installed browser.
-
----
+url: https://chatgpt.com/g/g-p-69db58392fb48191849a03dcc4483741-tetrisspeckitcopilotreacttypescriptnodejs/c/69db5996-0688-8393-b81b-5cf5a3a04812
 ---
 
-# Electron vs. Tauri vs. Neutralino vs. Flutter
+# Packaging Guide: Windows-First Tauri Desktop
 
-For your project, the core tension is this:
+## Overview
 
-You currently have a browser-first stack:
+This project now packages as a Windows-first Tauri desktop application. The supported distribution baseline is a portable folder artifact, not an Electron-style bundled Chromium executable.
 
-* React 19
-* TypeScript
-* Vite
-* `sql.js`
-* Playwright/Vitest
+## Current Packaging Model
 
-That makes Electron and Tauri natural on paper, but your real deployment constraints are stricter than the average web-desktop discussion:
+- Desktop framework: Tauri 2
+- Frontend build: Vite output consumed by Tauri
+- Native runtime: Rust
+- Windows webview dependency: WebView2
+- Primary artifact: bundled Windows desktop output under `src-tauri/target/release/bundle/`
 
-Your stated priorities
+## Development Commands
 
-* Windows packaging
-* portable distribution preferred
-* ideally a single `.exe`, or at least a self-extracting archive that behaves like one
-* avoid WebView2 dependence if possible
-* avoid Electron’s huge footprint if possible
-* keep your existing frontend stack if practical
-* browser-like compatibility matters
+Use these commands when working on packaging or release validation:
 
-That combination rules out a lot of “lightweight” options once you look at them operationally rather than marketing-wise.
+```bash
+npm install
+npm run tauri dev
+cargo test --manifest-path src-tauri/Cargo.toml
+npm run tauri build
+```
 
-Here is the technical and practical rundown.
+## Build Behavior
 
-## 1. Electron
+`npm run tauri build` runs the frontend build first and then produces the desktop bundle.
 
-### What it is
+Current Tauri build configuration:
 
-Electron is a desktop shell that bundles:
+- product name: `Classic Tetris Desktop`
+- main window label: `main`
+- bundle target: `all`
+- icon source: `src-tauri/icons/icon.ico`
 
-* Chromium
-* Node.js
-* your frontend app
+## Artifact Expectations
 
-Your React/Vite app runs inside Electron’s Chromium renderer process, and Electron provides a desktop-native bootstrap layer.
+Successful build validation currently produces:
 
-### Fit for your current app
+- release executable at `src-tauri/target/release/tetris-desktop.exe`
+- bundled Windows output under `src-tauri/target/release/bundle/`
 
-Very strong.
+The portable folder artifact is the acceptance baseline for Windows distribution even if a true single-file package is not produced.
 
-Your stack already maps directly:
+## Persistence Packaging Notes
 
-* React/Vite frontend becomes the Electron renderer
-* local persistence can remain `sql.js`
-* or you can move to native SQLite via `better-sqlite3` in the main process later
+Packaging behavior is tied to desktop persistence behavior:
 
-This is the lowest-friction route from your current codebase to a desktop app.
+- the best-score database file is named `best-score.sqlite3`
+- if the executable directory is writable, the database is created adjacent to the app
+- if the executable directory is not writable, storage falls back to `%LOCALAPPDATA%/Classic Browser Tetris/`
+- startup can emit a one-time fallback or database-reset notice when recovery behavior is used
 
-### Packaging reality
+## Validation Checklist
 
-Electron can produce:
+Run this sequence before packaging sign-off:
 
-* installer `.exe`
-* portable `.exe`
-* unpacked app directory
+1. `npm run lint`
+2. `npm run test`
+3. `cargo test --manifest-path src-tauri/Cargo.toml`
+4. `npx playwright test tests/e2e/core-gameplay.spec.ts --project=chromium --reporter=line`
+5. `npx playwright test tests/e2e/hud-and-strategy.spec.ts --project=chromium --reporter=line`
+6. `npx playwright test tests/e2e/session-persistence.spec.ts --project=chromium --reporter=line`
+7. `npm run tauri build`
+8. `npx playwright test tests/e2e/portable-desktop-offline.spec.ts --project=chromium --reporter=line`
 
-You can also create packaging that looks like a single executable, but it is not truly a tiny monolithic native binary. In practice, Electron apps still carry a substantial runtime payload.
+If Playwright browser binaries are missing, run:
 
-A “single exe” Electron app is generally:
+```bash
+npx playwright install chromium
+```
 
-* a packaged wrapper
-* often extracting resources or carrying embedded archives internally
-* still large because Chromium is there somewhere
+## Reviewer Focus Areas
 
-So yes, you can get a one-file-ish distribution, but not a small one.
+When reviewing packaging changes, verify these outcomes specifically:
 
-### Size profile
-
-This is Electron’s biggest weakness for you.
-
-Typical reasons it is large:
-
-* Chromium runtime
-* Node runtime
-* Electron infrastructure
-* app resources and locale files
-
-Even trivial apps are big compared with native programs.
-
-For your Tetris app, the actual app logic is tiny. Most of the package size would be runtime overhead.
-
-### Browser/runtime dependence
-
-This is Electron’s biggest strength for you.
-
-Electron does not depend on:
-
-* WebView2
-* system Edge
-* system browser
-
-It brings its own rendering engine.
-
-That gives you:
-
-* consistent rendering
-* predictable behavior
-* strong compatibility with modern frontend code
-
-### Desktop feel
-
-Strong.
-Electron apps feel like true desktop apps:
-
-* own windows
-* native menus if you want them
-* tray, file system, packaging, shortcuts, installers, updates
-
-### Security/architecture considerations
-
-You should structure it as:
-
-* main process
-* preload bridge
-* renderer
-
-Avoid:
-
-* exposing unrestricted Node in renderer
-* loose IPC
-* file system access directly from web UI without a preload contract
-
-### Persistence implications
-
-Your current `sql.js` approach will work, but remember:
-
-* `sql.js` is browser/WASM SQLite
-* persistence requires explicitly loading/saving DB bytes
-
-In Electron, you may want either:
-
-* keep `sql.js` and save the DB file under app data
-* move to `better-sqlite3` for real native SQLite
-
-For a packaged desktop app, native SQLite is usually cleaner long term.
-
-### Development experience
-
-Very good for web developers.
-You can keep:
-
-* Vite
-* React
-* TypeScript
-* most existing UI code
-
-### Verdict for your use case
-
-Pros:
-
-* easiest migration from current app
-* no WebView2 dependence
-* bundled browser/runtime
-* strong compatibility
-* real desktop app experience
-
-Cons:
-
-* large package size
-* “single exe” is possible but still heavy
-* more runtime overhead than your app deserves
+- the app still launches locally with no separate server process
+- the portable folder artifact is produced successfully
+- best-score persistence survives restart in the desktop runtime
+- storage fallback and corruption recovery messaging remain explicit and accurate
+- generated Tauri directories are excluded from lint noise
 
 Best when:
 
