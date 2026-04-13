@@ -28,7 +28,8 @@
         "bash --version": true,
         "git config": true,
         "./.specify/extensions/git/scripts/bash/auto-commit.sh": true,
-        "printf": true
+        "printf": true,
+        ".specify/extensions/git/scripts/bash/auto-commit.sh": true
     },
     "terminal.explorerKind": "integrated"
 }
