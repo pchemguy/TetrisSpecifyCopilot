@@ -53,7 +53,7 @@
 
 - [X] T011 [P] [US1] Add preload contract coverage for desktop runtime info and app version metadata in tests/contract/desktop-api.contract.spec.ts
 - [X] T012 [P] [US1] Add renderer integration coverage for desktop runtime detection in tests/integration/app/desktop-runtime.spec.tsx
-- [ ] T013 [P] [US1] Add Electron launch and offline shell smoke coverage in tests/e2e/desktop-shell.spec.ts
+- [X] T013 [P] [US1] Add Electron launch and offline shell smoke coverage in tests/e2e/desktop-shell.spec.ts
 
 ### Implementation for User Story 1
 
