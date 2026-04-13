@@ -1,3 +1,7 @@
+---
+url: https://chatgpt.com/g/g-p-69db58392fb48191849a03dcc4483741-tetrisspeckitcopilotreacttypescriptnodejs/c/69db5996-0688-8393-b81b-5cf5a3a04812
+---
+
 # Packaging Guide: Windows-First Tauri Desktop
 
 ## Overview
