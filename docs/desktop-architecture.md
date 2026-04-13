@@ -34,6 +34,28 @@ The feature keeps one renderer-owned persistence model and swaps only the durabl
 - `npm run dev` will run the Electron shell against the same renderer.
 - The first reviewable desktop output is a portable Windows artifact.
 
+## Launch Lifecycle
+
+The desktop shell now has two explicit launch paths:
+
+1. Development launch: `npm run dev` starts Vite on `127.0.0.1:4173`, watches the Electron TypeScript build, and then starts Electron with `VITE_DEV_SERVER_URL` pointed at the renderer server.
+2. File-based launch: compiled Electron output without `VITE_DEV_SERVER_URL` loads `dist/index.html` directly from disk, which is the same path used by packaged desktop validation.
+
+The main process owns the window lifecycle and renderer selection:
+
+- create a single `BrowserWindow` with `contextIsolation: true`, `nodeIntegration: false`, and preload-only desktop access
+- prefer the Vite dev server when `VITE_DEV_SERVER_URL` is present
+- otherwise load the built renderer from `dist/index.html`
+- expose runtime metadata through the preload bridge so the renderer can display build identification in the live shell
+
+## Validated Evidence
+
+- Current packaged-shell runtime label: `Runtime desktop/win32 v0.1.0`
+- Current build outputs observed during validation:
+  - `dist/` renderer bundle
+  - `dist-electron/` Electron main/preload bundle
+  - `release/win-unpacked/Tetris Specify Copilot.exe` unpacked Windows app for launch validation
+
 ## Shared Guardrails
 
 ### Packaging

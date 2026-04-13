@@ -62,7 +62,7 @@
 - [X] T016 [US1] Wire desktop development and production build commands in package.json, vite.config.ts, and tsconfig.electron.json
 - [X] T017 [US1] Configure portable Windows packaging with electron-builder in package.json
 - [X] T018 [US1] Fix packaged renderer, preload, and static asset resolution in electron/main.ts, src/persistence/sqlite/database.ts, and vite.config.ts
-- [ ] T019 [US1] Validate packaged desktop launch behavior, build/version identification, and the launch lifecycle in docs/desktop-architecture.md and docs/windows-development.md
+- [X] T019 [US1] Validate packaged desktop launch behavior, build/version identification, and the launch lifecycle in docs/desktop-architecture.md and docs/windows-development.md
 - [ ] T054 [P] [US1] Measure and record packaged desktop startup time to the usable main UI against the 5-second budget in docs/desktop-architecture.md and specs/003-desktop-app-packaging/quickstart.md
 
 **Checkpoint**: User Story 1 delivers a runnable desktop shell and a portable Windows artifact that can be reviewed independently. Evidence: passing T011-T013, a launchable Electron shell, a portable Windows artifact, and updated operating docs.
