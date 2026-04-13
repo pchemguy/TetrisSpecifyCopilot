@@ -19,7 +19,7 @@
 
 - [X] T001 Create the desktop architecture decision note in docs/desktop-architecture.md
 - [X] T002 [P] Update desktop boundary and Windows shell rules in AGENTS.md
-- [ ] T003 [P] Create the Windows developer workflow guide skeleton in docs/windows-development.md
+- [X] T003 [P] Create the Windows developer workflow guide skeleton in docs/windows-development.md
 
 ---
 
