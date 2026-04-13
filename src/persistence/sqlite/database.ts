@@ -1,6 +1,10 @@
 import initSqlJs, { type Database, type SqlJsStatic } from 'sql.js';
 import wasmUrl from 'sql.js/dist/sql-wasm.wasm?url';
-import { getRuntimeMode } from '../../platform/runtime';
+import {
+  getRuntimeMode,
+  isDesktopPersistenceErrorCode,
+  type DesktopPersistenceErrorCode,
+} from '../../platform/runtime';
 import {
   BROWSER_SQLITE_STORAGE,
   createBrowserPersistenceAdapter,
@@ -10,6 +14,10 @@ import { createDesktopPersistenceAdapter } from '../runtime/desktopAdapter';
 import { ensureSchema, SCHEMA_VERSION } from './schema';
 
 const BEST_SCORE_META_KEY = 'best_score';
+
+type CodedPersistenceError = Error & {
+  code: DesktopPersistenceErrorCode;
+};
 
 let sqlJsPromise: Promise<SqlJsStatic> | null = null;
 
@@ -34,6 +42,30 @@ function normalizeBestScore(value: unknown): number {
   }
 
   return Math.floor(numericValue);
+}
+
+function createPersistenceError(
+  code: DesktopPersistenceErrorCode,
+  message: string,
+): CodedPersistenceError {
+  const error = new Error(message) as CodedPersistenceError;
+  error.code = code;
+  return error;
+}
+
+function normalizeDesktopPersistenceError(
+  error: unknown,
+  fallbackCode: DesktopPersistenceErrorCode,
+  fallbackMessage: string,
+): CodedPersistenceError {
+  if (error instanceof Error && isDesktopPersistenceErrorCode((error as Partial<CodedPersistenceError>).code)) {
+    return error as CodedPersistenceError;
+  }
+
+  return createPersistenceError(
+    fallbackCode,
+    error instanceof Error && error.message ? error.message : fallbackMessage,
+  );
 }
 
 async function readPersistedDatabase(): Promise<Uint8Array | null> {
@@ -107,19 +139,65 @@ export function writePersistedBestScore(database: Database, score: number): numb
 }
 
 export async function initializeSQLiteDatabase(): Promise<SQLiteDatabaseHandle> {
-  const sqlJs = await loadSqlJs();
-  const persistedBinary = await readPersistedDatabase();
-  const { database, schemaVersion } = createHydratedDatabase(sqlJs, persistedBinary);
+  const runtimeMode = getRuntimeMode();
 
-  return {
-    database,
-    sqlJs,
-    schemaVersion,
-    persist: async () => {
-      const binary = database.export();
-      await writePersistedDatabase(binary);
-    },
-  };
+  try {
+    const sqlJs = await loadSqlJs();
+    const persistedBinary = await readPersistedDatabase();
+
+    let hydratedDatabase: ReturnType<typeof createHydratedDatabase>;
+
+    try {
+      hydratedDatabase = createHydratedDatabase(sqlJs, persistedBinary);
+    } catch (error) {
+      if (runtimeMode === 'desktop') {
+        throw normalizeDesktopPersistenceError(
+          error,
+          persistedBinary ? 'desktop_data_invalid' : 'desktop_persistence_disabled',
+          persistedBinary
+            ? 'Desktop best-score data was invalid, so the app started with the default best score.'
+            : 'Desktop persistence is unavailable for this run.',
+        );
+      }
+
+      throw error;
+    }
+
+    const { database, schemaVersion } = hydratedDatabase;
+
+    return {
+      database,
+      sqlJs,
+      schemaVersion,
+      persist: async () => {
+        const binary = database.export();
+
+        try {
+          await writePersistedDatabase(binary);
+        } catch (error) {
+          if (runtimeMode === 'desktop') {
+            throw normalizeDesktopPersistenceError(
+              error,
+              'desktop_write_failed',
+              'Desktop persistence could not save the local database.',
+            );
+          }
+
+          throw error;
+        }
+      },
+    };
+  } catch (error) {
+    if (runtimeMode === 'desktop') {
+      throw normalizeDesktopPersistenceError(
+        error,
+        'desktop_persistence_disabled',
+        'Desktop persistence is unavailable for this run.',
+      );
+    }
+
+    throw error;
+  }
 }
 
 export async function resetSQLiteDatabase(): Promise<void> {
