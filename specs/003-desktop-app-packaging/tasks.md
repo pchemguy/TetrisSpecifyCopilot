@@ -90,7 +90,7 @@
 - [X] T025 [US2] Implement the desktop runtime adapter for loading and saving database bytes in src/persistence/runtime/desktopAdapter.ts and src/platform/runtime.ts
 - [X] T026 [US2] Add desktop best-score persistence and schema bootstrap helpers in src/persistence/sqlite/database.ts and src/persistence/sqlite/schema.ts
 - [X] T027 [US2] Persist desktop database exports after best-score mutations in src/app/providers/PersistenceProvider.tsx and src/persistence/sqlite/database.ts
-- [ ] T028 [US2] Surface missing or invalid desktop best-score recovery through existing warning UI in src/app/providers/PersistenceProvider.tsx and src/components/overlays/PersistenceWarning.tsx
+- [X] T028 [US2] Surface missing or invalid desktop best-score recovery through existing warning UI in src/app/providers/PersistenceProvider.tsx and src/components/overlays/PersistenceWarning.tsx
 - [X] T029 [US2] Handle unreadable or corrupt desktop database bytes plus permission, locked-file, and disk-space write failures with deterministic recovery in electron/main.ts and src/types/persistence.ts
 - [ ] T055 [P] [US2] Add integration coverage proving desktop mode does not import, merge, or overwrite browser persistence in tests/integration/app/desktop-persistence-isolation.spec.tsx
 - [ ] T056 [US2] Enforce browser/desktop persistence separation in src/persistence/runtime/browserAdapter.ts, src/persistence/runtime/desktopAdapter.ts, and src/platform/runtime.ts

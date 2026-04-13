@@ -53,6 +53,56 @@ export interface PersistenceContextValue {
 
 const PersistenceContext = createContext<PersistenceContextValue | null>(null);
 
+type PersistenceMetric = {
+  phase: 'hydrate' | 'save';
+  runtimeMode: 'browser' | 'desktop';
+  durationMs: number;
+  outcome: 'ready' | 'warning';
+};
+
+function isWarningCode(value: unknown): value is PersistenceWarning['code'] {
+  return value === 'sqlite_unavailable'
+    || value === 'desktop_bridge_unavailable'
+    || value === 'desktop_data_unreadable'
+    || value === 'desktop_data_invalid'
+    || value === 'desktop_persistence_disabled'
+    || value === 'desktop_write_permission_denied'
+    || value === 'desktop_write_locked'
+    || value === 'desktop_write_no_space'
+    || value === 'desktop_write_failed'
+    || value === 'replay_write_failed'
+    || value === 'storage_pruned'
+    || value === 'malformed_local_storage';
+}
+
+function createDesktopPersistenceWarning(
+  error: unknown,
+  fallbackCode: PersistenceWarning['code'],
+  fallbackMessage: string,
+): PersistenceWarning {
+  const errorCode = error instanceof Error ? (error as Error & { code?: unknown }).code : undefined;
+
+  return {
+    code: isWarningCode(errorCode) ? errorCode : fallbackCode,
+    message: error instanceof Error && error.message ? error.message : fallbackMessage,
+    recoverable: true,
+  };
+}
+
+function recordPersistenceMetric(metric: PersistenceMetric): void {
+  if (typeof window === 'undefined') {
+    return;
+  }
+
+  const runtimeGlobal = globalThis as typeof globalThis & {
+    __TETRIS_PERSISTENCE_METRICS__?: PersistenceMetric[];
+  };
+
+  runtimeGlobal.__TETRIS_PERSISTENCE_METRICS__ ??= [];
+  runtimeGlobal.__TETRIS_PERSISTENCE_METRICS__.push(metric);
+  window.dispatchEvent(new CustomEvent('tetris:persistence-metric', { detail: metric }));
+}
+
 export function PersistenceProvider({ children }: PropsWithChildren) {
   const [databaseHandle, setDatabaseHandle] = useState<SQLiteDatabaseHandle | null>(null);
   const [settings, setSettings] = useState<UserSettingsDocument>(() => (
@@ -71,6 +121,8 @@ export function PersistenceProvider({ children }: PropsWithChildren) {
   async function initializePersistence() {
     const nextWarnings: PersistenceWarning[] = [];
     const runtimeMode = getRuntimeMode();
+    const startedAtMs = typeof performance !== 'undefined' ? performance.now() : 0;
+    let metricOutcome: PersistenceMetric['outcome'] = 'ready';
 
     try {
       const nextSettings = runtimeMode === 'desktop' ? DEFAULT_USER_SETTINGS : readSettings();
@@ -94,19 +146,21 @@ export function PersistenceProvider({ children }: PropsWithChildren) {
       setBestScore(nextBestScore);
       setHealth('ready');
     } catch (error) {
+      metricOutcome = 'warning';
       const fallbackSettings = runtimeMode === 'desktop' ? DEFAULT_USER_SETTINGS : readSettings();
       const fallbackUiState = runtimeMode === 'desktop' ? DEFAULT_UI_STATE : readUIState();
-      const message = error instanceof Error
-        ? error.message
-        : runtimeMode === 'desktop'
-          ? 'Desktop SQLite persistence is unavailable.'
-          : 'SQLite persistence is unavailable.';
 
-      nextWarnings.push({
-        code: runtimeMode === 'desktop' ? 'desktop_persistence_disabled' : 'sqlite_unavailable',
-        message,
-        recoverable: true,
-      });
+      nextWarnings.push(runtimeMode === 'desktop'
+        ? createDesktopPersistenceWarning(
+          error,
+          'desktop_persistence_disabled',
+          'Desktop SQLite persistence is unavailable.',
+        )
+        : {
+          code: 'sqlite_unavailable',
+          message: error instanceof Error ? error.message : 'SQLite persistence is unavailable.',
+          recoverable: true,
+        });
       setSettings(fallbackSettings);
       setUiState(fallbackUiState);
       setDatabaseHandle(null);
@@ -116,6 +170,12 @@ export function PersistenceProvider({ children }: PropsWithChildren) {
 
     setWarnings(nextWarnings);
     setIsHydrated(true);
+    recordPersistenceMetric({
+      phase: 'hydrate',
+      runtimeMode,
+      durationMs: Math.round((typeof performance !== 'undefined' ? performance.now() : startedAtMs) - startedAtMs),
+      outcome: metricOutcome,
+    });
   }
 
   async function hydratePersistence() {
@@ -126,6 +186,7 @@ export function PersistenceProvider({ children }: PropsWithChildren) {
 
   async function recordCompletedSession(payload: CompletedSessionPayload): Promise<void> {
     const runtimeMode = getRuntimeMode();
+    const startedAtMs = typeof performance !== 'undefined' ? performance.now() : 0;
     const nextBestScore = runtimeMode === 'desktop'
       ? Math.max(bestScore, Math.max(0, Math.floor(payload.score.final_score)))
       : commitBestScore(payload.score.final_score);
@@ -153,16 +214,34 @@ export function PersistenceProvider({ children }: PropsWithChildren) {
       });
       insertReplayEnvelope(databaseHandle.database, payload.replay);
       await databaseHandle.persist();
+      recordPersistenceMetric({
+        phase: 'save',
+        runtimeMode,
+        durationMs: Math.round((typeof performance !== 'undefined' ? performance.now() : startedAtMs) - startedAtMs),
+        outcome: 'ready',
+      });
     } catch (error) {
       setWarnings((currentWarnings) => ([
         ...currentWarnings,
-        {
-          code: runtimeMode === 'desktop' ? 'desktop_write_failed' : 'replay_write_failed',
-          message: error instanceof Error ? error.message : 'Failed to persist the completed session.',
-          recoverable: true,
-        },
+        runtimeMode === 'desktop'
+          ? createDesktopPersistenceWarning(
+            error,
+            'desktop_write_failed',
+            'Failed to persist the completed session.',
+          )
+          : {
+            code: 'replay_write_failed',
+            message: error instanceof Error ? error.message : 'Failed to persist the completed session.',
+            recoverable: true,
+          },
       ]));
       setHealth('warning');
+      recordPersistenceMetric({
+        phase: 'save',
+        runtimeMode,
+        durationMs: Math.round((typeof performance !== 'undefined' ? performance.now() : startedAtMs) - startedAtMs),
+        outcome: 'warning',
+      });
     }
   }
 
