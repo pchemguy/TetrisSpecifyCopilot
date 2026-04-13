@@ -4,6 +4,37 @@ url: https://chatgpt.com/g/g-p-69db58392fb48191849a03dcc4483741-tetrisspeckitcop
 
 # Electron Packaging Baseline
 
+## Prompt
+
+Given tech stack
+
+```
+Frontend
+
+* React 19
+* React DOM 19
+* TypeScript 6
+
+Persistence
+
+* SQLite (client-side)
+
+Build and dev server
+
+* Vite 8
+* `@vitejs/plugin-react`
+
+Runtime / architecture
+
+* ESM project (`"type": "module"`)
+* Browser app
+* Client-side SQLite via `sql.js` rather than a server database 
+```
+
+I am looking for a simpl and robust approach to turn this web app into a packaged desktop app with crossplatform compatibility, but present focus on Windows. It must be well suitable for agentic development on Windows/Conda/VS Code/Git Bash/Coding Agents. I tried Tauri, but implementation was pain and even the simplest persistence was not implemented.
+
+## Synopsis
+
 **Electron + Vite + React + TypeScript + `sql.js`**, with a disciplined architecture that keeps the app mostly a browser app and uses Electron only as a thin desktop shell.
 
 Why this fits your situation:
