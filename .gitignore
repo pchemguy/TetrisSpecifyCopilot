@@ -7,9 +7,14 @@ build/
 coverage/
 playwright-report/
 test-results/
+src-tauri/target/
+src-tauri/gen/
+.tmp/
 *.log
 .env*
 .DS_Store
 Thumbs.db
 *.tmp
 *.swp
+.vscode/
+.idea/
