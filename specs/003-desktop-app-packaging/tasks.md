@@ -179,7 +179,7 @@
 **Purpose**: Close the feature with cross-runtime validation, documentation alignment, and architecture hardening.
 
 - [X] T050 [P] Run a desktop boundary audit to confirm there are no direct Electron imports under src/ and record the result in docs/desktop-architecture.md
-- [ ] T051 [P] Re-run the requirement-quality checks in specs/003-desktop-app-packaging/checklists/requirements.md and specs/003-desktop-app-packaging/checklists/desktop.md and close any findings in specs/003-desktop-app-packaging/spec.md or docs/desktop-architecture.md
+- [X] T051 [P] Re-run the requirement-quality checks in specs/003-desktop-app-packaging/checklists/requirements.md and specs/003-desktop-app-packaging/checklists/desktop.md and close any findings in specs/003-desktop-app-packaging/spec.md or docs/desktop-architecture.md
 - [ ] T052 [P] Execute the full validation pass from specs/003-desktop-app-packaging/quickstart.md, including `npm run dev:web`, `npm run dev`, `npm run build`, desktop restart persistence, bridge-unavailable fallback behavior, atomic-save recovery, write-failure handling, and portable packaging output validation
 - [ ] T053 Finalize desktop runtime and persistence lifecycle documentation in docs/desktop-architecture.md and docs/windows-development.md
 
