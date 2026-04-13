@@ -2,10 +2,7 @@
 Sync Impact Report
 Version change: 1.3.0 -> 1.4.0
 Modified principles:
-- Separation Of Concerns-> II. Delivery Proceeds In Small, Testable Increments
 - Design Must Preserve Separation Of Concerns -> VI. Architecture And Decomposition Must Preserve Separation Of Concerns
-Removed sections:
-- None
 Templates requiring updates:
 - ⚠ pending: .specify/templates/plan-template.md
 - ⚠ pending: .specify/templates/spec-template.md
@@ -45,7 +42,7 @@ To support that requirement:
 - specifications MUST be structured so that user stories or feature slices can be implemented and validated incrementally;
 - plans, task lists, and GitHub issues MUST avoid bundling unrelated work;
 - implementation SHOULD prefer the smallest change that produces meaningful progress while preserving repository correctness; and
-- where feasible, the sequence of work MUST be organized to deliver a minimal viable path or tracer bullet as early as possible, then evolve it through staged follow-on increments.
+- where feasible, the sequence of work MUST be organized to deliver a minimal viable path or tracer bullet early enough to validate architecture, workflow, and integration assumptions before broader feature expansion, then evolve it through staged follow-on increments.
 
 Large or tightly coupled changes require explicit justification in the plan.
 
@@ -94,7 +91,7 @@ Rationale: agentic development is most reliable when architectural seams and exe
 
 System design and implementation MUST preserve clear separation of concerns at every relevant level of decomposition, including module boundaries, feature slices, service interfaces, data handling, runtime integration points, and cross-cutting concerns. Responsibilities SHOULD be assigned so that components remain understandable, independently testable, maintainable, and extensible without unnecessary coupling.
 
-Plans and implementation tasks MUST identify the intended decomposition for non-trivial changes and MUST avoid designs that mix unrelated responsibilities, hide boundaries, or force broad changes for localized behavior. Where a design introduces shared infrastructure or abstractions, that structure MUST be justified by concrete maintainability, testability, or extensibility needs rather than speculative generalization.
+Plans and implementation tasks MUST identify the intended decomposition for non-trivial changes and MUST avoid designs that mix unrelated responsibilities, hide boundaries, or force broad changes for localized behavior. Where a design introduces shared infrastructure, common abstractions, or reusable layers, that structure MUST be justified by immediate maintainability, testability, extensibility, or boundary-enforcement needs rather than speculative reuse or anticipated generality.
 
 Rationale: strong separation of concerns reduces regression risk, improves local reasoning, enables more reliable testing, and allows the system to evolve in controlled increments.
 
@@ -130,7 +127,7 @@ Tasks and issues MUST therefore be:
 - explicit about inputs, outputs, constraints, and dependencies; and
 - clear about the acceptance checks and validation evidence required for completion.
 
-When tasks are converted into implementation issues, the issue set MUST preserve both the intended architectural decomposition and the staged delivery sequence. Where feasible, issue ordering, labels, and milestones MUST make the MVP or tracer-bullet stage explicit and distinguish it from subsequent evolution stages.
+When tasks are converted into implementation issues, the issue set MUST preserve both the intended architectural decomposition and the staged delivery sequence. Task-to-issue workflows MUST not merge unrelated or independently testable tasks into a single implementation issue merely for administrative convenience. Where feasible, issue ordering, labels, and milestones MUST make the MVP or tracer-bullet stage explicit and distinguish it from subsequent evolution stages.
 
 Repository guidance MUST explicitly define shell selection, environment assumptions, architectural boundaries, and forbidden shortcuts where omission would cause agents to drift from the intended implementation path.
 
@@ -150,7 +147,7 @@ The constitution check MUST confirm that the feature:
 - preserves clear architectural decomposition and separation of concerns; and
 - is sequenced to deliver an MVP or tracer bullet early, followed by staged evolution where feasible.
 
-Reviewers MUST reject changes that are too large to review confidently, lack validation evidence, exceed approved scope without amendment, or violate architectural or environment constraints without a recorded justification.
+Reviewers MUST reject changes that are too large to review confidently, lack validation evidence, exceed approved scope without amendment, violate architectural or environment constraints, or break the approved staged sequence without a recorded justification.
 
 Implementation SHOULD prefer the narrowest viable change that satisfies the approved specification and acceptance criteria.
 
