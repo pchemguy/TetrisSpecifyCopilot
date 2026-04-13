@@ -24,6 +24,14 @@ This guide will track the validated commands for both supported runtime paths.
 - Production validation: `npm run build`
 - Packaging workflow: `npm run dist:win`
 
+## Contributor Smoke Checklist
+
+- [ ] Run `npm run dev:web` and confirm the browser shell shows `Runtime browser/web`.
+- [ ] Run `npm run dev` and confirm the Electron shell shows `Runtime desktop/win32 v0.1.0` on the current Windows review machine.
+- [ ] Run `npm run build` and confirm both `dist/` and `dist-electron/` are produced.
+- [ ] Run `npm run dist:win` and confirm `release/win-unpacked/Tetris Specify Copilot.exe` launches.
+- [ ] Re-run the browser regression slice before closing a change that touched shared renderer code.
+
 ## Current Scope
 
 - Browser mode remains the fast path for renderer-only changes.
@@ -49,6 +57,7 @@ This guide will track the validated commands for both supported runtime paths.
 - Browser tests and browser-only validation should use `npm run dev:web`; the desktop default `npm run dev` is no longer the correct web-server command for Playwright browser flows.
 - If Electron launches without the Vite renderer in development, confirm `127.0.0.1:4173` is free and re-run `npm run dev`.
 - Environment-specific cache warnings can appear during Electron launch on locked-down Windows setups; treat them separately from renderer boot failures unless they block the app window from opening.
+- If the browser workflow fails after desktop changes, re-run `npm run dev:web` and the browser Playwright slice before changing Electron code; shared-renderer regressions should be isolated there first.
 
 ## Desktop Smoke Flow
 
@@ -57,6 +66,7 @@ This guide will track the validated commands for both supported runtime paths.
 3. Run `npm run build` and then `npm run dist:win`.
 4. Launch `release/win-unpacked/Tetris Specify Copilot.exe` and confirm the board becomes visible.
 5. Use the packaged shell for startup-budget and offline-play validation.
+6. If the packaged shell fails after a desktop-only change, fall back to `npm run build` and `npm run build:electron` separately before editing shared renderer code.
 
 ## Browser Continuity Flow
 
@@ -64,6 +74,14 @@ This guide will track the validated commands for both supported runtime paths.
 2. Confirm the readiness strip shows `Runtime browser/web`.
 3. Run the browser regression slices with `npx playwright test tests/e2e/core-gameplay.spec.ts tests/e2e/session-persistence.spec.ts --project=chromium --reporter=line`.
 4. Treat any failure that requires Electron-specific globals in this flow as a browser-regression bug, not a desktop-only issue.
+
+## Final Command Set
+
+- Browser development: `npm run dev:web`
+- Desktop development: `npm run dev`
+- Shared build: `npm run build`
+- Desktop package: `npm run dist:win`
+- Browser regression slice: `npx playwright test tests/e2e/core-gameplay.spec.ts tests/e2e/session-persistence.spec.ts --project=chromium --reporter=line`
 
 ## Follow-On Documentation
 
