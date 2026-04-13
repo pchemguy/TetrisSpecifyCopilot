@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import GameCanvas from '../canvas/GameCanvas';
 import KeyboardInputHandler from '../components/controls/KeyboardInputHandler';
 import BestScorePanel from '../components/hud/BestScorePanel';
@@ -7,8 +8,17 @@ import PauseOverlay from '../components/overlays/PauseOverlay';
 import PersistenceWarning from '../components/overlays/PersistenceWarning';
 import { selectGhostPiece, selectHeldTetromino, selectNextTetromino } from '../engine/core/selectors';
 import { summarizeSessionPerformance } from '../engine/core/performance';
+import { readRuntimeInfo, type RuntimeInfo } from '../platform/runtime';
 import { useGameSession } from './state/useGameSession';
 import { usePersistence } from './providers/PersistenceProvider';
+
+function formatRuntimeLabel(runtimeInfo: RuntimeInfo): string {
+  if (runtimeInfo.runtime === 'desktop') {
+    return `Runtime desktop/${runtimeInfo.platform} v${runtimeInfo.appVersion}`;
+  }
+
+  return 'Runtime browser/web';
+}
 
 export default function App() {
   const {
@@ -29,8 +39,25 @@ export default function App() {
   const ghostPiece = settings.show_ghost_piece && state.status === 'active'
     ? selectGhostPiece(state)
     : null;
+  const [runtimeLabel, setRuntimeLabel] = useState('Runtime browser/web');
   const performanceSummary = summarizeSessionPerformance(lastInputLatencyMs);
+
+  useEffect(() => {
+    let isActive = true;
+
+    void readRuntimeInfo().then((runtimeInfo) => {
+      if (isActive) {
+        setRuntimeLabel(formatRuntimeLabel(runtimeInfo));
+      }
+    });
+
+    return () => {
+      isActive = false;
+    };
+  }, []);
+
   const readinessItems = [
+    runtimeLabel,
     `Persistence ${health}`,
     `Ghost ${settings.show_ghost_piece ? 'on' : 'off'}`,
     `Panel ${uiState.last_selected_panel}`,
