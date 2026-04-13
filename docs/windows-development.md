@@ -89,9 +89,10 @@ This guide will track the validated commands for both supported runtime paths.
 - Desktop package: `npm run dist:win`
 - Browser regression slice: `npx playwright test tests/e2e/core-gameplay.spec.ts tests/e2e/session-persistence.spec.ts --project=chromium --reporter=line`
 
-## Follow-On Documentation
+## Runtime And Persistence Notes
 
-Later tasks will expand this guide with:
+- Browser mode is the first fallback when diagnosing renderer regressions; it must stay free of Electron globals.
+- Desktop mode persists only best score across restarts in the first release and surfaces warnings instead of blocking gameplay when persistence fails.
+- Atomic desktop save recovery is validated through the desktop file-store unit coverage and the desktop persistence integration suite.
 
-- best-score restart persistence validation
-- rollback checkpoints for runtime and packaging work
+This guide is now aligned with the current feature scope and validated command set.
