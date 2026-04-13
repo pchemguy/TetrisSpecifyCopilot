@@ -7,8 +7,6 @@ build/
 coverage/
 playwright-report/
 test-results/
-src-tauri/target/
-src-tauri/gen/
 .tmp/
 *.log
 .env*
@@ -18,3 +16,12 @@ Thumbs.db
 *.swp
 .vscode/
 .idea/
+
+# Hard linked .github for Obsidian
+# github
+
+# Hard linked .specify for Obsidian
+# specify
+
+# Hard linked for Obsidian
+_hard-links-obsidian 
