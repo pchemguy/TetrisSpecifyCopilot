@@ -133,8 +133,8 @@ describe('browser runtime integration', () => {
     );
 
     expect(await screen.findByText(/best score 800/i)).toBeInTheDocument();
-    expect(screen.getByText(/health ready/i)).toBeInTheDocument();
-    expect(screen.getByText(/hydrated true/i)).toBeInTheDocument();
+    expect(await screen.findByText(/health ready/i)).toBeInTheDocument();
+    expect(await screen.findByText(/hydrated true/i)).toBeInTheDocument();
     expect(seedDatabaseMocks.seedLocalPersistence).toHaveBeenCalledOnce();
     expect(settingsStoreMocks.readSettings).toHaveBeenCalled();
     expect(uiStateStoreMocks.readUIState).toHaveBeenCalled();
