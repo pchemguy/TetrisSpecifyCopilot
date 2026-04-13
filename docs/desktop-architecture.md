@@ -19,6 +19,7 @@ The desktop build uses Electron as a thin shell around the existing renderer.
 - Electron-specific imports stay out of shared React, engine, and HUD modules.
 - Browser mode remains a supported development path and must continue working without preload or Electron globals.
 - Runtime-specific detection and bridge helpers are isolated under `src/platform/browser/` and `src/platform/desktop/`, with `src/platform/runtime.ts` acting as the shared boundary.
+- Preload remains the only allowed renderer entry point for desktop-specific capabilities; shared renderer bugs must be validated against `npm run dev:web` before they are treated as shell failures.
 
 ## Persistence Direction
 
