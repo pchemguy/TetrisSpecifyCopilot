@@ -38,6 +38,12 @@ This guide will track the validated commands for both supported runtime paths.
 - Desktop mode is the validation path for Electron shell, preload bridge, and file-backed persistence work.
 - The first desktop release targets a portable Windows artifact.
 
+## Windows-First Limits And Future Extension Points
+
+- Current limit: this guide validates Windows-first workflows only; it does not define packaging or support steps for macOS or Linux reviewers yet.
+- Current limit: desktop restart persistence is intentionally scoped to best score only in the first release.
+- Extension point: the renderer, persistence adapters, and runtime detection are already split so later platform targets can reuse the shared browser and desktop boundaries.
+
 ## Validated Command Baseline
 
 - `npm run dev:web`: starts the browser-only Vite renderer on `127.0.0.1:4173`
