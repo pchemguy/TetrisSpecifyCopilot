@@ -59,6 +59,8 @@ The main process owns the window lifecycle and renderer selection:
 - Current desktop best-score fallback hydration measurement: `30 ms` from desktop persistence start to warning/default-score fallback using a corrupt `desktop-state.sqlite`
 - Current desktop best-score save measurement: `14 ms` from desktop save start to completed local persistence after game over
 - Current browser continuity validation: `npm run dev:web` plus browser Playwright coverage for `tests/e2e/core-gameplay.spec.ts` and `tests/e2e/session-persistence.spec.ts`
+- Desktop boundary audit result: no direct `electron` imports under `src/`
+- Requirements checklist revalidation result: `checklists/requirements.md` and `checklists/desktop.md` remain fully passing with no open findings
 - Current build outputs observed during validation:
   - `dist/` renderer bundle
   - `dist-electron/` Electron main/preload bundle
@@ -92,6 +94,13 @@ The measured desktop best-score fallback and save paths both stay within the 250
 - Keep Electron main and preload thin.
 - Add runtime-specific code at the platform and persistence boundaries before changing shared renderer modules.
 - Extend this note as later tasks add validation guardrails, runtime evidence, and broader cross-platform extension points.
+
+## Runtime And Persistence Lifecycle
+
+1. Browser mode starts through `npm run dev:web`, resolves `Runtime browser/web`, and keeps persistence on browser-owned localStorage plus IndexedDB-backed SQLite bytes.
+2. Desktop mode starts through preload plus `window.desktopApi`, resolves desktop runtime metadata from Electron, and stores SQLite bytes under the app `userData` directory.
+3. Desktop hydration removes stale temp files first, prefers the last committed database file, and falls back to the default best score with a warning if the database bytes are unreadable or invalid.
+4. Desktop saves export the shared SQLite database, write through a temp-file-plus-rename flow, and keep gameplay available with a warning if the save cannot be committed.
 
 ## Current Limits And Extension Points
 
