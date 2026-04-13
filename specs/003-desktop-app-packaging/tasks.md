@@ -29,7 +29,7 @@
 
 **⚠️ CRITICAL**: No user story work should be treated as complete until this phase is done.
 
-- [ ] T004 Add shared Electron dependencies and script scaffolding in package.json
+- [X] T004 Add shared Electron dependencies and script scaffolding in package.json
 - [ ] T005 [P] Add Electron TypeScript build configuration in tsconfig.electron.json and tsconfig.json
 - [ ] T006 [P] Create Electron shell scaffolds in electron/main.ts and electron/preload.ts
 - [ ] T007 [P] Add typed runtime detection and global desktop API declarations in src/platform/runtime.ts and src/types/global.d.ts
