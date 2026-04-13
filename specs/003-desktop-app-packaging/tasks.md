@@ -166,7 +166,7 @@
 
 ### Implementation for User Story 5
 
-- [ ] T047 [US5] Keep platform branching isolated to shell/runtime boundaries in electron/main.ts and src/platform/runtime.ts
+- [X] T047 [US5] Keep platform branching isolated to shell/runtime boundaries in electron/main.ts and src/platform/runtime.ts
 - [ ] T048 [US5] Keep packaging configuration extensible beyond Windows-only assumptions in package.json and docs/desktop-architecture.md
 - [ ] T049 [US5] Document current Windows-first limits and future extension points in docs/desktop-architecture.md and docs/windows-development.md
 
