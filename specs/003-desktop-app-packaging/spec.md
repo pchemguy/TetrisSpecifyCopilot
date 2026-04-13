@@ -5,6 +5,16 @@
 **Status**: Draft  
 **Input**: User description: "Turn the existing browser-based React/Vite/TypeScript application with client-side SQLite into a packaged cross-platform desktop app, with present focus on Windows, using a simple and robust approach suitable for agentic development on Windows/Conda/VS Code/Git Bash/coding agents. Ignore the last feature 003-*, which is not merged into main and will not be used."
 
+## Clarifications
+
+### Session 2026-04-13
+
+- Q: How should the first desktop release treat existing browser-saved data? → A: The desktop app uses its own separate local data profile; no browser-data import in the first release.
+- Q: What Windows release artifact should the first reviewable desktop release provide? → A: Portable app only, no installer.
+- Q: How should the first reviewable release treat application upgrade concerns? → A: Upgrade concerns are out of scope.
+- Q: Which local persisted data categories must the first desktop release retain across restarts? → A: Preserve only best score in the first desktop release.
+- Q: How should the desktop app recover if best-score data is missing or invalid? → A: Continue launching, warn the user, and fall back to a default best score.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Launch And Use As A Desktop App (Priority: P1)
@@ -23,19 +33,19 @@ A user can launch the application as a packaged desktop app on Windows and use t
 
 ---
 
-### User Story 2 - Keep Local Data Across Restarts (Priority: P1)
+### User Story 2 - Keep Best Score Across Restarts (Priority: P1)
 
-A user can close and reopen the desktop application without losing the local application data that the app is expected to preserve.
+A user can close and reopen the desktop application without losing their best score.
 
-**Why this priority**: Persistent local data is a core expectation of the existing application. A desktop transformation that does not preserve local state would not meet the functional goal of the feature.
+**Why this priority**: Best score is the minimum retained player outcome that the desktop release must preserve. The first release stays intentionally narrow by not requiring broader local-history or settings retention.
 
-**Independent Test**: Launch the desktop app, create or modify persisted local data, close the application fully, relaunch it, and confirm that the previously saved data remains available.
+**Independent Test**: Launch the desktop app, achieve or set a new best score, close the application fully, relaunch it, and confirm that the best score remains available.
 
 **Acceptance Scenarios**:
 
-1. **Given** the user creates or updates local application data in the desktop app, **When** they close and relaunch the application, **Then** the previously saved data is still available.
-2. **Given** the user is running the desktop app, **When** local data is saved, **Then** that persistence occurs locally on the same machine.
-3. **Given** the application is operating in desktop mode, **When** the user works with persisted data, **Then** no external database server, cloud account, or always-on network connection is required.
+1. **Given** the user achieves a new best score in the desktop app, **When** they close and relaunch the application, **Then** the best score is still available.
+2. **Given** the user is running the desktop app, **When** best score is saved, **Then** that persistence occurs locally on the same machine.
+3. **Given** the application is operating in desktop mode, **When** the user relies on best-score retention, **Then** no external database server, cloud account, or always-on network connection is required.
 
 ---
 
@@ -88,7 +98,7 @@ A maintainer can extend the desktop packaging approach toward broader cross-plat
 ### Edge Cases
 
 - What happens when the desktop application is launched for the first time and no prior local persisted data exists?
-- What happens when previously saved local data cannot be read or is no longer valid for the current application state?
+- What happens when previously saved best-score data cannot be read or is no longer valid? The app continues launching, warns the user, and falls back to the default best score.
 - What happens when the application closes unexpectedly during or shortly after a save?
 - How does the system behave when desktop mode and browser mode rely on different local persistence mechanisms?
 - What happens when a contributor attempts to use an unsupported or undocumented development shell or tooling path?
@@ -100,16 +110,19 @@ A maintainer can extend the desktop packaging approach toward broader cross-plat
 
 - **FR-001**: The system MUST support launching the application as a packaged desktop application on Windows.
 - **FR-002**: The desktop application MUST support the current primary local workflow of the existing application within the approved desktop feature scope.
-- **FR-003**: The desktop application MUST preserve expected local application data across application restarts on the same machine.
+- **FR-003**: The desktop application MUST preserve the player's best score across application restarts on the same machine.
 - **FR-004**: Desktop operation for supported local workflows MUST not require a backend service, hosted database, or continuous network connectivity.
 - **FR-005**: The feature MUST preserve a supported browser-based development mode after desktop support is added.
 - **FR-006**: The feature MUST support incremental delivery and validation so that desktop capability does not require one all-or-nothing implementation step.
 - **FR-007**: The feature MUST produce at least one Windows desktop artifact that can be launched and validated outside the browser-based development workflow.
 - **FR-008**: The feature MUST preserve local-first behavior for supported workflows.
 - **FR-009**: The feature MUST define the supported scope of desktop behavior where that scope differs from current browser behavior.
-- **FR-010**: The feature MUST define how persisted local data is treated when it is missing, unreadable, or invalid.
+- **FR-010**: When persisted best-score data is missing, unreadable, or invalid, the desktop app MUST continue launching, warn the user in plain language, and fall back to the default best score.
 - **FR-011**: The feature MUST define the supported contributor workflow for developing and validating the desktop-capable application on Windows where environment choices materially affect success.
 - **FR-012**: The feature MUST preserve the project’s ability to evolve the delivered desktop capability in later increments rather than requiring a restart from a different desktop approach immediately after delivery.
+- **FR-013**: The first desktop release MUST keep desktop-local persisted data separate from browser-mode persisted data and MUST NOT automatically import, merge, or overwrite browser-saved data.
+- **FR-014**: The first reviewable Windows desktop release MUST be distributed as a portable app only; installer creation, OS-level install flows, uninstall flows, and application upgrade behavior are out of scope for that release.
+- **FR-015**: The first desktop release MUST require restart persistence only for best score; settings, UI state, sessions, score-history records, and replay metadata are out of scope for retention requirements in that release.
 
 ### Non-Functional Requirements
 
@@ -124,7 +137,7 @@ A maintainer can extend the desktop packaging approach toward broader cross-plat
 ### Key Entities *(include if feature involves data)*
 
 - **Desktop Application Artifact**: A packaged Windows-distributed form of the application that can be launched independently of a browser development server.
-- **Local Persisted Data**: Application data expected to survive application restarts on the same machine.
+- **Local Persisted Data**: The desktop app's best-score record, which is the only category required to survive application restarts in the first release.
 - **Execution Mode**: The supported runtime context in which the application is operated, including browser-based development mode and packaged desktop mode.
 - **Contributor Workflow**: The documented set of supported steps used by maintainers or coding agents to run, validate, and extend the desktop-capable application on Windows.
 
@@ -133,7 +146,7 @@ A maintainer can extend the desktop packaging approach toward broader cross-plat
 ### Measurable Outcomes
 
 - **SC-001**: A Windows user can launch the packaged application and reach a usable main application state without needing a browser tab or backend service.
-- **SC-002**: For the primary supported local workflow, data that the application is expected to preserve remains available after the application is closed and relaunched on the same machine.
+- **SC-002**: The player's best score remains available after the desktop application is closed and relaunched on the same machine.
 - **SC-003**: A contributor can still start and use the browser-based development workflow after desktop support is introduced.
 - **SC-004**: The desktop transformation can be delivered and validated in staged increments, with each completed increment producing independently reviewable evidence of progress.
 - **SC-005**: The Windows desktop artifact can be launched and validated outside the development server workflow.
@@ -146,4 +159,8 @@ A maintainer can extend the desktop packaging approach toward broader cross-plat
 - The application remains local-first for the supported workflows in this feature.
 - The repository’s documented Windows development conventions, including shell and tooling expectations where relevant, remain authoritative for this feature.
 - This feature transforms packaging and runtime form; it does not by itself require expansion into a networked multi-user system or hosted service architecture.
+- Desktop-mode persistence is intentionally separate from browser-mode persistence for the first release; no browser-data import or live sharing is required.
+- The first reviewable Windows release is a portable desktop app, not an installed application managed by a Windows installer.
+- Application upgrade behavior, upgrade-time data handling, and upgrade validation are explicitly out of scope for the first reviewable release.
+- The first desktop release only requires restart persistence for best score; retention of settings, UI state, sessions, score history, and replay metadata is out of scope.
 - Differences between browser-mode persistence and desktop-mode persistence are acceptable if they remain within the approved feature scope and preserve the required user outcomes.

@@ -25,10 +25,8 @@
             "approve": true,
             "matchCommandLine": true
         },
-        "/^bash --version$/": {
-            "approve": true,
-            "matchCommandLine": true
-        }
+        "bash --version": true,
+        "git config": true
     },
     "terminal.explorerKind": "integrated"
 }
