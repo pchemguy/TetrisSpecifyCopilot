@@ -80,6 +80,14 @@ export function applySchema(database: Database): void {
       [String(SCHEMA_VERSION)],
     );
 
+    database.run(
+      `
+        INSERT INTO app_meta (key, value)
+        VALUES ('best_score', '0')
+        ON CONFLICT(key) DO NOTHING
+      `,
+    );
+
     database.run('COMMIT');
   } catch (error) {
     database.run('ROLLBACK');

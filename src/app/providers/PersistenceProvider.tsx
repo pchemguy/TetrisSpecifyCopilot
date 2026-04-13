@@ -7,6 +7,8 @@ import {
 } from 'react';
 import { getRuntimeMode } from '../../platform/runtime';
 import {
+  DEFAULT_UI_STATE,
+  DEFAULT_USER_SETTINGS,
   type OverlayState,
   type PersistenceHealth,
   type PersistenceWarning,
@@ -17,7 +19,12 @@ import {
 } from '../../types/persistence';
 import type { ReplayEnvelope } from '../../types/replay';
 import { commitBestScore, readBestScore } from '../../persistence/local-storage/bestScoreStore';
-import { initializeSQLiteDatabase, type SQLiteDatabaseHandle } from '../../persistence/sqlite/database';
+import {
+  initializeSQLiteDatabase,
+  readPersistedBestScore,
+  type SQLiteDatabaseHandle,
+  writePersistedBestScore,
+} from '../../persistence/sqlite/database';
 import { readSettings } from '../../persistence/local-storage/settingsStore';
 import { mergeUIState, readUIState, writeUIState } from '../../persistence/local-storage/uiStateStore';
 import { insertReplayEnvelope } from '../../persistence/sqlite/replayRepository';
@@ -48,9 +55,15 @@ const PersistenceContext = createContext<PersistenceContextValue | null>(null);
 
 export function PersistenceProvider({ children }: PropsWithChildren) {
   const [databaseHandle, setDatabaseHandle] = useState<SQLiteDatabaseHandle | null>(null);
-  const [settings, setSettings] = useState<UserSettingsDocument>(() => readSettings());
-  const [uiState, setUiState] = useState<UIStateDocument>(() => readUIState());
-  const [bestScore, setBestScore] = useState(() => readBestScore());
+  const [settings, setSettings] = useState<UserSettingsDocument>(() => (
+    getRuntimeMode() === 'desktop' ? DEFAULT_USER_SETTINGS : readSettings()
+  ));
+  const [uiState, setUiState] = useState<UIStateDocument>(() => (
+    getRuntimeMode() === 'desktop' ? DEFAULT_UI_STATE : readUIState()
+  ));
+  const [bestScore, setBestScore] = useState(() => (
+    getRuntimeMode() === 'desktop' ? 0 : readBestScore()
+  ));
   const [health, setHealth] = useState<PersistenceHealth>('hydrating');
   const [warnings, setWarnings] = useState<PersistenceWarning[]>([]);
   const [isHydrated, setIsHydrated] = useState(false);
@@ -60,29 +73,42 @@ export function PersistenceProvider({ children }: PropsWithChildren) {
     const runtimeMode = getRuntimeMode();
 
     try {
-      seedLocalPersistence();
-      const nextSettings = readSettings();
-      const nextUIState = readUIState();
+      const nextSettings = runtimeMode === 'desktop' ? DEFAULT_USER_SETTINGS : readSettings();
+      const nextUIState = runtimeMode === 'desktop' ? DEFAULT_UI_STATE : readUIState();
+
+      if (runtimeMode !== 'desktop') {
+        seedLocalPersistence();
+      }
 
       const handle = await initializeSQLiteDatabase();
       seedDatabase(handle.database);
       await handle.persist();
 
+      const nextBestScore = runtimeMode === 'desktop'
+        ? readPersistedBestScore(handle.database)
+        : readBestScore();
+
       setSettings(nextSettings);
       setUiState(nextUIState);
       setDatabaseHandle(handle);
-      setBestScore(readBestScore());
+      setBestScore(nextBestScore);
       setHealth('ready');
     } catch (error) {
+      const fallbackSettings = runtimeMode === 'desktop' ? DEFAULT_USER_SETTINGS : readSettings();
+      const fallbackUiState = runtimeMode === 'desktop' ? DEFAULT_UI_STATE : readUIState();
+      const message = error instanceof Error
+        ? error.message
+        : runtimeMode === 'desktop'
+          ? 'Desktop SQLite persistence is unavailable.'
+          : 'SQLite persistence is unavailable.';
+
       nextWarnings.push({
-        code: 'sqlite_unavailable',
-        message: error instanceof Error
-          ? error.message
-          : runtimeMode === 'desktop'
-            ? 'Desktop SQLite persistence is unavailable.'
-            : 'SQLite persistence is unavailable.',
+        code: runtimeMode === 'desktop' ? 'desktop_persistence_disabled' : 'sqlite_unavailable',
+        message,
         recoverable: true,
       });
+      setSettings(fallbackSettings);
+      setUiState(fallbackUiState);
       setDatabaseHandle(null);
       setBestScore(0);
       setHealth('warning');
@@ -99,7 +125,11 @@ export function PersistenceProvider({ children }: PropsWithChildren) {
   }
 
   async function recordCompletedSession(payload: CompletedSessionPayload): Promise<void> {
-    const nextBestScore = commitBestScore(payload.score.final_score);
+    const runtimeMode = getRuntimeMode();
+    const nextBestScore = runtimeMode === 'desktop'
+      ? Math.max(bestScore, Math.max(0, Math.floor(payload.score.final_score)))
+      : commitBestScore(payload.score.final_score);
+
     setBestScore(nextBestScore);
 
     if (!databaseHandle) {
@@ -107,13 +137,19 @@ export function PersistenceProvider({ children }: PropsWithChildren) {
     }
 
     try {
+      const persistedBestScore = runtimeMode === 'desktop'
+        ? writePersistedBestScore(databaseHandle.database, payload.score.final_score)
+        : nextBestScore;
+
+      setBestScore(persistedBestScore);
+
       insertSessionRecord(databaseHandle.database, {
         ...payload.session,
-        best_score_at_end: nextBestScore,
+        best_score_at_end: persistedBestScore,
       });
       insertScoreRecord(databaseHandle.database, {
         ...payload.score,
-        is_personal_best: payload.score.final_score >= nextBestScore,
+        is_personal_best: payload.score.final_score >= persistedBestScore,
       });
       insertReplayEnvelope(databaseHandle.database, payload.replay);
       await databaseHandle.persist();
@@ -121,7 +157,7 @@ export function PersistenceProvider({ children }: PropsWithChildren) {
       setWarnings((currentWarnings) => ([
         ...currentWarnings,
         {
-          code: 'replay_write_failed',
+          code: runtimeMode === 'desktop' ? 'desktop_write_failed' : 'replay_write_failed',
           message: error instanceof Error ? error.message : 'Failed to persist the completed session.',
           recoverable: true,
         },
@@ -131,6 +167,14 @@ export function PersistenceProvider({ children }: PropsWithChildren) {
   }
 
   function updateOverlayState(overlayState: OverlayState): void {
+    if (getRuntimeMode() === 'desktop') {
+      setUiState((currentState) => ({
+        ...currentState,
+        last_overlay: overlayState,
+      }));
+      return;
+    }
+
     const nextUIState = mergeUIState({ last_overlay: overlayState });
     writeUIState(nextUIState);
     setUiState(nextUIState);

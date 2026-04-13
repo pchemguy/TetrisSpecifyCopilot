@@ -32,6 +32,10 @@ export type PersistenceHealth = 'idle' | 'hydrating' | 'ready' | 'warning' | 'er
 export interface PersistenceWarning {
   code:
     | 'sqlite_unavailable'
+    | 'desktop_bridge_unavailable'
+    | 'desktop_data_invalid'
+    | 'desktop_persistence_disabled'
+    | 'desktop_write_failed'
     | 'replay_write_failed'
     | 'storage_pruned'
     | 'malformed_local_storage';

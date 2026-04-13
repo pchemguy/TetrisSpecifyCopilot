@@ -28,6 +28,10 @@ type WindowWithDesktopApi = {
   desktopApi?: Partial<DesktopApi>;
 };
 
+type NavigatorLike = {
+  userAgent?: string;
+};
+
 function hasRuntimeInfoMethod(
   api: Partial<DesktopApi> | undefined,
 ): api is Partial<DesktopApi> & Pick<DesktopApi, 'getRuntimeInfo'> {
@@ -50,6 +54,11 @@ export function hasDesktopApi(): boolean {
   return typeof getDesktopApi() !== 'undefined';
 }
 
+export function isElectronShell(): boolean {
+  const runtimeNavigator = (globalThis as typeof globalThis & { navigator?: NavigatorLike }).navigator;
+  return typeof runtimeNavigator?.userAgent === 'string' && runtimeNavigator.userAgent.includes('Electron');
+}
+
 export function hasCompleteDesktopApi(
   api: Partial<DesktopApi> | undefined = getDesktopApi(),
 ): api is DesktopApi {
@@ -59,7 +68,7 @@ export function hasCompleteDesktopApi(
 }
 
 export function getRuntimeMode(): RuntimeMode {
-  return hasDesktopApi() ? 'desktop' : 'browser';
+  return hasDesktopApi() || isElectronShell() ? 'desktop' : 'browser';
 }
 
 export function isDesktopRuntime(): boolean {

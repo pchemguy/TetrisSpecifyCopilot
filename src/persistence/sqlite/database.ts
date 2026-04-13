@@ -9,6 +9,8 @@ import {
 import { createDesktopPersistenceAdapter } from '../runtime/desktopAdapter';
 import { ensureSchema, SCHEMA_VERSION } from './schema';
 
+const BEST_SCORE_META_KEY = 'best_score';
+
 let sqlJsPromise: Promise<SqlJsStatic> | null = null;
 
 function createHydratedDatabase(sqlJs: SqlJsStatic, persistedBinary: Uint8Array | null): {
@@ -22,6 +24,16 @@ function createHydratedDatabase(sqlJs: SqlJsStatic, persistedBinary: Uint8Array 
     database,
     schemaVersion,
   };
+}
+
+function normalizeBestScore(value: unknown): number {
+  const numericValue = Number(value);
+
+  if (!Number.isFinite(numericValue) || numericValue < 0) {
+    return 0;
+  }
+
+  return Math.floor(numericValue);
 }
 
 async function readPersistedDatabase(): Promise<Uint8Array | null> {
@@ -64,6 +76,34 @@ export interface SQLiteDatabaseHandle {
 export async function createSqlDatabase(): Promise<Database> {
   const sqlJs = await loadSqlJs();
   return createHydratedDatabase(sqlJs, null).database;
+}
+
+export function readPersistedBestScore(database: Database): number {
+  const result = database.exec(
+    `SELECT value FROM app_meta WHERE key = '${BEST_SCORE_META_KEY}' LIMIT 1`,
+  );
+
+  if (result.length === 0 || result[0].values.length === 0) {
+    return 0;
+  }
+
+  return normalizeBestScore(result[0].values[0][0]);
+}
+
+export function writePersistedBestScore(database: Database, score: number): number {
+  const normalizedScore = normalizeBestScore(score);
+  const nextBestScore = Math.max(readPersistedBestScore(database), normalizedScore);
+
+  database.run(
+    `
+      INSERT INTO app_meta (key, value)
+      VALUES (?, ?)
+      ON CONFLICT(key) DO UPDATE SET value = excluded.value
+    `,
+    [BEST_SCORE_META_KEY, String(nextBestScore)],
+  );
+
+  return nextBestScore;
 }
 
 export async function initializeSQLiteDatabase(): Promise<SQLiteDatabaseHandle> {
