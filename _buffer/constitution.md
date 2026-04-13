@@ -91,7 +91,7 @@ Accordingly:
 
 - Plans and tasks MUST name any platform, runtime, packaging, tooling, shell, or repository constraints that materially affect execution.
 - Agents and contributors MUST prefer the simplest approach compatible with the current architecture and supported environment, and MUST not introduce new dependencies, toolchains, or cross-boundary coupling without explicit justification.
-- Repository-specific execution guidance takes precedence over contributor convenience defaults when shell, tooling, or environment selection affects correctness or determinism.
+- Repository-specific execution guidance takes precedence over contributor convenience defaults when shell, tooling, or environment choices affect correctness or determinism.
 
 Rationale: agentic development is most reliable when architectural seams and execution constraints are explicit, stable, and enforced.
 
