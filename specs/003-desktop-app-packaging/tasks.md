@@ -136,7 +136,7 @@
 
 > **NOTE: Write these validation tasks FIRST and confirm the workflow gaps they expose before implementation**
 
-- [ ] T038 [P] [US4] Add unit coverage for Windows-safe path and command helper behavior in tests/unit/platform/windowsRuntime.spec.ts
+- [X] T038 [P] [US4] Add unit coverage for Windows-safe path and command helper behavior in tests/unit/platform/windowsRuntime.spec.ts
 - [ ] T039 [P] [US4] Add a contributor smoke validation checklist for Windows workflows in docs/windows-development.md
 
 ### Implementation for User Story 4
