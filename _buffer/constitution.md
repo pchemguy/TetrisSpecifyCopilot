@@ -95,33 +95,6 @@ Accordingly:
 
 Rationale: agentic development is most reliable when architectural seams and execution constraints are explicit, stable, and enforced.
 
-## Prompt And Template Design Principles
-
-This constitution primarily governs *Spec Kit project artifacts*: the materialized constitution, specifications, plans, task lists, checklists, issue mappings, and other delivery artifacts produced for a concrete project workflow. Under the normal abstraction model, *Spec Kit framework artifacts* - such as agent prompts, templates, command scaffolds, and other workflow-generating assets - operate at a higher level and
-are not ordinarily treated as first-order project delivery artifacts, even though they shape those artifacts indirectly.
-
-However, this repository also develops the Spec Kit framework itself, and those framework artifacts are intentionally editable, reviewable, and operationally significant within the same repository context as the project artifacts they generate. For that reason, this constitution explicitly permits a controlled and intentional abstraction leak in this section: the design principles below apply both to materialized project artifacts and to the framework artifacts that shape them. This extension is justified by the rapid development nature of the framework, the ease with which its assets can be revised as first-class repository artifacts, and the need to make their composition rules explicit, reviewable, and measurable.
-
-Accordingly, this constitution governs not only what project artifacts must require, but also how Spec Kit prompts, templates, and workflow guidance SHOULD be written.
-
-These artifacts SHOULD optimize for agent clarity, bounded execution, and reliable interpretation. They SHOULD therefore use structure where structure materially improves operational clarity, scanability, or enforceability. Structure is justified when it helps an agent or reviewer determine:
-
-- what is mandatory;
-- where a rule applies;
-- which artifact must contain which information; or
-- what exception or escalation mechanism exists.
-
-However, prompts, templates, and governing documents SHOULD not be rewritten into pure lists or checklist prose solely for stylistic uniformity. Structure is a tool, not a goal. Dense prose SHOULD be broken up when doing so improves execution or review, but narrative explanation and justification SHOULD be preserved where they materially aid correct interpretation, constraint handling, or decision quality.
-
-This principle applies not only to local phrasing and list usage, but also to the higher-level organization of the document as a whole. Complex prompts, templates, and project artifacts MUST have an explicit, well-defined, and meaningful Markdown heading structure. Major concerns, phases, constraints, decision points, and execution stages MUST be separated into sections whose scope and hierarchy are clear to both humans and AI systems.
-
-That organizational structure SHOULD emerge naturally from the content and its intended workflow rather than being imposed as empty formality after drafting. Markdown heading levels SHOULD reflect real semantic hierarchy rather than visual preference. New sections SHOULD be introduced when they separate distinct concerns, phases, or rule sets, not merely to shorten the page superficially.
-
-Even when AI can parse a poorly organized document, that is not an acceptable justification for weak document architecture. Poorly organized documents substantially increase review burden, hide ambiguity, and make it harder for human maintainers to build an accurate mental model of the artifact. Because these artifacts are authored, reviewed, and owned by humans, high-level organization is a correctness concern, not merely a presentation preference. Human contributors are responsible for detecting subtle ambiguities, conflicts, omissions, and instruction-ordering problems that may materially confuse AI or degrade AI-assisted workflows.
-
-When revising constitutional text, prompts, templates, or other structured guidance, contributors SHOULD consider whether a more structured organization would substantively improve clarity or determinism, even when the underlying requirement does not change.
-Where ambiguity, dense prose, mixed concerns, or weak section boundaries would increase the risk of agent drift, the more clearly organized formulation is preferred. Purely cosmetic reformatting without operational benefit SHOULD be avoided.
-
 ## Spec Kit Workflow Requirements
 
 Specifications MUST define:
