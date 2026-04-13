@@ -51,8 +51,13 @@ describe('desktop persistence integration', () => {
         platform: 'win32' as const,
         appVersion: '0.1.0',
       })),
-      readDatabaseBytes: vi.fn(async () => new Uint8Array([1, 2, 3])),
-      writeDatabaseBytes: vi.fn(async () => undefined),
+      readDatabaseBytes: vi.fn(async () => ({
+        status: 'ok' as const,
+        bytes: new Uint8Array([1, 2, 3]),
+      })),
+      writeDatabaseBytes: vi.fn(async () => ({
+        status: 'ok' as const,
+      })),
     };
 
     databaseMocks.initializeSQLiteDatabase.mockResolvedValue({

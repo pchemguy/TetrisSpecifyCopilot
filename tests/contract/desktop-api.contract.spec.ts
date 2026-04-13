@@ -40,6 +40,8 @@ describe('desktop preload contract', () => {
     const { exposeDesktopApi } = await import('../../electron/preload');
     const bridge = {
       getRuntimeInfo: vi.fn(),
+      readDatabaseBytes: vi.fn(),
+      writeDatabaseBytes: vi.fn(),
     };
 
     exposeDesktopApi(bridge);
