@@ -116,7 +116,7 @@
 
 ### Implementation for User Story 3
 
-- [ ] T033 [US3] Implement the browser runtime adapter for localStorage and IndexedDB-backed SQLite in src/persistence/runtime/browserAdapter.ts and src/platform/runtime.ts
+- [X] T033 [US3] Implement the browser runtime adapter for localStorage and IndexedDB-backed SQLite in src/persistence/runtime/browserAdapter.ts and src/platform/runtime.ts
 - [ ] T034 [US3] Add the pure browser workflow command as `npm run dev:web` in package.json and keep browser server settings explicit in vite.config.ts
 - [ ] T035 [US3] Remove Electron assumptions from shared renderer bootstrap in src/app/providers/PersistenceProvider.tsx and src/persistence/sqlite/database.ts
 - [ ] T036 [US3] Isolate runtime-specific behavior behind platform modules in src/platform/runtime.ts, src/platform/browser/, and src/platform/desktop/
