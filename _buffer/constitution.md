@@ -1,6 +1,6 @@
 <!--
 Sync Impact Report
-Version change: 1.1.0 -> 1.2.0
+Version change: 1.2.0 -> 1.3.0
 Modified principles:
 - Code Quality Is A Release Gate -> I. Specification And Documentation Are The Source Of Truth
 - Tests Prove Behavior -> II. Delivery Proceeds In Small, Testable Increments
@@ -97,7 +97,12 @@ Rationale: agentic development is most reliable when architectural seams and exe
 
 ## Prompt And Template Design Principles
 
-This constitution governs not only what project artifacts must require, but also how Spec Kit prompts, templates, and workflow guidance SHOULD be written.
+This constitution primarily governs *Spec Kit project artifacts*: the materialized constitution, specifications, plans, task lists, checklists, issue mappings, and other delivery artifacts produced for a concrete project workflow. Under the normal abstraction model, *Spec Kit framework artifacts* - such as agent prompts, templates, command scaffolds, and other workflow-generating assets - operate at a higher level and
+are not ordinarily treated as first-order project delivery artifacts, even though they shape those artifacts indirectly.
+
+However, this repository also develops the Spec Kit framework itself, and those framework artifacts are intentionally editable, reviewable, and operationally significant within the same repository context as the project artifacts they generate. For that reason, this constitution explicitly permits a controlled and intentional abstraction leak in this section: the design principles below apply both to materialized project artifacts and to the framework artifacts that shape them. This extension is justified by the rapid development nature of the framework, the ease with which its assets can be revised as first-class repository artifacts, and the need to make their composition rules explicit, reviewable, and measurable.
+
+Accordingly, this constitution governs not only what project artifacts must require, but also how Spec Kit prompts, templates, and workflow guidance SHOULD be written.
 
 These artifacts SHOULD optimize for agent clarity, bounded execution, and reliable interpretation. They SHOULD therefore use structure where structure materially improves operational clarity, scanability, or enforceability. Structure is justified when it helps an agent or reviewer determine:
 
@@ -106,7 +111,7 @@ These artifacts SHOULD optimize for agent clarity, bounded execution, and reliab
 - which artifact must contain which information; or
 - what exception or escalation mechanism exists.
 
-However, prompts, templates, and governing documents MUST not be rewritten into pure lists or checklist prose solely for stylistic uniformity. Structure is a tool, not a goal. Dense prose SHOULD be broken up when doing so improves execution or review, but narrative explanation and justification SHOULD be preserved where they materially aid correct interpretation, constraint handling, or decision quality.
+However, prompts, templates, and governing documents SHOULD not be rewritten into pure lists or checklist prose solely for stylistic uniformity. Structure is a tool, not a goal. Dense prose SHOULD be broken up when doing so improves execution or review, but narrative explanation and justification SHOULD be preserved where they materially aid correct interpretation, constraint handling, or decision quality.
 
 When revising constitutional text, prompts, or templates, contributors SHOULD consider whether a more structured organization would substantively improve clarity or determinism, even when the underlying requirement does not change. Where ambiguity, dense prose, or mixed concerns would increase the risk of agent drift, the more structured formulation is preferred. Purely cosmetic reformatting without operational benefit SHOULD be avoided.
 
@@ -192,4 +197,4 @@ Constitutional principles take precedence over feature-level preferences. The or
 4. Approved task or issue definition
 5. Local coding preference
 
-**Version**: 1.2.0 | **Ratified**: 2026-04-10 | **Last Amended**: 2026-04-13
+**Version**: 1.3.0 | **Ratified**: 2026-04-10 | **Last Amended**: 2026-04-13
