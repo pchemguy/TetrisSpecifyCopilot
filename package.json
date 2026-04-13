@@ -2,6 +2,9 @@
   "name": "classic-browser-tetris",
   "private": true,
   "version": "0.1.0",
+  "description": "Windows-first Electron packaging for the local-first Tetris renderer.",
+  "author": "pchemguy",
+  "main": "dist-electron/electron/main.js",
   "type": "module",
   "scripts": {
     "dev": "concurrently -k -s first \"npm run dev:web -- --host 127.0.0.1 --port 4173\" \"npm run dev:electron:build\" \"npm run dev:electron:start\"",
@@ -17,6 +20,34 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test"
+  },
+  "build": {
+    "appId": "com.pchemguy.tetrisspecifycopilot",
+    "productName": "Tetris Specify Copilot",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "dist-electron/**/*",
+      "package.json"
+    ],
+    "asar": true,
+    "npmRebuild": false,
+    "extraMetadata": {
+      "main": "dist-electron/electron/main.js"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "artifactName": "${productName}-${version}-portable.${ext}"
+    }
   },
   "dependencies": {
     "react": "^19.2.5",

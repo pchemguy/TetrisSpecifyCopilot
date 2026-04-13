@@ -60,7 +60,7 @@
 - [X] T014 [US1] Implement BrowserWindow creation, secure webPreferences, and dev/prod renderer loading in electron/main.ts
 - [X] T015 [US1] Implement the preload runtime-info bridge with platform and app version metadata in electron/preload.ts and src/platform/runtime.ts
 - [X] T016 [US1] Wire desktop development and production build commands in package.json, vite.config.ts, and tsconfig.electron.json
-- [ ] T017 [US1] Configure portable Windows packaging with electron-builder in package.json
+- [X] T017 [US1] Configure portable Windows packaging with electron-builder in package.json
 - [ ] T018 [US1] Fix packaged renderer, preload, and static asset resolution in electron/main.ts, src/persistence/sqlite/database.ts, and vite.config.ts
 - [ ] T019 [US1] Validate packaged desktop launch behavior, build/version identification, and the launch lifecycle in docs/desktop-architecture.md and docs/windows-development.md
 - [ ] T054 [P] [US1] Measure and record packaged desktop startup time to the usable main UI against the 5-second budget in docs/desktop-architecture.md and specs/003-desktop-app-packaging/quickstart.md
