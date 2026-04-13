@@ -24,6 +24,10 @@
         "/^cd /b/GH/TetrisSpecifyCopilot && bash \\.specify/scripts/bash/update-agent-context\\.sh copilot && git status --short$/": {
             "approve": true,
             "matchCommandLine": true
+        },
+        "/^bash --version$/": {
+            "approve": true,
+            "matchCommandLine": true
         }
     },
     "terminal.explorerKind": "integrated"
