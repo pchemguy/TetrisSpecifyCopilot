@@ -161,7 +161,7 @@
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T045 [P] [US5] Add unit coverage for platform-neutral runtime info and path helpers in tests/unit/platform/runtimeInfo.spec.ts
+- [X] T045 [P] [US5] Add unit coverage for platform-neutral runtime info and path helpers in tests/unit/platform/runtimeInfo.spec.ts
 - [ ] T046 [P] [US5] Extend preload contract coverage for platform and version metadata in tests/contract/desktop-api.contract.spec.ts
 
 ### Implementation for User Story 5

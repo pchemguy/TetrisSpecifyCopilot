@@ -2,6 +2,7 @@ import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { app, BrowserWindow, ipcMain } from 'electron';
+import { createDesktopRuntimeInfo } from '../src/platform/runtimeInfo.js';
 import type {
   DesktopDatabaseLoadResult,
   DesktopDatabaseSaveResult,
@@ -174,17 +175,6 @@ function getUserDataPath(): string {
   return process.env.TETRIS_USER_DATA_DIR ?? app.getPath('userData');
 }
 
-function toDesktopPlatform(platform: NodeJS.Platform): DesktopRuntimeInfo['platform'] {
-  switch (platform) {
-    case 'win32':
-    case 'darwin':
-    case 'linux':
-      return platform;
-    default:
-      return 'linux';
-  }
-}
-
 function getCurrentDirectory(): string {
   return path.dirname(fileURLToPath(import.meta.url));
 }
@@ -214,11 +204,7 @@ export function getRendererEntry(): { type: 'url' | 'file'; value: string } {
 }
 
 export function createRuntimeInfo(): DesktopRuntimeInfo {
-  return {
-    runtime: 'desktop',
-    platform: toDesktopPlatform(process.platform),
-    appVersion: app.getVersion(),
-  };
+  return createDesktopRuntimeInfo(process.platform, app.getVersion());
 }
 
 export async function createMainWindow(): Promise<BrowserWindow> {
