@@ -43,7 +43,7 @@ None.
 
 ## Recovery Notes
 
-No recovery actions were required. The ARW round was bootstrapped cleanly because no prior `analyses/CUR` directory existed for this feature.
+A filesystem-sync mismatch left stale `*.LOCK` files visible during the first finalization attempt even after they were deleted from the active round. Recovery was immediate: the numbered round was cleaned up by removing the stale lock files and preserving the markdown artifacts unchanged.
 
 ## Commit Summary
 
