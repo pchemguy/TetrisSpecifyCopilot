@@ -1,98 +1,15 @@
 import initSqlJs, { type Database, type SqlJsStatic } from 'sql.js';
 import wasmUrl from 'sql.js/dist/sql-wasm.wasm?url';
+import { getRuntimeMode } from '../../platform/runtime';
+import {
+  BROWSER_SQLITE_STORAGE,
+  createBrowserPersistenceAdapter,
+  type SQLitePersistenceAdapter,
+} from '../runtime/browserAdapter';
+import { createDesktopPersistenceAdapter } from '../runtime/desktopAdapter';
 import { ensureSchema, SCHEMA_VERSION } from './schema';
 
-const DATABASE_NAME = 'classic-browser-tetris';
-const DATABASE_VERSION = 1;
-const STORE_NAME = 'sqlite';
-const DATABASE_FILE_KEY = 'main';
-
 let sqlJsPromise: Promise<SqlJsStatic> | null = null;
-
-function getIndexedDb(): IDBFactory {
-  if (!globalThis.indexedDB) {
-    throw new Error('IndexedDB is not available in this browser environment.');
-  }
-
-  return globalThis.indexedDB;
-}
-
-function openDatabaseStore(): Promise<IDBDatabase> {
-  return new Promise((resolve, reject) => {
-    const request = getIndexedDb().open(DATABASE_NAME, DATABASE_VERSION);
-
-    request.onerror = () => {
-      reject(request.error ?? new Error('Failed to open IndexedDB for SQLite persistence.'));
-    };
-
-    request.onupgradeneeded = () => {
-      const database = request.result;
-
-      if (!database.objectStoreNames.contains(STORE_NAME)) {
-        database.createObjectStore(STORE_NAME);
-      }
-    };
-
-    request.onsuccess = () => {
-      resolve(request.result);
-    };
-  });
-}
-
-async function runReadRequest<T>(
-  operation: (store: IDBObjectStore) => IDBRequest<T>,
-  errorMessage: string,
-): Promise<T> {
-  const database = await openDatabaseStore();
-
-  return new Promise((resolve, reject) => {
-    const transaction = database.transaction(STORE_NAME, 'readonly');
-    const request = operation(transaction.objectStore(STORE_NAME));
-
-    request.onerror = () => {
-      reject(request.error ?? new Error(errorMessage));
-    };
-
-    request.onsuccess = () => {
-      resolve(request.result);
-    };
-
-    transaction.oncomplete = () => {
-      database.close();
-    };
-
-    transaction.onabort = () => {
-      database.close();
-      reject(transaction.error ?? new Error(errorMessage));
-    };
-  });
-}
-
-async function runWriteTransaction(
-  operation: (store: IDBObjectStore) => void,
-  errorMessage: string,
-): Promise<void> {
-  const database = await openDatabaseStore();
-
-  await new Promise<void>((resolve, reject) => {
-    const transaction = database.transaction(STORE_NAME, 'readwrite');
-    operation(transaction.objectStore(STORE_NAME));
-
-    transaction.onerror = () => {
-      reject(transaction.error ?? new Error(errorMessage));
-    };
-
-    transaction.onabort = () => {
-      reject(transaction.error ?? new Error(errorMessage));
-    };
-
-    transaction.oncomplete = () => {
-      resolve();
-    };
-  });
-
-  database.close();
-}
 
 function createHydratedDatabase(sqlJs: SqlJsStatic, persistedBinary: Uint8Array | null): {
   database: Database;
@@ -108,25 +25,17 @@ function createHydratedDatabase(sqlJs: SqlJsStatic, persistedBinary: Uint8Array 
 }
 
 async function readPersistedDatabase(): Promise<Uint8Array | null> {
-  const result = await runReadRequest(
-    (store) => store.get(DATABASE_FILE_KEY),
-    'Failed to read SQLite database from IndexedDB.',
-  );
-
-  if (!result) {
-    return null;
-  }
-
-  return new Uint8Array(result as ArrayBuffer);
+  return resolvePersistenceAdapter().readDatabaseBytes();
 }
 
 async function writePersistedDatabase(binary: Uint8Array): Promise<void> {
-  await runWriteTransaction(
-    (store) => {
-      store.put(binary, DATABASE_FILE_KEY);
-    },
-    'Failed to write SQLite database to IndexedDB.',
-  );
+  await resolvePersistenceAdapter().writeDatabaseBytes(binary);
+}
+
+function resolvePersistenceAdapter(): SQLitePersistenceAdapter {
+  return getRuntimeMode() === 'desktop'
+    ? createDesktopPersistenceAdapter()
+    : createBrowserPersistenceAdapter();
 }
 
 export function loadSqlJs(): Promise<SqlJsStatic> {
@@ -174,17 +83,52 @@ export async function initializeSQLiteDatabase(): Promise<SQLiteDatabaseHandle> 
 }
 
 export async function resetSQLiteDatabase(): Promise<void> {
-  await runWriteTransaction(
-    (store) => {
-      store.delete(DATABASE_FILE_KEY);
-    },
-    'Failed to reset persisted SQLite database.',
-  );
+  if (getRuntimeMode() === 'desktop') {
+    throw new Error('Resetting SQLite persistence is only supported in browser mode.');
+  }
+
+  if (!globalThis.indexedDB) {
+    throw new Error('IndexedDB is not available in this browser environment.');
+  }
+
+  const database = await new Promise<IDBDatabase>((resolve, reject) => {
+    const request = globalThis.indexedDB.open(
+      BROWSER_SQLITE_STORAGE.databaseName,
+      BROWSER_SQLITE_STORAGE.databaseVersion,
+    );
+
+    request.onerror = () => {
+      reject(request.error ?? new Error('Failed to open IndexedDB for SQLite reset.'));
+    };
+
+    request.onsuccess = () => {
+      resolve(request.result);
+    };
+  });
+
+  await new Promise<void>((resolve, reject) => {
+    const transaction = database.transaction(BROWSER_SQLITE_STORAGE.storeName, 'readwrite');
+    transaction.objectStore(BROWSER_SQLITE_STORAGE.storeName).delete(BROWSER_SQLITE_STORAGE.fileKey);
+
+    transaction.onerror = () => {
+      reject(transaction.error ?? new Error('Failed to reset persisted SQLite database.'));
+    };
+
+    transaction.onabort = () => {
+      reject(transaction.error ?? new Error('Failed to reset persisted SQLite database.'));
+    };
+
+    transaction.oncomplete = () => {
+      resolve();
+    };
+  });
+
+  database.close();
 }
 
 export const SQLITE_PERSISTENCE_INFO = {
-  databaseName: DATABASE_NAME,
-  storeName: STORE_NAME,
-  fileKey: DATABASE_FILE_KEY,
+  databaseName: BROWSER_SQLITE_STORAGE.databaseName,
+  storeName: BROWSER_SQLITE_STORAGE.storeName,
+  fileKey: BROWSER_SQLITE_STORAGE.fileKey,
   schemaVersion: SCHEMA_VERSION,
 } as const;

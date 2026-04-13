@@ -5,6 +5,7 @@ import {
   useEffect,
   useState,
 } from 'react';
+import { getRuntimeMode } from '../../platform/runtime';
 import {
   type OverlayState,
   type PersistenceHealth,
@@ -56,6 +57,7 @@ export function PersistenceProvider({ children }: PropsWithChildren) {
 
   async function initializePersistence() {
     const nextWarnings: PersistenceWarning[] = [];
+    const runtimeMode = getRuntimeMode();
 
     try {
       seedLocalPersistence();
@@ -74,7 +76,11 @@ export function PersistenceProvider({ children }: PropsWithChildren) {
     } catch (error) {
       nextWarnings.push({
         code: 'sqlite_unavailable',
-        message: error instanceof Error ? error.message : 'SQLite persistence is unavailable.',
+        message: error instanceof Error
+          ? error.message
+          : runtimeMode === 'desktop'
+            ? 'Desktop SQLite persistence is unavailable.'
+            : 'SQLite persistence is unavailable.',
         recoverable: true,
       });
       setDatabaseHandle(null);
