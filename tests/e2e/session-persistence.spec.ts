@@ -23,6 +23,7 @@ test('pauses, restarts, reloads, and preserves the best score and local records'
   const scorePanel = page.getByRole('region', { name: 'Score panel' });
 
   await expect(page.getByLabel('Classic Browser Tetris board')).toBeVisible();
+  await expect(page.getByText(/Runtime browser\/web/i)).toBeVisible();
 
   await page.keyboard.press('Space');
   await page.keyboard.press('Space');

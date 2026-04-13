@@ -6,6 +6,7 @@ test('plays a keyboard-driven run from fresh start to game over', async ({ page,
   const scorePanel = page.getByRole('region', { name: 'Score panel' });
 
   await expect(page.getByLabel('Classic Browser Tetris board')).toBeVisible();
+  await expect(page.getByText(/Runtime browser\/web/i)).toBeVisible();
   await expect(scorePanel.locator('dd').nth(0)).toHaveText('0');
   await expect(scorePanel.locator('dd').nth(2)).toHaveText('1');
   await expect(scorePanel.locator('dd').nth(3)).toHaveText('0');
