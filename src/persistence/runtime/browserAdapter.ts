@@ -1,3 +1,5 @@
+import { getRuntimeMode } from '../../platform/runtime';
+
 export interface SQLitePersistenceAdapter {
   readDatabaseBytes: () => Promise<Uint8Array | null>;
   writeDatabaseBytes: (bytes: Uint8Array) => Promise<void>;
@@ -7,6 +9,12 @@ const DATABASE_NAME = 'classic-browser-tetris';
 const DATABASE_VERSION = 1;
 const STORE_NAME = 'sqlite';
 const DATABASE_FILE_KEY = 'main';
+
+function assertBrowserRuntime(): void {
+  if (getRuntimeMode() !== 'browser') {
+    throw new Error('Browser persistence adapter is only available in browser mode.');
+  }
+}
 
 function getIndexedDb(): IDBFactory {
   if (!globalThis.indexedDB) {
@@ -96,6 +104,8 @@ async function runWriteTransaction(
 export function createBrowserPersistenceAdapter(): SQLitePersistenceAdapter {
   return {
     readDatabaseBytes: async () => {
+      assertBrowserRuntime();
+
       const result = await runReadRequest(
         (store) => store.get(DATABASE_FILE_KEY),
         'Failed to read SQLite database from IndexedDB.',
@@ -108,6 +118,8 @@ export function createBrowserPersistenceAdapter(): SQLitePersistenceAdapter {
       return new Uint8Array(result as ArrayBuffer);
     },
     writeDatabaseBytes: async (bytes) => {
+      assertBrowserRuntime();
+
       await runWriteTransaction(
         (store) => {
           store.put(bytes, DATABASE_FILE_KEY);
