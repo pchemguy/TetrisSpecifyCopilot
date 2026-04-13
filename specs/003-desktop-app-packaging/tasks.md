@@ -51,20 +51,21 @@
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T011 [P] [US1] Add preload contract coverage for desktop runtime info in tests/contract/desktop-api.contract.spec.ts
+- [ ] T011 [P] [US1] Add preload contract coverage for desktop runtime info and app version metadata in tests/contract/desktop-api.contract.spec.ts
 - [ ] T012 [P] [US1] Add renderer integration coverage for desktop runtime detection in tests/integration/app/desktop-runtime.spec.tsx
 - [ ] T013 [P] [US1] Add Electron launch and offline shell smoke coverage in tests/e2e/desktop-shell.spec.ts
 
 ### Implementation for User Story 1
 
 - [ ] T014 [US1] Implement BrowserWindow creation, secure webPreferences, and dev/prod renderer loading in electron/main.ts
-- [ ] T015 [US1] Implement the preload runtime-info bridge in electron/preload.ts and src/platform/runtime.ts
+- [ ] T015 [US1] Implement the preload runtime-info bridge with platform and app version metadata in electron/preload.ts and src/platform/runtime.ts
 - [ ] T016 [US1] Wire desktop development and production build commands in package.json, vite.config.ts, and tsconfig.electron.json
 - [ ] T017 [US1] Configure portable Windows packaging with electron-builder in package.json
 - [ ] T018 [US1] Fix packaged renderer, preload, and static asset resolution in electron/main.ts, src/persistence/sqlite/database.ts, and vite.config.ts
-- [ ] T019 [US1] Validate packaged desktop launch behavior and document the launch lifecycle in docs/desktop-architecture.md and docs/windows-development.md
+- [ ] T019 [US1] Validate packaged desktop launch behavior, build/version identification, and the launch lifecycle in docs/desktop-architecture.md and docs/windows-development.md
+- [ ] T054 [P] [US1] Measure and record packaged desktop startup time to the usable main UI against the 5-second budget in docs/desktop-architecture.md and specs/003-desktop-app-packaging/quickstart.md
 
-**Checkpoint**: User Story 1 delivers a runnable desktop shell and a portable Windows artifact that can be reviewed independently.
+**Checkpoint**: User Story 1 delivers a runnable desktop shell and a portable Windows artifact that can be reviewed independently. Evidence: passing T011-T013, a launchable Electron shell, a portable Windows artifact, and updated operating docs.
 
 ---
 
@@ -91,8 +92,11 @@
 - [ ] T027 [US2] Persist desktop database exports after best-score mutations in src/app/providers/PersistenceProvider.tsx and src/persistence/sqlite/database.ts
 - [ ] T028 [US2] Surface missing or invalid desktop best-score recovery through existing warning UI in src/app/providers/PersistenceProvider.tsx and src/components/overlays/PersistenceWarning.tsx
 - [ ] T029 [US2] Handle unreadable or corrupt desktop database bytes with deterministic recovery in electron/main.ts and src/types/persistence.ts
+- [ ] T055 [P] [US2] Add integration coverage proving desktop mode does not import, merge, or overwrite browser persistence in tests/integration/app/desktop-persistence-isolation.spec.tsx
+- [ ] T056 [US2] Enforce browser/desktop persistence separation in src/persistence/runtime/browserAdapter.ts, src/persistence/runtime/desktopAdapter.ts, and src/platform/runtime.ts
+- [ ] T057 [P] [US2] Measure and record desktop best-score hydration fallback time and save latency against the 250 ms budgets in docs/desktop-architecture.md and specs/003-desktop-app-packaging/quickstart.md
 
-**Checkpoint**: User Story 2 keeps best score across desktop restarts and recovers predictably from missing or invalid data.
+**Checkpoint**: User Story 2 keeps best score across desktop restarts and recovers predictably from missing or invalid data. Evidence: passing T020-T022 and T055, a restart-persistence demo, fallback-warning validation, and recorded performance measurements.
 
 ---
 
@@ -118,7 +122,7 @@
 - [ ] T036 [US3] Isolate runtime-specific behavior behind platform modules in src/platform/runtime.ts, src/platform/browser/, and src/platform/desktop/
 - [ ] T037 [US3] Validate browser-mode continuity and update the dual-runtime workflow notes in docs/desktop-architecture.md and docs/windows-development.md
 
-**Checkpoint**: User Story 3 keeps browser development and browser persistence working independently of the desktop shell.
+**Checkpoint**: User Story 3 keeps browser development and browser persistence working independently of the desktop shell. Evidence: passing T030-T032, a working `npm run dev:web` path, and updated dual-runtime workflow docs.
 
 ---
 
@@ -143,7 +147,7 @@
 - [ ] T043 [US4] Update architecture and agent guardrails for preload-only desktop access in docs/desktop-architecture.md and AGENTS.md
 - [ ] T044 [US4] Verify the Windows contributor workflow end to end and record the final command set in docs/windows-development.md
 
-**Checkpoint**: User Story 4 provides a bounded Windows development workflow that agents and contributors can follow without guesswork.
+**Checkpoint**: User Story 4 provides a bounded Windows development workflow that agents and contributors can follow without guesswork. Evidence: the validated Windows command set, the contributor smoke checklist, and updated Windows workflow documentation.
 
 ---
 
@@ -166,7 +170,7 @@
 - [ ] T048 [US5] Keep packaging configuration extensible beyond Windows-only assumptions in package.json and docs/desktop-architecture.md
 - [ ] T049 [US5] Document current Windows-first limits and future extension points in docs/desktop-architecture.md and docs/windows-development.md
 
-**Checkpoint**: User Story 5 leaves the runtime and packaging architecture open for later cross-platform extension without changing the renderer model.
+**Checkpoint**: User Story 5 leaves the runtime and packaging architecture open for later cross-platform extension without changing the renderer model. Evidence: passing T045-T046, platform-neutral runtime boundaries, and documented extension points.
 
 ---
 
@@ -265,4 +269,5 @@ With multiple contributors after Phase 2:
 - This task plan follows the requested shell-first, bridge-next, persistence-next, packaging-last sequencing.
 - The user-provided installer phase was intentionally excluded because the active spec marks installer packaging out of scope for this feature.
 - Best-score retention is the only desktop restart persistence requirement in scope for the first release.
+- Independently reviewable evidence for each staged increment means the story-specific validation tasks pass, the checkpoint workflow or artifact is runnable, and the related docs/scripts are updated for reviewers and contributors.
 - Keep renderer code Electron-agnostic throughout implementation; any direct `electron` import under `src/` fails the architecture boundary.

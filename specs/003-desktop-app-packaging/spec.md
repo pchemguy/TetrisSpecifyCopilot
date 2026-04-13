@@ -115,7 +115,7 @@ A maintainer can extend the desktop packaging approach toward broader cross-plat
 - **FR-005**: The feature MUST preserve a supported browser-based development mode after desktop support is added.
 - **FR-006**: The feature MUST support incremental delivery and validation so that desktop capability does not require one all-or-nothing implementation step.
 - **FR-007**: The feature MUST produce at least one Windows desktop artifact that can be launched and validated outside the browser-based development workflow.
-- **FR-008**: The feature MUST preserve local-first behavior for supported workflows.
+- **FR-008**: The desktop app or its associated portable release metadata MUST expose clear build/version identification so reviewers can distinguish one desktop build from another during validation.
 - **FR-009**: The feature MUST define the supported scope of desktop behavior where that scope differs from current browser behavior.
 - **FR-010**: When persisted best-score data is missing, unreadable, or invalid, the desktop app MUST continue launching, warn the user in plain language, and fall back to the default best score.
 - **FR-011**: The feature MUST define the supported contributor workflow for developing and validating the desktop-capable application on Windows where environment choices materially affect success.
@@ -148,7 +148,7 @@ A maintainer can extend the desktop packaging approach toward broader cross-plat
 - **SC-001**: A Windows user can launch the packaged application and reach a usable main application state without needing a browser tab or backend service.
 - **SC-002**: The player's best score remains available after the desktop application is closed and relaunched on the same machine.
 - **SC-003**: A contributor can still start and use the browser-based development workflow after desktop support is introduced.
-- **SC-004**: The desktop transformation can be delivered and validated in staged increments, with each completed increment producing independently reviewable evidence of progress.
+- **SC-004**: The desktop transformation can be delivered and validated in staged increments, with each completed increment producing independently reviewable evidence of progress consisting of: the story-specific validation tasks passing, the runnable workflow or packaged artifact named by that story's checkpoint, and any updated documentation required to operate or review that increment.
 - **SC-005**: The Windows desktop artifact can be launched and validated outside the development server workflow.
 - **SC-006**: For supported local workflows, the application remains functional without requiring continuous network connectivity.
 

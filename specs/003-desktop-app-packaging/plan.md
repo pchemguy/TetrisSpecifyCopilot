@@ -106,6 +106,10 @@ src/
 public/
 └── [renderer static assets]
 
+docs/
+├── desktop-architecture.md
+└── windows-development.md
+
 dist/
 └── [Vite renderer build output]
 
@@ -124,7 +128,7 @@ tests/
 └── unit/
 ```
 
-**Structure Decision**: Keep a single repository and a single renderer codebase. Add `electron/` for the only Electron-owned entrypoints, keep runtime-specific persistence adapters under `src/persistence` and `src/platform`, and preserve the existing renderer folders for gameplay, HUD, and persistence orchestration. This keeps desktop-specific code thin while allowing browser mode and desktop mode to share the same React, engine, and repository logic.
+**Structure Decision**: Keep a single repository and a single renderer codebase. Add `electron/` for the only Electron-owned entrypoints, keep runtime-specific persistence adapters under `src/persistence` and `src/platform`, preserve the existing renderer folders for gameplay, HUD, and persistence orchestration, and place Windows workflow plus architecture guidance under `docs/`. This keeps desktop-specific code thin while allowing browser mode and desktop mode to share the same React, engine, and repository logic.
 
 ## Complexity Tracking
 
