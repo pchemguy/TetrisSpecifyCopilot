@@ -87,7 +87,7 @@
 
 - [X] T023 [US2] Implement `db:load` and `db:save` IPC handlers with `userData` path resolution, temp-file cleanup, and last-committed-file preference in electron/main.ts
 - [X] T024 [US2] Implement typed database byte bridging in electron/preload.ts and src/types/global.d.ts
-- [ ] T025 [US2] Implement the desktop runtime adapter for loading and saving database bytes in src/persistence/runtime/desktopAdapter.ts and src/platform/runtime.ts
+- [X] T025 [US2] Implement the desktop runtime adapter for loading and saving database bytes in src/persistence/runtime/desktopAdapter.ts and src/platform/runtime.ts
 - [ ] T026 [US2] Add desktop best-score persistence and schema bootstrap helpers in src/persistence/sqlite/database.ts and src/persistence/sqlite/schema.ts
 - [ ] T027 [US2] Persist desktop database exports after best-score mutations in src/app/providers/PersistenceProvider.tsx and src/persistence/sqlite/database.ts
 - [ ] T028 [US2] Surface missing or invalid desktop best-score recovery through existing warning UI in src/app/providers/PersistenceProvider.tsx and src/components/overlays/PersistenceWarning.tsx
