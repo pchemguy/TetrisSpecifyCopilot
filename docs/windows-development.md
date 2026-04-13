@@ -36,6 +36,7 @@ This guide will track the validated commands for both supported runtime paths.
 - `npm run dev`: starts the Vite renderer, Electron TypeScript watch build, and Electron shell together
 - `npm run build`: produces both `dist/` and `dist-electron/`
 - `npm run dist:win`: produces the Windows packaging output under `release/`
+- Browser continuity validation also expects the app shell to show `Runtime browser/web` when launched through `npm run dev:web`.
 
 ## Packaged Launch Validation
 
@@ -56,6 +57,13 @@ This guide will track the validated commands for both supported runtime paths.
 3. Run `npm run build` and then `npm run dist:win`.
 4. Launch `release/win-unpacked/Tetris Specify Copilot.exe` and confirm the board becomes visible.
 5. Use the packaged shell for startup-budget and offline-play validation.
+
+## Browser Continuity Flow
+
+1. Run `npm run dev:web` and open the Vite URL in a browser.
+2. Confirm the readiness strip shows `Runtime browser/web`.
+3. Run the browser regression slices with `npx playwright test tests/e2e/core-gameplay.spec.ts tests/e2e/session-persistence.spec.ts --project=chromium --reporter=line`.
+4. Treat any failure that requires Electron-specific globals in this flow as a browser-regression bug, not a desktop-only issue.
 
 ## Follow-On Documentation
 

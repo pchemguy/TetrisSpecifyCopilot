@@ -18,6 +18,7 @@ The desktop build uses Electron as a thin shell around the existing renderer.
 - Desktop-only behavior is accessed only through `window.desktopApi`.
 - Electron-specific imports stay out of shared React, engine, and HUD modules.
 - Browser mode remains a supported development path and must continue working without preload or Electron globals.
+- Runtime-specific detection and bridge helpers are isolated under `src/platform/browser/` and `src/platform/desktop/`, with `src/platform/runtime.ts` acting as the shared boundary.
 
 ## Persistence Direction
 
@@ -51,9 +52,11 @@ The main process owns the window lifecycle and renderer selection:
 ## Validated Evidence
 
 - Current packaged-shell runtime label: `Runtime desktop/win32 v0.1.0`
+- Current browser-shell runtime label: `Runtime browser/web`
 - Current packaged-shell startup measurement: `979 ms` from launch to visible game board using `release/win-unpacked/Tetris Specify Copilot.exe`
 - Current desktop best-score fallback hydration measurement: `30 ms` from desktop persistence start to warning/default-score fallback using a corrupt `desktop-state.sqlite`
 - Current desktop best-score save measurement: `14 ms` from desktop save start to completed local persistence after game over
+- Current browser continuity validation: `npm run dev:web` plus browser Playwright coverage for `tests/e2e/core-gameplay.spec.ts` and `tests/e2e/session-persistence.spec.ts`
 - Current build outputs observed during validation:
   - `dist/` renderer bundle
   - `dist-electron/` Electron main/preload bundle
