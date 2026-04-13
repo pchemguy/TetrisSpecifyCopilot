@@ -32,6 +32,7 @@
 ## Notes
 
 - All checklist items pass after initial validation.
+- Revalidated against the full feature artifact set on 2026-04-13, including plan, tasks, research, data model, quickstart, and contracts; no new specification-quality issues were introduced.
 - Scope is bounded to a packaged desktop product and its validation workflow, with Windows as the first review target.
 - Cross-platform intent is preserved without locking the spec to a specific desktop framework or release technology.
 - Browser-data migration, code signing, and store submission are explicitly treated as out-of-scope unless later required.

@@ -8,40 +8,40 @@
 
 ## Requirement Completeness
 
-- [ ] CHK001 Are packaged desktop launch requirements defined for both the development shell path and the reviewable portable artifact path? [Completeness, Spec §FR-001, Spec §FR-007, Contract §5]
-- [ ] CHK002 Are the required Electron bridge capabilities fully specified for the first-release desktop persistence scope, rather than left implied by the architecture summary? [Completeness, Spec §FR-003, Spec §FR-010, Contract §2]
-- [ ] CHK003 Are the desktop persistence boundaries explicitly documented so reviewers can tell which categories are intentionally out of scope beyond best score? [Completeness, Spec §FR-015, Contract §4]
-- [ ] CHK004 Are the browser-mode continuity requirements defined clearly enough to preserve `npm run dev:web` as a supported workflow rather than an incidental convenience? [Completeness, Spec §FR-005, Spec §FR-011, Contract §5]
-- [ ] CHK005 Does the spec define what makes a Windows portable artifact review-ready beyond “can be launched,” including required included assets and version visibility? [Gap, Spec §FR-007, Spec §FR-014]
+- [x] CHK001 Are packaged desktop launch requirements defined for both the development shell path and the reviewable portable artifact path? [Completeness, Spec §FR-001, Spec §FR-007, Contract §5]
+- [x] CHK002 Are the required Electron bridge capabilities fully specified for the first-release desktop persistence scope, rather than left implied by the architecture summary? [Completeness, Spec §FR-003, Spec §FR-010, Contract §2]
+- [x] CHK003 Are the desktop persistence boundaries explicitly documented so reviewers can tell which categories are intentionally out of scope beyond best score? [Completeness, Spec §FR-015, Contract §4]
+- [x] CHK004 Are the browser-mode continuity requirements defined clearly enough to preserve `npm run dev:web` as a supported workflow rather than an incidental convenience? [Completeness, Spec §FR-005, Spec §FR-011, Contract §5]
+- [x] CHK005 Does the spec define what makes a Windows portable artifact review-ready beyond “can be launched,” including required included assets and version visibility? [Gap, Spec §FR-007, Spec §FR-014]
 
 ## Requirement Clarity
 
-- [ ] CHK006 Is “keep React renderer independent of Electron internals” translated into clear, testable requirement language about allowed and forbidden renderer dependencies? [Clarity, Plan §Summary, Contract §1]
-- [ ] CHK007 Is the statement that Electron main and preload are “thin adapters only” precise enough to tell reviewers what logic must stay out of those layers? [Ambiguity, Plan §Summary, Plan §Constitution Check]
-- [ ] CHK008 Is the desktop source of truth for best-score persistence unambiguous, including where it lives and which runtime owns read/write coordination? [Clarity, Spec §FR-003, Data Model §Best Score Snapshot]
-- [ ] CHK009 Is “warn the user in plain language” specific enough about timing, surface, and non-blocking behavior to avoid multiple reasonable interpretations? [Ambiguity, Spec §FR-010, Plan §Constitution Check]
-- [ ] CHK010 Is “portable app only” defined clearly enough to exclude installer, updater, and OS-managed install expectations from the first release? [Clarity, Spec §FR-014, Quickstart §Runtime Notes]
+- [x] CHK006 Is “keep React renderer independent of Electron internals” translated into clear, testable requirement language about allowed and forbidden renderer dependencies? [Clarity, Plan §Summary, Contract §1]
+- [x] CHK007 Is the statement that Electron main and preload are “thin adapters only” precise enough to tell reviewers what logic must stay out of those layers? [Ambiguity, Plan §Summary, Plan §Constitution Check]
+- [x] CHK008 Is the desktop source of truth for best-score persistence unambiguous, including where it lives and which runtime owns read/write coordination? [Clarity, Spec §FR-003, Data Model §Best Score Snapshot]
+- [x] CHK009 Is “warn the user in plain language” specific enough about timing, surface, and non-blocking behavior to avoid multiple reasonable interpretations? [Ambiguity, Spec §FR-010, Plan §Constitution Check]
+- [x] CHK010 Is “portable app only” defined clearly enough to exclude installer, updater, and OS-managed install expectations from the first release? [Clarity, Spec §FR-014, Quickstart §Runtime Notes]
 
 ## Requirement Consistency
 
-- [ ] CHK011 Do the spec, plan, and contract agree that `window.desktopApi` is the only renderer boundary for desktop-only features? [Consistency, Spec §FR-011, Contract §1, Contract §2]
-- [ ] CHK012 Do the plan, research, and data model align on where `sql.js` executes and where the durable desktop database bytes are stored? [Consistency, Plan §Summary, Research §3, Data Model §Desktop SQLite File]
-- [ ] CHK013 Are the requirements consistent about keeping desktop-local data separate from browser-local data in the first release? [Consistency, Spec §FR-013, Spec §Assumptions, Contract §4]
-- [ ] CHK014 Do browser-development requirements remain consistent with the Windows-first desktop packaging goal, rather than pulling the feature in two contradictory directions? [Consistency, Spec §FR-005, Spec §FR-007, Spec §FR-011]
-- [ ] CHK015 Are installer and upgrade exclusions stated consistently across the specification and planning artifacts, with no residual requirement implying those flows are still in scope? [Consistency, Spec §FR-014, Spec §Assumptions, Quickstart §Runtime Notes]
+- [x] CHK011 Do the spec, plan, and contract agree that `window.desktopApi` is the only renderer boundary for desktop-only features? [Consistency, Spec §FR-011, Contract §1, Contract §2]
+- [x] CHK012 Do the plan, research, and data model align on where `sql.js` executes and where the durable desktop database bytes are stored? [Consistency, Plan §Summary, Research §3, Data Model §Desktop SQLite File]
+- [x] CHK013 Are the requirements consistent about keeping desktop-local data separate from browser-local data in the first release? [Consistency, Spec §FR-013, Spec §Assumptions, Contract §4]
+- [x] CHK014 Do browser-development requirements remain consistent with the Windows-first desktop packaging goal, rather than pulling the feature in two contradictory directions? [Consistency, Spec §FR-005, Spec §FR-007, Spec §FR-011]
+- [x] CHK015 Are installer and upgrade exclusions stated consistently across the specification and planning artifacts, with no residual requirement implying those flows are still in scope? [Consistency, Spec §FR-014, Spec §Assumptions, Quickstart §Runtime Notes]
 
 ## Acceptance Criteria Quality
 
-- [ ] CHK016 Is “usable main application state” quantified enough that reviewers can objectively decide whether desktop launch succeeded? [Measurability, Spec §SC-001]
-- [ ] CHK017 Is best-score retention success defined precisely enough to verify the promised persistence behavior without implying broader persistence parity? [Acceptance Criteria, Spec §SC-002, Spec §FR-015]
-- [ ] CHK018 Are browser-development preservation criteria measurable and independently verifiable from packaged desktop validation? [Acceptance Criteria, Spec §SC-003, Spec §FR-005]
-- [ ] CHK019 Is “independently reviewable evidence of progress” defined well enough to evaluate staged delivery without subjective interpretation? [Ambiguity, Spec §SC-004, Spec §NFR-001]
+- [x] CHK016 Is “usable main application state” quantified enough that reviewers can objectively decide whether desktop launch succeeded? [Measurability, Spec §SC-001]
+- [x] CHK017 Is best-score retention success defined precisely enough to verify the promised persistence behavior without implying broader persistence parity? [Acceptance Criteria, Spec §SC-002, Spec §FR-015]
+- [x] CHK018 Are browser-development preservation criteria measurable and independently verifiable from packaged desktop validation? [Acceptance Criteria, Spec §SC-003, Spec §FR-005]
+- [x] CHK019 Is “independently reviewable evidence of progress” defined well enough to evaluate staged delivery without subjective interpretation? [Ambiguity, Spec §SC-004, Spec §NFR-001]
 - [ ] CHK020 Are feature-level performance expectations explicit enough in the requirements, rather than captured only in the plan’s technical context? [Gap, Spec §NFR-006, Plan §Technical Context]
 
 ## Scenario Coverage
 
-- [ ] CHK021 Are first-run requirements defined for the case where no desktop database file exists yet under `userData`? [Coverage, Spec §Edge Cases, Contract §4]
-- [ ] CHK022 Are offline-launch requirements defined for both development-shell and packaged-artifact use, or is one of those scenarios left unspecified? [Coverage, Spec §FR-004, Spec §SC-006, Quickstart §Desktop Reviewer Flow]
+- [x] CHK021 Are first-run requirements defined for the case where no desktop database file exists yet under `userData`? [Coverage, Spec §Edge Cases, Contract §4]
+- [x] CHK022 Are offline-launch requirements defined for both development-shell and packaged-artifact use, or is one of those scenarios left unspecified? [Coverage, Spec §FR-004, Spec §SC-006, Quickstart §Desktop Reviewer Flow]
 - [ ] CHK023 Are requirements defined for runtime selection and fallback when `window.desktopApi` is absent, unavailable, or incomplete? [Gap, Data Model §Execution Mode, Contract §3]
 - [ ] CHK024 Are requirements defined for packaged runtime asset failures, including how the user is informed and whether gameplay can continue? [Coverage, Spec §Edge Cases, Spec §FR-010]
 
@@ -49,30 +49,35 @@
 
 - [ ] CHK025 Are interrupted-write and temp-file cleanup requirements specified clearly enough to evaluate the promised atomic-save behavior? [Gap, Research §4, Data Model §Desktop SQLite File]
 - [ ] CHK026 Are file-permission, locked-file, and disk-space failure behaviors specified for desktop persistence writes, or are they left to implementation guesswork? [Gap, Spec §FR-010]
-- [ ] CHK027 Are requirements clear on how startup should behave when the desktop database file exists but contains invalid schema, malformed bytes, or unreadable best-score data? [Coverage, Spec §FR-010, Data Model §Desktop SQLite File]
+- [x] CHK027 Are requirements clear on how startup should behave when the desktop database file exists but contains invalid schema, malformed bytes, or unreadable best-score data? [Coverage, Spec §FR-010, Data Model §Desktop SQLite File]
 - [ ] CHK028 Are crash-during-save recovery expectations defined for the next launch, including whether the app should prefer last-known-good data, fallback defaults, or explicit warning states? [Gap, Spec §Edge Cases, Research §4]
 
 ## Non-Functional Requirements
 
-- [ ] CHK029 Are code-quality expectations explicit for the added Electron build path, TypeScript config, and packaging scripts rather than only for the existing renderer flow? [Completeness, Spec §NFR-003, Plan §Constitution Check]
-- [ ] CHK030 Are automated test requirements specified for preload-contract behavior, file-backed persistence, and browser-regression preservation at the right levels? [Completeness, Spec §NFR-002, Plan §Constitution Check, Contract §6]
-- [ ] CHK031 Are startup and hydration performance requirements measurable for the Windows review machine, including method of measurement and acceptable thresholds? [Clarity, Spec §NFR-006, Plan §Technical Context]
-- [ ] CHK032 Are maintainability requirements explicit enough to prevent desktop runtime checks from leaking across unrelated renderer code paths? [Clarity, Spec §NFR-003, Plan §Project Structure]
+- [x] CHK029 Are code-quality expectations explicit for the added Electron build path, TypeScript config, and packaging scripts rather than only for the existing renderer flow? [Completeness, Spec §NFR-003, Plan §Constitution Check]
+- [x] CHK030 Are automated test requirements specified for preload-contract behavior, file-backed persistence, and browser-regression preservation at the right levels? [Completeness, Spec §NFR-002, Plan §Constitution Check, Contract §6]
+- [x] CHK031 Are startup and hydration performance requirements measurable for the Windows review machine, including method of measurement and acceptable thresholds? [Clarity, Spec §NFR-006, Plan §Technical Context]
+- [x] CHK032 Are maintainability requirements explicit enough to prevent desktop runtime checks from leaking across unrelated renderer code paths? [Clarity, Spec §NFR-003, Plan §Project Structure]
 
 ## Dependencies & Assumptions
 
-- [ ] CHK033 Are Windows-first, Bash-based, and no-backend assumptions elevated to explicit requirements wherever violating them would materially change the implementation? [Assumption, Spec §FR-004, Spec §FR-011, Spec §Assumptions]
-- [ ] CHK034 Are future cross-platform ambitions clearly separated from the current first-release commitments so the spec does not overpromise portability? [Consistency, Spec §FR-012, Spec §Assumptions]
-- [ ] CHK035 Are Electron, electron-builder, and file-backed `sql.js` decisions documented as traceable technical choices rather than hidden mandatory constraints? [Traceability, Research §1, Research §3, Research §5]
+- [x] CHK033 Are Windows-first, Bash-based, and no-backend assumptions elevated to explicit requirements wherever violating them would materially change the implementation? [Assumption, Spec §FR-004, Spec §FR-011, Spec §Assumptions]
+- [x] CHK034 Are future cross-platform ambitions clearly separated from the current first-release commitments so the spec does not overpromise portability? [Consistency, Spec §FR-012, Spec §Assumptions]
+- [x] CHK035 Are Electron, electron-builder, and file-backed `sql.js` decisions documented as traceable technical choices rather than hidden mandatory constraints? [Traceability, Research §1, Research §3, Research §5]
 
 ## Ambiguities & Conflicts
 
-- [ ] CHK036 Do the requirements create any conflict between mandating a file-backed SQLite design and limiting first-release retained persistence to best score only? [Conflict, Spec §FR-003, Spec §FR-015, Research §7]
-- [ ] CHK037 Is it clear whether the desktop database file is required to store only best score for now or may contain a broader schema with narrower retention guarantees? [Ambiguity, Spec §FR-015, Data Model §Persistence Notes]
-- [ ] CHK038 Are the requirements explicit about whether browser mode remains a supported runtime target or only a development-time validation path? [Ambiguity, Spec §FR-005, Quickstart §Run Browser Development Mode]
+- [x] CHK036 Do the requirements create any conflict between mandating a file-backed SQLite design and limiting first-release retained persistence to best score only? [Conflict, Spec §FR-003, Spec §FR-015, Research §7]
+- [x] CHK037 Is it clear whether the desktop database file is required to store only best score for now or may contain a broader schema with narrower retention guarantees? [Ambiguity, Spec §FR-015, Data Model §Persistence Notes]
+- [x] CHK038 Are the requirements explicit about whether browser mode remains a supported runtime target or only a development-time validation path? [Ambiguity, Spec §FR-005, Quickstart §Run Browser Development Mode]
 
 ## Notes
 
 - This checklist uses standard reviewer depth and focuses on the first-release Windows desktop scope.
 - The checklist tests the quality of requirements for Electron packaging, persistence, and architecture; it is not an implementation test plan.
 - Items marked `[Gap]`, `[Ambiguity]`, or `[Conflict]` are intended to surface places where the written requirements may need tightening before implementation or review.
+- Open findings after re-review: CHK020, CHK023, CHK024, CHK025, CHK026, and CHK028.
+- CHK020 remains open because the measurable startup and hydration budgets live in the plan, while Spec §NFR-006 stays qualitative.
+- CHK023 remains open because the written contracts define browser absence and desktop presence of `window.desktopApi`, but do not yet define behavior for a partially available or incomplete bridge.
+- CHK024 remains open because the packaged runtime asset failure edge case is listed, but the expected warning and gameplay-continuation behavior is not yet spelled out.
+- CHK025, CHK026, and CHK028 remain open because atomic-write cleanup and specific desktop write-failure recovery behavior are justified technically in research, but not yet translated into explicit requirement language.
