@@ -60,6 +60,12 @@ Expected outcome:
 - Observed runtime/build label in the desktop shell: `Runtime desktop/win32 v0.1.0`
 - Result: passes the 5-second packaged desktop startup budget
 
+## Desktop Persistence Budget Evidence
+
+- Measured desktop best-score fallback hydration time with a corrupt `desktop-state.sqlite`: `30 ms`
+- Measured desktop best-score save latency after game over: `14 ms`
+- Result: both desktop persistence timings pass the 250 ms budget
+
 ## Validation Commands
 
 ```bash

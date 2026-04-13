@@ -52,12 +52,15 @@ The main process owns the window lifecycle and renderer selection:
 
 - Current packaged-shell runtime label: `Runtime desktop/win32 v0.1.0`
 - Current packaged-shell startup measurement: `979 ms` from launch to visible game board using `release/win-unpacked/Tetris Specify Copilot.exe`
+- Current desktop best-score fallback hydration measurement: `30 ms` from desktop persistence start to warning/default-score fallback using a corrupt `desktop-state.sqlite`
+- Current desktop best-score save measurement: `14 ms` from desktop save start to completed local persistence after game over
 - Current build outputs observed during validation:
   - `dist/` renderer bundle
   - `dist-electron/` Electron main/preload bundle
   - `release/win-unpacked/Tetris Specify Copilot.exe` unpacked Windows app for launch validation
 
 This measured startup time stays within the 5-second desktop launch budget with headroom.
+The measured desktop best-score fallback and save paths both stay within the 250 ms persistence budget with headroom.
 
 ## Shared Guardrails
 
