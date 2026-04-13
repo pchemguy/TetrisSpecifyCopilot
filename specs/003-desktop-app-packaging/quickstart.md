@@ -88,6 +88,14 @@ Use these checkpoints while the desktop path is still being assembled:
 4. Keep renderer-facing desktop behavior behind `window.desktopApi`; do not patch around shell failures by adding direct Electron imports under `src/`.
 5. If a desktop packaging step fails, confirm `dist/` and `dist-electron/` were both produced as expected before retrying `npm run dist:win`.
 
+## Windows Contributor Smoke Flow
+
+1. Run `npm run dev:web` and confirm the browser shell shows `Runtime browser/web`.
+2. Run `npm run dev` and confirm the desktop shell opens without a second manual browser step.
+3. Run `npm run build` and confirm both renderer and Electron outputs were regenerated.
+4. Run `npm run dist:win` and relaunch `release/win-unpacked/Tetris Specify Copilot.exe`.
+5. If any desktop-only step fails, roll back to `npm run dev:web` and `npm run build:electron` separately before editing shared renderer code.
+
 ## Desktop Reviewer Flow
 
 1. Run `npm run dev` and confirm the Electron window opens the game shell without requiring a separate browser launch.
