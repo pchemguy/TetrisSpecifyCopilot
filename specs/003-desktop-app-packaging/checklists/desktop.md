@@ -36,21 +36,21 @@
 - [x] CHK017 Is best-score retention success defined precisely enough to verify the promised persistence behavior without implying broader persistence parity? [Acceptance Criteria, Spec §SC-002, Spec §FR-015]
 - [x] CHK018 Are browser-development preservation criteria measurable and independently verifiable from packaged desktop validation? [Acceptance Criteria, Spec §SC-003, Spec §FR-005]
 - [x] CHK019 Is “independently reviewable evidence of progress” defined well enough to evaluate staged delivery without subjective interpretation? [Ambiguity, Spec §SC-004, Spec §NFR-001]
-- [ ] CHK020 Are feature-level performance expectations explicit enough in the requirements, rather than captured only in the plan’s technical context? [Gap, Spec §NFR-006, Plan §Technical Context]
+- [x] CHK020 Are feature-level performance expectations explicit enough in the requirements, rather than captured only in the plan’s technical context? [Gap, Spec §NFR-006, Plan §Technical Context]
 
 ## Scenario Coverage
 
 - [x] CHK021 Are first-run requirements defined for the case where no desktop database file exists yet under `userData`? [Coverage, Spec §Edge Cases, Contract §4]
 - [x] CHK022 Are offline-launch requirements defined for both development-shell and packaged-artifact use, or is one of those scenarios left unspecified? [Coverage, Spec §FR-004, Spec §SC-006, Quickstart §Desktop Reviewer Flow]
-- [ ] CHK023 Are requirements defined for runtime selection and fallback when `window.desktopApi` is absent, unavailable, or incomplete? [Gap, Data Model §Execution Mode, Contract §3]
-- [ ] CHK024 Are requirements defined for packaged runtime asset failures, including how the user is informed and whether gameplay can continue? [Coverage, Spec §Edge Cases, Spec §FR-010]
+- [x] CHK023 Are requirements defined for runtime selection and fallback when `window.desktopApi` is absent, unavailable, or incomplete? [Gap, Data Model §Execution Mode, Contract §3]
+- [x] CHK024 Are requirements defined for packaged runtime asset failures, including how the user is informed and whether gameplay can continue? [Coverage, Spec §Edge Cases, Spec §FR-010]
 
 ## Edge Case Coverage
 
-- [ ] CHK025 Are interrupted-write and temp-file cleanup requirements specified clearly enough to evaluate the promised atomic-save behavior? [Gap, Research §4, Data Model §Desktop SQLite File]
-- [ ] CHK026 Are file-permission, locked-file, and disk-space failure behaviors specified for desktop persistence writes, or are they left to implementation guesswork? [Gap, Spec §FR-010]
+- [x] CHK025 Are interrupted-write and temp-file cleanup requirements specified clearly enough to evaluate the promised atomic-save behavior? [Gap, Research §4, Data Model §Desktop SQLite File]
+- [x] CHK026 Are file-permission, locked-file, and disk-space failure behaviors specified for desktop persistence writes, or are they left to implementation guesswork? [Gap, Spec §FR-010]
 - [x] CHK027 Are requirements clear on how startup should behave when the desktop database file exists but contains invalid schema, malformed bytes, or unreadable best-score data? [Coverage, Spec §FR-010, Data Model §Desktop SQLite File]
-- [ ] CHK028 Are crash-during-save recovery expectations defined for the next launch, including whether the app should prefer last-known-good data, fallback defaults, or explicit warning states? [Gap, Spec §Edge Cases, Research §4]
+- [x] CHK028 Are crash-during-save recovery expectations defined for the next launch, including whether the app should prefer last-known-good data, fallback defaults, or explicit warning states? [Gap, Spec §Edge Cases, Research §4]
 
 ## Non-Functional Requirements
 
@@ -76,8 +76,4 @@
 - This checklist uses standard reviewer depth and focuses on the first-release Windows desktop scope.
 - The checklist tests the quality of requirements for Electron packaging, persistence, and architecture; it is not an implementation test plan.
 - Items marked `[Gap]`, `[Ambiguity]`, or `[Conflict]` are intended to surface places where the written requirements may need tightening before implementation or review.
-- Open findings after re-review: CHK020, CHK023, CHK024, CHK025, CHK026, and CHK028.
-- CHK020 remains open because the measurable startup and hydration budgets live in the plan, while Spec §NFR-006 stays qualitative.
-- CHK023 remains open because the written contracts define browser absence and desktop presence of `window.desktopApi`, but do not yet define behavior for a partially available or incomplete bridge.
-- CHK024 remains open because the packaged runtime asset failure edge case is listed, but the expected warning and gameplay-continuation behavior is not yet spelled out.
-- CHK025, CHK026, and CHK028 remain open because atomic-write cleanup and specific desktop write-failure recovery behavior are justified technically in research, but not yet translated into explicit requirement language.
+- Re-reviewed after requirement and contract tightening on 2026-04-13; no open findings remain in this checklist.

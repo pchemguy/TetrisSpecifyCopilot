@@ -70,7 +70,9 @@ npm run dist:win
 2. Start a short game, achieve a non-zero best score, close the desktop app fully, relaunch it, and confirm the best score remains visible.
 3. Disable networking and relaunch the desktop app to confirm supported local gameplay remains available offline.
 4. Corrupt or remove the desktop database file in the app data directory, relaunch, and confirm the app warns the user while falling back to a default best score instead of blocking startup.
-5. Run the browser regression commands to confirm `npm run dev:web` and the existing renderer path still behave correctly.
+5. Simulate a stale temp save file or interrupted desktop save and confirm the next launch prefers the last committed database file, removes or ignores stale temp artifacts, and warns only if fallback defaults are required.
+6. Validate a desktop persistence failure path such as locked-file, permission, or disk-space denial and confirm gameplay can still continue while the last committed best score remains intact.
+7. Run the browser regression commands to confirm `npm run dev:web` and the existing renderer path still behave correctly.
 
 ## Runtime Notes
 
@@ -78,3 +80,6 @@ npm run dist:win
 - Desktop and browser persistence are intentionally separate in the first release.
 - Best score is the only persistence category required across desktop restarts in the first release.
 - Electron main and preload are thin adapters; shared persistence logic remains in `src/persistence`.
+- Desktop mode treats an unavailable or incomplete bridge as a persistence warning path and does not fall back to browser storage.
+- Atomic desktop saves use temp-file replacement; stale temp save artifacts are removed or ignored on the next launch before committed data is loaded.
+- Persistence-only asset failures and write failures warn and keep gameplay available when core gameplay can still initialize; core startup asset failures produce a blocking startup error with recovery guidance.

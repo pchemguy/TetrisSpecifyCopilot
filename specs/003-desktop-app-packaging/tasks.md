@@ -79,19 +79,19 @@
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T020 [P] [US2] Add unit coverage for desktop file load/save and atomic replace behavior in tests/unit/persistence/desktopFileStore.spec.ts
-- [ ] T021 [P] [US2] Add renderer integration coverage for best-score hydration and fallback warnings in tests/integration/app/desktop-persistence.spec.tsx
+- [ ] T020 [P] [US2] Add unit coverage for desktop file load/save, atomic replace, stale temp cleanup, and interrupted-save recovery in tests/unit/persistence/desktopFileStore.spec.ts
+- [ ] T021 [P] [US2] Add renderer integration coverage for best-score hydration, bridge-unavailable fallback warnings, and persistence-disabled launch behavior in tests/integration/app/desktop-persistence.spec.tsx
 - [ ] T022 [P] [US2] Extend desktop restart persistence validation in tests/e2e/session-persistence.spec.ts
 
 ### Implementation for User Story 2
 
-- [ ] T023 [US2] Implement `db:load` and `db:save` IPC handlers with `userData` path resolution in electron/main.ts
+- [ ] T023 [US2] Implement `db:load` and `db:save` IPC handlers with `userData` path resolution, temp-file cleanup, and last-committed-file preference in electron/main.ts
 - [ ] T024 [US2] Implement typed database byte bridging in electron/preload.ts and src/types/global.d.ts
 - [ ] T025 [US2] Implement the desktop runtime adapter for loading and saving database bytes in src/persistence/runtime/desktopAdapter.ts and src/platform/runtime.ts
 - [ ] T026 [US2] Add desktop best-score persistence and schema bootstrap helpers in src/persistence/sqlite/database.ts and src/persistence/sqlite/schema.ts
 - [ ] T027 [US2] Persist desktop database exports after best-score mutations in src/app/providers/PersistenceProvider.tsx and src/persistence/sqlite/database.ts
 - [ ] T028 [US2] Surface missing or invalid desktop best-score recovery through existing warning UI in src/app/providers/PersistenceProvider.tsx and src/components/overlays/PersistenceWarning.tsx
-- [ ] T029 [US2] Handle unreadable or corrupt desktop database bytes with deterministic recovery in electron/main.ts and src/types/persistence.ts
+- [ ] T029 [US2] Handle unreadable or corrupt desktop database bytes plus permission, locked-file, and disk-space write failures with deterministic recovery in electron/main.ts and src/types/persistence.ts
 - [ ] T055 [P] [US2] Add integration coverage proving desktop mode does not import, merge, or overwrite browser persistence in tests/integration/app/desktop-persistence-isolation.spec.tsx
 - [ ] T056 [US2] Enforce browser/desktop persistence separation in src/persistence/runtime/browserAdapter.ts, src/persistence/runtime/desktopAdapter.ts, and src/platform/runtime.ts
 - [ ] T057 [P] [US2] Measure and record desktop best-score hydration fallback time and save latency against the 250 ms budgets in docs/desktop-architecture.md and specs/003-desktop-app-packaging/quickstart.md
@@ -110,7 +110,7 @@
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T030 [P] [US3] Add unit coverage for runtime selection and browser fallback behavior in tests/unit/platform/runtime.spec.ts
+- [ ] T030 [P] [US3] Add unit coverage for runtime selection, absent desktop bridge behavior, and incomplete desktop bridge fallback in tests/unit/platform/runtime.spec.ts
 - [ ] T031 [P] [US3] Add browser-mode integration coverage for persistence bootstrap in tests/integration/app/browser-runtime.spec.tsx
 - [ ] T032 [P] [US3] Extend browser regression coverage for `dev:web` behavior in tests/e2e/core-gameplay.spec.ts and tests/e2e/session-persistence.spec.ts
 
@@ -180,7 +180,7 @@
 
 - [ ] T050 [P] Run a desktop boundary audit to confirm there are no direct Electron imports under src/ and record the result in docs/desktop-architecture.md
 - [ ] T051 [P] Re-run the requirement-quality checks in specs/003-desktop-app-packaging/checklists/requirements.md and specs/003-desktop-app-packaging/checklists/desktop.md and close any findings in specs/003-desktop-app-packaging/spec.md or docs/desktop-architecture.md
-- [ ] T052 [P] Execute the full validation pass from specs/003-desktop-app-packaging/quickstart.md, including `npm run dev:web`, `npm run dev`, `npm run build`, desktop restart persistence, and portable packaging output validation
+- [ ] T052 [P] Execute the full validation pass from specs/003-desktop-app-packaging/quickstart.md, including `npm run dev:web`, `npm run dev`, `npm run build`, desktop restart persistence, bridge-unavailable fallback behavior, atomic-save recovery, write-failure handling, and portable packaging output validation
 - [ ] T053 Finalize desktop runtime and persistence lifecycle documentation in docs/desktop-architecture.md and docs/windows-development.md
 
 ---

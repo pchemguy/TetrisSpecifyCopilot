@@ -99,10 +99,10 @@ A maintainer can extend the desktop packaging approach toward broader cross-plat
 
 - What happens when the desktop application is launched for the first time and no prior local persisted data exists?
 - What happens when previously saved best-score data cannot be read or is no longer valid? The app continues launching, warns the user, and falls back to the default best score.
-- What happens when the application closes unexpectedly during or shortly after a save?
-- How does the system behave when desktop mode and browser mode rely on different local persistence mechanisms?
+- What happens when the application closes unexpectedly during or shortly after a save? The next launch removes or ignores stale temp save artifacts, prefers the last successfully committed database file, and warns before falling back to the default best score if no committed file is readable.
+- How does the system behave when desktop mode and browser mode rely on different local persistence mechanisms? Browser mode treats an absent desktop bridge as normal and uses browser persistence; desktop mode with an unavailable or incomplete bridge continues launching with desktop persistence disabled for that run and MUST NOT read or mutate browser-saved data.
 - What happens when a contributor attempts to use an unsupported or undocumented development shell or tooling path?
-- What happens when a packaged desktop build launches but a required runtime asset for local functionality is unavailable?
+- What happens when a packaged desktop build launches but a required runtime asset for local functionality is unavailable? If the missing asset affects only persistence, gameplay continues with a warning and non-persistent default best score; if it prevents core renderer or gameplay initialization, the app shows a blocking startup error with recovery guidance instead of a misleading playable state.
 
 ## Requirements *(mandatory)*
 
@@ -123,6 +123,11 @@ A maintainer can extend the desktop packaging approach toward broader cross-plat
 - **FR-013**: The first desktop release MUST keep desktop-local persisted data separate from browser-mode persisted data and MUST NOT automatically import, merge, or overwrite browser-saved data.
 - **FR-014**: The first reviewable Windows desktop release MUST be distributed as a portable app only; installer creation, OS-level install flows, uninstall flows, and application upgrade behavior are out of scope for that release.
 - **FR-015**: The first desktop release MUST require restart persistence only for best score; settings, UI state, sessions, score-history records, and replay metadata are out of scope for retention requirements in that release.
+- **FR-016**: Browser mode MUST treat the absence of `window.desktopApi` as the normal web path and use browser persistence adapters. Desktop mode with an unavailable or incomplete `window.desktopApi` bridge MUST continue launching with desktop persistence disabled for that run, warn the user, and MUST NOT fall back to browser persistence or mutate browser-saved data.
+- **FR-017**: If a required packaged runtime asset for desktop persistence is missing or unreadable, the app MUST warn the user and continue with a non-persistent default best score whenever gameplay can still initialize. If a required runtime asset for core renderer or gameplay initialization is unavailable, the app MUST present a blocking startup error with recovery guidance instead of a misleading playable state.
+- **FR-018**: Desktop best-score persistence writes MUST use atomic temp-file-plus-rename replacement, and the next launch MUST remove or ignore stale temp save artifacts before loading the last successfully committed database file.
+- **FR-019**: If a desktop persistence write fails because of permission, locked-file, or disk-space errors, the app MUST preserve the last successfully committed database file, warn the user that current best-score progress may not persist, and keep gameplay available whenever the current session can still continue.
+- **FR-020**: After an interrupted or crashed desktop save, the next launch MUST prefer the last successfully committed database file; if no committed file is readable, the app MUST warn the user and fall back to the default best score.
 
 ### Non-Functional Requirements
 
@@ -131,7 +136,7 @@ A maintainer can extend the desktop packaging approach toward broader cross-plat
 - **NFR-003**: The feature MUST preserve maintainability by keeping desktop-specific behavior bounded enough that contributors can reason about and validate localized changes.
 - **NFR-004**: The feature MUST preserve an agent-friendly development workflow on Windows by avoiding unnecessary toolchain or workflow complexity beyond what is required for the approved desktop scope.
 - **NFR-005**: For supported local workflows, the application MUST remain usable without relying on service availability, remote state, or continuous connectivity.
-- **NFR-006**: The primary desktop launch and ready-for-use flow MUST be fast enough that contributors and users can validate the application without unreasonable delay.
+- **NFR-006**: On the Windows review machine, the packaged desktop app MUST reach a usable main UI within 5 seconds of launch, best-score hydration or fallback MUST complete within 250 ms of renderer boot, and best-score save MUST complete within 250 ms after persistence begins at game-over.
 - **NFR-007**: The feature MUST preserve the project’s architectural direction well enough that future increments can extend desktop support without first undoing the delivered work.
 
 ### Key Entities *(include if feature involves data)*
@@ -151,6 +156,7 @@ A maintainer can extend the desktop packaging approach toward broader cross-plat
 - **SC-004**: The desktop transformation can be delivered and validated in staged increments, with each completed increment producing independently reviewable evidence of progress consisting of: the story-specific validation tasks passing, the runnable workflow or packaged artifact named by that story's checkpoint, and any updated documentation required to operate or review that increment.
 - **SC-005**: The Windows desktop artifact can be launched and validated outside the development server workflow.
 - **SC-006**: For supported local workflows, the application remains functional without requiring continuous network connectivity.
+- **SC-007**: On the Windows review machine, packaged desktop launch reaches a usable main UI within 5 seconds, best-score hydration or fallback completes within 250 ms of renderer boot, and best-score save completes within 250 ms after persistence begins.
 
 ## Assumptions
 
