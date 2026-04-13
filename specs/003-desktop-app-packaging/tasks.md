@@ -35,7 +35,7 @@
 - [X] T007 [P] Add typed runtime detection and global desktop API declarations in src/platform/runtime.ts and src/types/global.d.ts
 - [X] T008 [P] Create runtime-specific persistence adapter skeletons in src/persistence/runtime/browserAdapter.ts and src/persistence/runtime/desktopAdapter.ts
 - [X] T009 Refactor shared SQLite bootstrap to consume runtime-selected byte loaders and savers in src/persistence/sqlite/database.ts and src/app/providers/PersistenceProvider.tsx
-- [ ] T010 Capture shared packaging, persistence, and rollback guardrails in docs/desktop-architecture.md and specs/003-desktop-app-packaging/quickstart.md
+- [X] T010 Capture shared packaging, persistence, and rollback guardrails in docs/desktop-architecture.md and specs/003-desktop-app-packaging/quickstart.md
 
 **Checkpoint**: Shared runtime and persistence boundaries are ready; user story work can proceed in small vertical slices.
 

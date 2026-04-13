@@ -34,6 +34,26 @@ The feature keeps one renderer-owned persistence model and swaps only the durabl
 - `npm run dev` will run the Electron shell against the same renderer.
 - The first reviewable desktop output is a portable Windows artifact.
 
+## Shared Guardrails
+
+### Packaging
+
+- Keep renderer output in `dist/` and Electron output in `dist-electron/` so packaging failures can be isolated quickly.
+- Treat `npm run build` and `npm run build:electron` as separate checkpoints before wiring full desktop packaging flows.
+- Keep the browser workflow runnable while desktop packaging work is in flight so renderer regressions can be diagnosed without the shell.
+
+### Persistence
+
+- Shared SQLite bootstrap code must consume runtime-selected byte loaders and savers instead of owning browser storage directly.
+- Browser storage remains the default path unless a desktop bridge is present.
+- Desktop persistence work must stay behind runtime adapters and preload bridge methods rather than leaking filesystem access into shared renderer code.
+
+### Rollback
+
+- If a desktop-shell change breaks startup, revalidate `npm run dev:web` and `npm run build` first to confirm the shared renderer still works.
+- If Electron compilation fails, validate `npm run build:electron` independently before changing shared renderer code.
+- If desktop persistence work regresses, keep the browser adapter as the safe baseline until the desktop bridge contract is complete.
+
 ## Contributor Guidance
 
 - Keep Electron main and preload thin.

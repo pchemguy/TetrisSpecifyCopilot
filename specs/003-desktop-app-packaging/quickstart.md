@@ -58,11 +58,22 @@ Expected outcome:
 ```bash
 npm run lint
 npm run test
+npm run build:electron
 npx playwright test tests/e2e/core-gameplay.spec.ts --project=chromium --reporter=line
 npx playwright test tests/e2e/session-persistence.spec.ts --project=chromium --reporter=line
 npx playwright test tests/e2e/desktop-shell.spec.ts --reporter=line
 npm run dist:win
 ```
+
+## Shared Guardrails And Rollback
+
+Use these checkpoints while the desktop path is still being assembled:
+
+1. Validate the shared renderer separately with `npm run dev:web` or `npm run build` before diagnosing Electron-specific failures.
+2. Validate Electron compilation separately with `npm run build:electron` before investigating packaging or preload behavior.
+3. Treat browser persistence as the rollback baseline until the desktop bridge and file-backed persistence flow are fully wired.
+4. Keep renderer-facing desktop behavior behind `window.desktopApi`; do not patch around shell failures by adding direct Electron imports under `src/`.
+5. If a desktop packaging step fails, confirm `dist/` and `dist-electron/` were both produced as expected before retrying `npm run dist:win`.
 
 ## Desktop Reviewer Flow
 
