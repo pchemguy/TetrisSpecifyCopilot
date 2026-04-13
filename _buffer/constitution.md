@@ -113,7 +113,14 @@ These artifacts SHOULD optimize for agent clarity, bounded execution, and reliab
 
 However, prompts, templates, and governing documents SHOULD not be rewritten into pure lists or checklist prose solely for stylistic uniformity. Structure is a tool, not a goal. Dense prose SHOULD be broken up when doing so improves execution or review, but narrative explanation and justification SHOULD be preserved where they materially aid correct interpretation, constraint handling, or decision quality.
 
-When revising constitutional text, prompts, or templates, contributors SHOULD consider whether a more structured organization would substantively improve clarity or determinism, even when the underlying requirement does not change. Where ambiguity, dense prose, or mixed concerns would increase the risk of agent drift, the more structured formulation is preferred. Purely cosmetic reformatting without operational benefit SHOULD be avoided.
+This principle applies not only to local phrasing and list usage, but also to the higher-level organization of the document as a whole. Complex prompts, templates, and project artifacts MUST have an explicit, well-defined, and meaningful Markdown heading structure. Major concerns, phases, constraints, decision points, and execution stages MUST be separated into sections whose scope and hierarchy are clear to both humans and AI systems.
+
+That organizational structure SHOULD emerge naturally from the content and its intended workflow rather than being imposed as empty formality after drafting. Markdown heading levels SHOULD reflect real semantic hierarchy rather than visual preference. New sections SHOULD be introduced when they separate distinct concerns, phases, or rule sets, not merely to shorten the page superficially.
+
+Even when AI can parse a poorly organized document, that is not an acceptable justification for weak document architecture. Poorly organized documents substantially increase review burden, hide ambiguity, and make it harder for human maintainers to build an accurate mental model of the artifact. Because these artifacts are authored, reviewed, and owned by humans, high-level organization is a correctness concern, not merely a presentation preference. Human contributors are responsible for detecting subtle ambiguities, conflicts, omissions, and instruction-ordering problems that may materially confuse AI or degrade AI-assisted workflows.
+
+When revising constitutional text, prompts, templates, or other structured guidance, contributors SHOULD consider whether a more structured organization would substantively improve clarity or determinism, even when the underlying requirement does not change.
+Where ambiguity, dense prose, mixed concerns, or weak section boundaries would increase the risk of agent drift, the more clearly organized formulation is preferred. Purely cosmetic reformatting without operational benefit SHOULD be avoided.
 
 ## Spec Kit Workflow Requirements
 
