@@ -35,6 +35,7 @@ The feature keeps one renderer-owned persistence model and swaps only the durabl
 - `npm run dev:web` remains the fast browser workflow.
 - `npm run dev` will run the Electron shell against the same renderer.
 - The first reviewable desktop output is a portable Windows artifact.
+- The current `electron-builder` layout keeps renderer assets, Electron output, and metadata in a way that can absorb future non-Windows targets without moving the renderer or preload boundaries.
 
 ## Launch Lifecycle
 
@@ -91,3 +92,10 @@ The measured desktop best-score fallback and save paths both stay within the 250
 - Keep Electron main and preload thin.
 - Add runtime-specific code at the platform and persistence boundaries before changing shared renderer modules.
 - Extend this note as later tasks add validation guardrails, runtime evidence, and broader cross-platform extension points.
+
+## Current Limits And Extension Points
+
+- Current release limit: Windows-first portable packaging only.
+- Current persistence scope: best score only across desktop restarts.
+- Extension point: platform normalization is shared through runtime helpers rather than baked directly into renderer code.
+- Extension point: packaging remains centered on shared `dist/` and `dist-electron/` outputs, so future targets can be added without redefining the renderer model.

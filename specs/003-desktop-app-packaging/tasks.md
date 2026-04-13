@@ -167,7 +167,7 @@
 ### Implementation for User Story 5
 
 - [X] T047 [US5] Keep platform branching isolated to shell/runtime boundaries in electron/main.ts and src/platform/runtime.ts
-- [ ] T048 [US5] Keep packaging configuration extensible beyond Windows-only assumptions in package.json and docs/desktop-architecture.md
+- [X] T048 [US5] Keep packaging configuration extensible beyond Windows-only assumptions in package.json and docs/desktop-architecture.md
 - [ ] T049 [US5] Document current Windows-first limits and future extension points in docs/desktop-architecture.md and docs/windows-development.md
 
 **Checkpoint**: User Story 5 leaves the runtime and packaging architecture open for later cross-platform extension without changing the renderer model. Evidence: passing T045-T046, platform-neutral runtime boundaries, and documented extension points.
