@@ -2,156 +2,131 @@
 
 ## Overview
 
-This guide helps contributors set up, validate, and evolve the project.
+This guide describes how to work on the shared renderer, the Electron shell, and the runtime-specific persistence boundaries.
 
-## Shell Prerequisite
+## Supported Shell
 
-Windows users require Git Bash (for example, Git for Windows) or WSL; PowerShell is not supported.
+Windows contributors must use Git Bash. Do not mix Bash and PowerShell commands in the same workflow.
 
 ## Related Docs
 
 - [User Guide](./user-guide.md)
 - [Reviewer Guide](./reviewer-guide.md)
+- [Windows Development Workflow](./windows-development.md)
+- [Desktop Architecture](./desktop-architecture.md)
 - [Persistence Reference](./persistence-reference.md)
 
-## Release-Gate Status
+## Runtime Model
 
-- Last full quickstart acceptance pass: 2026-04-12
-- Status: pass
+The repository has two supported runtime paths:
 
-## Validated Command Baseline
+- browser mode through `npm run dev:web`
+- desktop mode through `npm run dev`
 
-Validated from [specs/002-project-docs/quickstart.md](../specs/002-project-docs/quickstart.md):
+Shared renderer code lives under `src/` and must remain Electron-agnostic. Desktop-only behavior is exposed through preload and runtime boundary modules rather than direct `electron` imports in shared UI code.
 
-- `npm install`: install dependencies.
-- `npm run dev`: run local app.
-- `npm run lint` and `npm run test`: quality baseline.
-- `npx playwright install chromium`: browser binary remediation and first-time setup.
-- `npx playwright test tests/e2e/core-gameplay.spec.ts --project=chromium --reporter=line`
-- `npx playwright test tests/e2e/hud-and-strategy.spec.ts --project=chromium --reporter=line`
-- `npx playwright test tests/e2e/session-persistence.spec.ts --project=chromium --reporter=line`
-- `npm run build`: production build validation.
-
-## Terminology and Consistency Rules
-
-- Canonical terms: tetromino, ghost piece, hold, hard drop, soft drop, pause/resume, best score.
-- Cross-link targets: [User Guide](./user-guide.md), [Reviewer Guide](./reviewer-guide.md), [Persistence Reference](./persistence-reference.md).
-- Keep command names, script names, and expected outcomes consistent with reviewer documentation.
-
-## Contributor Setup
-
-1. Install dependencies:
+## Install And First Run
 
 ```bash
 npm install
+npx playwright install chromium
 ```
 
-2. Start the local development server:
+Use browser mode first for shared-renderer work:
+
+```bash
+npm run dev:web
+```
+
+Use desktop mode when validating preload, packaging, or desktop persistence:
 
 ```bash
 npm run dev
 ```
 
-3. Open the Vite local URL shown in the terminal.
-
 ## npm Scripts Reference
 
 | Script | Purpose |
 | --- | --- |
-| `npm run dev` | Starts Vite development server |
-| `npm run build` | Type-checks and builds production assets |
-| `npm run lint` | Runs ESLint checks |
-| `npm run test` | Runs Vitest in run mode |
-| `npm run test:watch` | Runs Vitest in watch mode |
-| `npm run test:e2e` | Runs Playwright E2E suite |
+| `npm run dev:web` | Starts the Vite browser workflow on `127.0.0.1:4173` |
+| `npm run dev` | Starts browser server, Electron build watch, and Electron shell together |
+| `npm run dev:electron:build` | Watches Electron TypeScript output |
+| `npm run dev:electron:start` | Waits for browser and Electron build outputs, then launches Electron |
+| `npm run build` | Builds renderer and Electron outputs |
+| `npm run build:renderer` | Type-checks and builds the Vite renderer |
+| `npm run build:electron` | Compiles Electron main and preload |
+| `npm run dist:win` | Builds the portable Windows artifact |
+| `npm run lint` | Runs ESLint |
+| `npm run test` | Runs Vitest |
+| `npm run test:e2e` | Runs the Playwright suite |
 
 ## Repository Directory Map
 
 | Path | Responsibility |
 | --- | --- |
-| `docs/` | End-user, developer, reviewer, and persistence documentation |
-| `specs/` | Spec Kit feature artifacts (spec, plan, tasks, analyses) |
-| `src/app/` | React app-level orchestration and state boundaries |
-| `src/canvas/` | Gameplay rendering integration |
-| `src/components/` | UI components and panels |
-| `src/engine/` | Deterministic game engine and rules |
-| `src/persistence/` | localStorage and SQLite/IndexedDB adapters |
-| `tests/` | Contract, integration, unit, and E2E test suites |
+| `electron/` | Electron main and preload entry points |
+| `docs/` | User, developer, reviewer, persistence, packaging, and workflow docs |
+| `scripts/` | Local workflow helpers such as the Electron dev launcher |
+| `specs/` | Spec Kit feature artifacts |
+| `src/app/` | React orchestration, runtime labels, and persistence provider wiring |
+| `src/canvas/` | Canvas rendering integration |
+| `src/components/` | HUD, overlays, and input-facing UI components |
+| `src/engine/` | Deterministic gameplay engine and rules |
+| `src/persistence/` | Shared SQLite bootstrap plus browser and desktop persistence adapters |
+| `src/platform/` | Runtime selection and boundary helpers |
+| `tests/` | Unit, integration, contract, and E2E validation |
 
-## Architecture Overview
+## Architecture Summary
 
-Core concerns are separated into four areas:
+Core concerns are separated into these layers:
 
-1. Game engine: deterministic state transitions and gameplay rules.
-2. Rendering: canvas-based visual output driven by engine state.
-3. Application state: React-level orchestration of UI and runtime boundaries.
-4. Persistence: browser-local storage for settings and structured history.
+1. Engine: deterministic gameplay state transitions.
+2. Renderer: canvas and HUD output driven by engine state.
+3. Runtime boundary: browser and desktop detection plus typed desktop bridge access.
+4. Persistence: shared `sql.js` schema with browser and desktop storage adapters.
+5. Shell: Electron main and preload for desktop launch, file-backed persistence, and runtime metadata.
 
-This separation keeps rule behavior testable and documentation traceable to runtime sources.
-
-## Input-to-Render Data Flow
+## Input, Runtime, And Persistence Flow
 
 ```mermaid
 flowchart LR
-	A[Keyboard Event] --> B[Input Normalization]
-	B --> C[Engine Command Queue]
-	C --> D[Deterministic Engine Tick]
-	D --> E[Updated Game State]
-	E --> F[Canvas Render Pass]
-	E --> G[HUD React State]
-	E --> H[Persistence Adapters]
+  A[Keyboard Event] --> B[Input Handler]
+  B --> C[Engine Command Queue]
+  C --> D[Deterministic Engine Tick]
+  D --> E[Updated Game State]
+  E --> F[Canvas Render Pass]
+  E --> G[HUD React State]
+  E --> H[Persistence Provider]
+  H --> I[Browser Adapter or Desktop Adapter]
 ```
 
-Step-by-step:
+## Validation Baseline
 
-1. Browser keyboard events are normalized into known gameplay commands.
-2. Commands are queued and consumed by deterministic engine ticks.
-3. The engine emits updated game state for playfield, metrics, and overlays.
-4. Canvas rendering consumes gameplay state to draw board, active piece, and ghost piece.
-5. React HUD state and persistence adapters consume the same state update for UI and storage synchronization.
-
-## Testing Strategy
-
-- Unit and integration validation: `npm run test`
-- End-to-end validation: `npm run test:e2e` or the three scoped Playwright commands
-- Lint validation: `npm run lint`
-
-The preferred local sequence is lint, tests, then E2E.
-
-## Build Workflow
+Use this order when touching shared logic:
 
 ```bash
+npm run lint
+npm run test
 npm run build
+npx playwright test tests/e2e/core-gameplay.spec.ts --project=chromium --reporter=line
+npx playwright test tests/e2e/session-persistence.spec.ts --project=chromium --reporter=line
+npx playwright test tests/e2e/desktop-shell.spec.ts --project=chromium --reporter=line
 ```
 
-This runs TypeScript checks and produces the production bundle.
+Use `npm run dist:win` when changing desktop packaging or validating the portable Windows artifact.
 
-## Verified Validation Outcomes
+## Contributor Guardrails
 
-Latest command-validation pass (Phase 7 / T026) confirmed:
+- Validate `npm run dev:web` before treating a regression as Electron-specific.
+- Keep desktop-only renderer access behind `window.desktopApi`.
+- Do not import `electron`, `node:fs`, or similar Node-only APIs into shared renderer modules.
+- Treat browser and desktop persistence as separate storage domains in the first release.
+- Keep docs synchronized with command names and runtime behavior.
 
-- `npm run lint`: exits with code 0.
-- `npm run test`: all test files pass (`12 passed`, `39 passed`).
-- `npx playwright install chromium`: browser binary remediation command succeeds.
-- `npx playwright test tests/e2e/core-gameplay.spec.ts --project=chromium --reporter=line`: `1 passed`.
-- `npx playwright test tests/e2e/hud-and-strategy.spec.ts --project=chromium --reporter=line`: `1 passed`.
-- `npx playwright test tests/e2e/session-persistence.spec.ts --project=chromium --reporter=line`: `2 passed`.
-- `npm run build`: exits with code 0 and emits production assets under `dist/`.
+## Developer Walkthrough
 
-## Code Quality Expectations
-
-- Keep documentation and command examples aligned with runtime behavior.
-- Do not introduce PowerShell command variants.
-- Ensure terminology remains canonical across user, developer, reviewer, and persistence docs.
-- Treat failing validation commands as blockers until corrected.
-
-## Contributor Walkthrough Validation
-
-Use this check to validate SC-002:
-
-1. Follow only this guide to install dependencies and run the app.
-2. Run `npm run lint`, `npm run test`, and the scoped Playwright commands.
-3. Locate the primary runtime areas (`src/engine/`, `src/canvas/`, `src/persistence/`, `src/app/`) using the directory map.
-4. Confirm the input-to-render flow in this guide is sufficient to trace where to make a small change.
-
-If this walkthrough fails, revise this guide before release sign-off.
+1. Install dependencies and browser binaries.
+2. Run `npm run dev:web` and confirm the browser shell shows `Runtime browser/web`.
+3. Run `npm run dev` and confirm the Electron shell shows `Runtime desktop/win32 v0.1.0` on the current validated machine.
+4. Run `npm run build` and `npm run dist:win`.
+5. Run the scoped Playwright validation slices for browser continuity and desktop shell coverage.

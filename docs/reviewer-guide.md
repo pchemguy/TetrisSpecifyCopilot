@@ -2,130 +2,124 @@
 
 ## Overview
 
-This guide provides a linear checklist to validate the implementation.
+This guide provides a linear review flow for the current browser and Windows desktop deliverable.
 
-## Shell Prerequisite
+## Supported Review Environment
 
-Windows users require Git Bash (for example, Git for Windows) or WSL; PowerShell is not supported.
+- Windows 11
+- Git Bash on `PATH`
+- Node.js 22 LTS or newer
+- npm 10 or newer
+
+Use Bash commands only.
 
 ## Related Docs
 
 - [User Guide](./user-guide.md)
 - [Developer Guide](./developer-guide.md)
+- [Windows Development Workflow](./windows-development.md)
 - [Persistence Reference](./persistence-reference.md)
-
-## Release-Gate Status
-
-- Last full quickstart acceptance pass: 2026-04-12
-- Status: pass
-
-## Validated Command Baseline
-
-Validated from [specs/002-project-docs/quickstart.md](../specs/002-project-docs/quickstart.md):
-
-- Use Bash commands only.
-- Validate install (`npm install`) and app start (`npm run dev`).
-- Validate quality baseline (`npm run lint`, `npm run test`).
-- Include Playwright remediation (`npx playwright install chromium`) before E2E if binaries are missing.
-- Validate E2E with the three scoped Playwright commands from quickstart.
-- Validate final build with `npm run build`.
-
-## Terminology and Consistency Rules
-
-- Canonical terms: tetromino, ghost piece, hold, hard drop, soft drop, pause/resume, best score.
-- Cross-link targets: [User Guide](./user-guide.md), [Developer Guide](./developer-guide.md), [Persistence Reference](./persistence-reference.md).
-- Reviewer wording must stay aligned with command names and outcomes documented in developer guidance.
 
 ## Reviewer Checklist
 
-1. Verify prerequisites are met.
-2. Install project dependencies.
-3. Start the application locally.
-4. Run gameplay smoke checks.
-5. Verify persistence behavior after reload.
-6. Run lint and unit/integration tests.
-7. Run scoped E2E tests.
-8. Run build validation.
-9. Verify offline behavior after initial load.
-10. Record results and sign off or open corrections.
+1. Install dependencies and Playwright Chromium.
+2. Validate browser mode with `npm run dev:web`.
+3. Validate desktop development mode with `npm run dev`.
+4. Validate browser continuity and persistence behavior.
+5. Validate desktop restart persistence and warning behavior.
+6. Run lint, tests, and build.
+7. Run the browser and desktop Playwright slices.
+8. Build the portable Windows artifact.
+9. Record pass or failure with the exact failing command if any step breaks.
 
-Checklist constraints:
+## Validation Commands
 
-- Top-level steps must remain at or below 12.
-- Each step should stay concise and map to one or more commands or observable outcomes.
-- Reviewers should be able to execute the full flow in under 30 minutes on a prepared machine.
-
-## Validation Commands and Expected Outcomes
-
-### Install and Start
+### Install And Browser Setup
 
 ```bash
 npm install
+npx playwright install chromium
+```
+
+### Browser Runtime Validation
+
+```bash
+npm run dev:web
+```
+
+Expected outcome:
+
+- Vite serves `http://127.0.0.1:4173`
+- the app shows `Runtime browser/web`
+- gameplay is responsive in a desktop browser
+
+### Desktop Runtime Validation
+
+```bash
 npm run dev
 ```
 
-Expected outcome: dependencies install successfully and Vite prints a local URL.
+Expected outcome:
+
+- the Electron shell launches without a separate browser step
+- the app shows `Runtime desktop/win32 v0.1.0` on the current validated machine
+- the game remains playable after networking is disabled post-load
 
 ### Quality Baseline
 
 ```bash
 npm run lint
 npm run test
-```
-
-Expected outcome: both commands exit with code 0.
-
-### End-to-End Validation
-
-```bash
-npx playwright test tests/e2e/core-gameplay.spec.ts --project=chromium --reporter=line
-npx playwright test tests/e2e/hud-and-strategy.spec.ts --project=chromium --reporter=line
-npx playwright test tests/e2e/session-persistence.spec.ts --project=chromium --reporter=line
-```
-
-Expected outcome: all three specs pass with no unexpected failures.
-
-### Build Validation
-
-```bash
 npm run build
 ```
 
-Expected outcome: production build completes without errors.
+Expected outcome: all three commands exit successfully.
 
-## Verified Command Outcomes (Current Baseline)
-
-The latest command-validation pass produced these results:
-
-- `npm run lint`: completed without reported lint failures.
-- `npm run test`: `12` test files passed and `39` tests passed.
-- `npx playwright install chromium`: completed successfully.
-- `core-gameplay.spec.ts`: `1 passed`.
-- `hud-and-strategy.spec.ts`: `1 passed`.
-- `session-persistence.spec.ts`: `2 passed`.
-- `npm run build`: completed successfully and produced `dist/` build artifacts.
-
-## Playwright Browser Remedy
-
-If Playwright cannot launch Chromium because browser binaries are missing, run:
+### Playwright Validation
 
 ```bash
-npx playwright install chromium
+npx playwright test tests/e2e/core-gameplay.spec.ts --project=chromium --reporter=line
+npx playwright test tests/e2e/session-persistence.spec.ts --project=chromium --reporter=line
+npx playwright test tests/e2e/desktop-shell.spec.ts --project=chromium --reporter=line
 ```
 
-Then re-run the E2E commands listed in this guide.
+Expected outcome:
 
-## Offline Verification
+- browser gameplay regression passes
+- browser reload and offline continuity pass
+- desktop shell launch and offline continuity pass
+- desktop best-score relaunch persistence passes
 
-1. Launch the app while online and wait for first render.
-2. Open browser DevTools and set network to offline.
-3. Perform gameplay smoke actions and verify behavior continues.
-4. Reload and verify local persistence behavior remains understandable from the docs.
+### Portable Packaging Validation
 
-## Failed-Command Exception Workflow
+```bash
+npm run dist:win
+```
 
-1. Capture the exact failing command and output.
-2. Mark the affected review step as not verified.
-3. Open or update a correction issue linked to the failing command.
-4. Re-run only the corrected validation step, then resume the remaining checklist.
-5. Do not sign off until all required steps are verified.
+Expected outcome:
+
+- `release/Tetris Specify Copilot-0.1.0-portable.exe` exists
+- `release/win-unpacked/Tetris Specify Copilot.exe` exists
+
+## Manual Runtime Checks
+
+### Browser Continuity
+
+1. Launch `npm run dev:web`.
+2. Start a short game.
+3. Reload and confirm best score remains visible.
+4. Disable network after initial load and confirm gameplay still works.
+
+### Desktop Persistence And Recovery
+
+1. Launch `npm run dev`.
+2. Reach a non-zero best score.
+3. Close the Electron app fully.
+4. Relaunch and confirm the best score is still visible.
+5. If testing recovery behavior, corrupt or remove the desktop database file and confirm a persistence warning appears while gameplay still loads.
+
+## If A Step Fails
+
+1. Record the exact command and output.
+2. Record whether the failure is browser-only, desktop-only, or shared.
+3. Do not sign off until the failing step has been corrected and re-run.
