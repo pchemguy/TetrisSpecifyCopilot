@@ -1,127 +1,196 @@
 <!--
 Sync Impact Report
-Version change: 1.0.0 -> 1.1.0
+Version change: 1.4.0 -> 1.5.0
 Modified principles:
-- Code Quality Release Gate -> I. Code Quality Is A Release Gate
-- Tests Prove Behavior -> II. Tests Prove Behavior
-- UX Consistency -> III. UX Consistency Is A Product Requirement
-- Performance Budgets -> IV. Performance Budgets Are Defined Up Front
-- Explicit Technical Decisions -> V. Technical Decisions Must Be Traceable
-Added sections:
-- Implementation Standards
-- Delivery Workflow
-Removed sections:
-- None
+- Validation Evidence Is Mandatory -> III. Test Suite Development Is Inseparable From Code Development
 Templates requiring updates:
-- ✅ updated: .specify/templates/plan-template.md
-- ✅ updated: .specify/templates/spec-template.md
-- ✅ updated: .specify/templates/tasks-template.md
-- ✅ no template command files present: .specify/templates/commands/*.md
-- ✅ reviewed, no update required: docs/SPEC_KIT.md
+- ⚠ pending: .specify/templates/plan-template.md
+- ⚠ pending: .specify/templates/spec-template.md
+- ⚠ pending: .specify/templates/tasks-template.md
+- ⚠ pending: .github/agents/speckit.specify.agent.md
+- ⚠ pending: .github/agents/speckit.plan.agent.md
+- ⚠ pending: .github/agents/speckit.tasks.agent.md
+- ⚠ pending: .github/agents/speckit.checklist.agent.md
+- ⚠ pending: .github/agents/speckit.implement.agent.md
+- ⚠ pending: .github/agents/speckit.taskstoissues.agent.md
 Follow-up TODOs:
-- None
+- Update all Spec Kit templates and agent prompts so they operationalize inseparable code/test development, staged MVP delivery, and explicit architectural decomposition.
 -->
 
-# TetrisSpecifyCopilot Constitution
+# Project Constitution
 
 ## Core Principles
 
-### I. Code Quality Is A Release Gate
-Every change MUST meet the repository's agreed quality bar before merge or release.
-Production code MUST be readable, intentionally named, small enough to review,
-and free of known lint, type, and static-analysis violations that the toolchain can
-detect. Refactors that reduce duplication, simplify control flow, or improve
-maintainability MUST accompany feature work when existing code would otherwise make
-the new change harder to verify or operate. Rationale: quality defects compound
-quickly; treating quality as optional pushes risk downstream into support,
-performance tuning, and future feature delivery.
+### I. Specification And Documentation Are The Source Of Truth
 
-### II. Tests Prove Behavior
-Changes MUST include tests that demonstrate the intended behavior at the lowest
-useful level and at every changed boundary that can fail independently. New logic
-MUST have unit coverage, contract changes MUST have contract coverage, and critical
-user journeys MUST have integration or end-to-end coverage. A change is incomplete
-until the relevant tests fail before implementation or defect reproduction and pass
-after the fix. Rationale: test evidence is the project's primary safeguard against
-regressions and undocumented assumptions.
+Implementation MUST be derived from explicit project artifacts rather than inferred from habit, preference, or undocumented assumptions. Specifications, plans, tasks, issue descriptions, and governing project documents MUST define:
 
-### III. UX Consistency Is A Product Requirement
-User-facing changes MUST preserve or deliberately improve the established interaction
-model, terminology, visual language, accessibility, and error handling patterns.
-Specifications MUST define the expected user journey, empty states, validation
-feedback, and recovery behavior for errors. Any intentional deviation from existing
-patterns MUST be explicitly justified in the plan and reviewed as a product-level
-decision, not a local implementation shortcut. Rationale: inconsistent experiences
-create user confusion even when the code is technically correct.
+- what is to be built,
+- what is out of scope, and
+- what evidence is required for completion.
 
-### IV. Performance Budgets Are Defined Up Front
-Features MUST declare measurable performance expectations before implementation and
-validate them before completion. Each plan MUST record the relevant latency,
-throughput, startup, render, memory, or cost budgets for the affected workflow,
-along with the method used to verify them. Work that risks missing a budget MUST
-include mitigation or staged delivery steps before approval. Rationale: performance
-is easiest to preserve when treated as a design input instead of a cleanup task.
+When implementation, conversation context, and repository documents conflict, the approved project artifacts take precedence unless they are formally amended.
 
-### V. Technical Decisions Must Be Traceable
-Architectural and implementation choices MUST be justified in writing when they add
-complexity, introduce dependencies, alter public contracts, or trade one principle
-against another. Plans and reviews MUST name the decision, the constraint that drove
-it, the simpler alternatives considered, and the reason those alternatives were
-rejected. Temporary exceptions MUST include an owner and a removal condition.
-Rationale: explicit decisions make tradeoffs reviewable and prevent accidental
-architecture drift.
+Rationale: this repository exists to support spec-driven and agent-driven development. That workflow fails when requirements are implicit, reconstructed ad hoc, or allowed to drift between artifacts.
 
-## Implementation Standards
+### II. Delivery Proceeds In Small, Testable Increments
 
-Specifications MUST include functional requirements, explicit non-functional
-requirements for quality, UX, and performance, measurable success criteria, and the
-assumptions that constrain implementation choices.
+Work MUST be decomposed into small, reviewable, and independently testable units.
 
-Implementation plans MUST translate the constitution into concrete gates covering:
+To support that requirement:
 
-- code quality checks and maintainability expectations
-- required unit, integration, contract, or end-to-end tests
-- UX consistency, accessibility, and error-state review criteria
-- performance budgets, measurement approach, and rollback or mitigation planning
-- decision records for architectural or implementation tradeoffs
+- specifications MUST be structured so that user stories or feature slices can be implemented and validated incrementally;
+- plans, task lists, and GitHub issues MUST avoid bundling unrelated work;
+- implementation SHOULD prefer the smallest change that produces meaningful progress while preserving repository correctness; and
+- where feasible, the sequence of work MUST be organized to deliver a minimal viable path or tracer bullet early enough to validate architecture, workflow, and integration assumptions before broader feature expansion, then evolve it through staged follow-on increments.
 
-Task lists MUST include the work needed to satisfy those gates. Test creation,
-quality tooling, UX validation, and performance verification are mandatory work
-items whenever the feature touches those concerns; they are not optional polish.
+Large or tightly coupled changes require explicit justification in the plan.
+
+Rationale: small increments reduce agent error, simplify review, improve rollback safety, and enable more deterministic progress. Early delivery of an MVP or tracer bullet provides a working baseline that reduces integration risk and supports staged evolution.
+
+### III. Test Suite Development Is Inseparable From Code Development
+
+Codebase development and test-suite development MUST proceed together. Every task that materially advances, modifies, or fixes production code MUST include the corresponding test work needed to verify the affected behavior, boundary, or regression risk. That test work MAY be performed immediately before the code change or immediately after it, but it MUST remain part of the same implementation unit and MUST not be deferred as optional follow-up work.
+
+A feature is not complete when only the code path exists; completion requires the corresponding test path to exist as well.
+
+The required test evidence MAY include unit, integration, contract, end-to-end, snapshot, replay, packaging, or other automated checks, depending on the affected boundary. Manual validation MAY supplement automated testing where appropriate, but it MUST not be used to justify leaving the automated test base behind when durable coverage is practical and warranted.
+
+Tasks and implementation plans MUST identify the test development required for each code-advancing change, and reviewers MUST reject changes where production code evolves without a corresponding and proportionate evolution of the test suite.
+
+Rationale: when tests evolve in lockstep with the codebase, the project preserves behavioral confidence, regression resistance, and change traceability. Treating test development as inseparable from code development prevents coverage debt from accumulating behind apparently complete feature work.
+
+### IV. Scope, Decisions, And Exceptions Must Be Traceable
+
+Every non-trivial change MUST make its scope boundaries, design decisions, and exceptions explicit.
+
+At minimum:
+
+- specifications MUST distinguish required behavior from assumptions and non-goals;
+- plans MUST identify material technical decisions, rejected alternatives when relevant, and any temporary deviations from the preferred approach; and
+- exceptions MUST record the impacted principle, the business or technical reason, the owner, and the removal condition.
+
+Rationale: traceability prevents scope creep, reduces hidden complexity, and makes agent-generated changes auditable and reviewable.
+
+### V. Architecture And Environment Constraints Must Be Respected
+
+Implementation MUST preserve the repository's declared architectural boundaries, technology constraints, and development environment rules.
+
+Accordingly:
+
+- plans and tasks MUST name any platform, runtime, packaging, tooling, shell, or repository constraints that materially affect execution;
+- agents and contributors MUST prefer the simplest approach compatible with the current architecture and supported environment, and MUST not introduce new dependencies, toolchains, or cross-boundary coupling without explicit justification; and
+- repository-specific execution guidance takes precedence over contributor convenience defaults when shell, tooling, or environment choices affect correctness or determinism.
+
+Rationale: agentic development is most reliable when architectural seams and execution constraints are explicit, stable, and enforced.
+
+### VI. Architecture And Decomposition Must Preserve Separation Of Concerns
+
+System design and implementation MUST preserve clear separation of concerns at every relevant level of decomposition, including module boundaries, feature slices, service interfaces, data handling, runtime integration points, and cross-cutting concerns. Responsibilities SHOULD be assigned so that components remain understandable, independently testable, maintainable, and extensible without unnecessary coupling.
+
+Plans and implementation tasks MUST identify the intended decomposition for non-trivial changes and MUST avoid designs that mix unrelated responsibilities, hide boundaries, or force broad changes for localized behavior. Where a design introduces shared infrastructure, common abstractions, or reusable layers, that structure MUST be justified by immediate maintainability, testability, extensibility, or boundary-enforcement needs rather than speculative reuse or anticipated generality.
+
+Rationale: strong separation of concerns reduces regression risk, improves local reasoning, enables more reliable testing, and allows the system to evolve in controlled increments.
+
+## Technology Platform
+
+The approved technology platform for this repository is:
+
+- **Application model**: local desktop-packaged web application
+- **Frontend**: React
+- **Primary language**: TypeScript
+- **Desktop packaging**: Electron
+- **Persistence / backend storage**: SQLite
+- **Architecture expectation**: browser-oriented application logic packaged for desktop use rather than a server-centric application
+
+Implementation plans, tasks, issue generation, and code changes MUST preserve this platform definition unless it is explicitly amended. Agents and contributors MUST not substitute a different application model, language, desktop packaging approach, or persistence technology without a recorded decision and approval.
+
+## Spec Kit Workflow Requirements
+
+Specifications MUST define:
+
+- prioritized, independently testable user stories or feature slices;
+- functional requirements and explicit out-of-scope boundaries;
+- non-functional requirements when relevant to architecture, reliability, UX, packaging, performance, or environment compatibility;
+- measurable success criteria; and
+- assumptions and dependencies that constrain implementation.
+
+Implementation plans MUST translate the constitutional principles into concrete execution rules, including:
+
+- constitution checks tied to the current feature;
+- architectural constraints and approved technology choices;
+- architectural decomposition and separation-of-concerns strategy;
+- test strategy, required test development, and other required validation evidence;
+- explicit MVP or tracer-bullet scope and the staged evolution path beyond it;
+- complexity tracking for justified deviations; and
+- explicit sequencing that supports incremental implementation.
+
+Task lists MUST be organized to support independent execution and verification. Where applicable, they MUST separate foundational work from user-story work, reflect the intended architectural decomposition, and order work to deliver an MVP or tracer bullet as early as feasible before staged follow-on evolution. They MUST include the test-development, validation, documentation, and integration tasks required to prove completion.
+
+## Agentic Delivery Requirements
+
+Prompts, templates, and issue-generation workflows MUST be written so that coding agents can act with bounded scope, deterministic guidance, and minimal ambiguity.
+
+Tasks and issues MUST therefore be:
+
+- small enough to implement safely in one focused pass;
+- explicit about inputs, outputs, constraints, and dependencies; and
+- clear about the acceptance checks, required test development, and validation evidence required for completion.
+
+When tasks are converted into implementation issues, the issue set MUST preserve both the intended architectural decomposition and the staged delivery sequence. Task-to-issue workflows MUST not merge unrelated or independently testable tasks into a single implementation issue merely for administrative convenience. Where feasible, issue ordering, labels, and milestones MUST make the MVP or tracer-bullet stage explicit and distinguish it from subsequent evolution stages.
+
+Repository guidance MUST explicitly define shell selection, environment assumptions, architectural boundaries, and forbidden shortcuts where omission would cause agents to drift from the intended implementation path.
+
+When repository or platform constraints materially affect delivery, the relevant documents, plans, and tasks MUST state those constraints directly rather than assuming they will be inferred during implementation.
 
 ## Delivery Workflow
 
-Every feature MUST pass a constitution check during planning and again before final
-review. If a principle cannot be met, the exception MUST be documented in the plan's
-complexity or risk tracking section with the impacted principle, business reason,
-owner, and expiration condition.
+Every feature MUST pass a constitution check during planning and again before final review.
 
-Reviewers MUST reject changes that lack sufficient test evidence, omit measurable
-performance targets, introduce unexplained UX inconsistency, or add complexity
-without a recorded decision. Implementation choices SHOULD prefer the simplest
-approach that satisfies the requirements and the stated budgets. When principles
-conflict, teams MUST resolve the conflict explicitly in favor of the option with the
-clearest user value and lowest long-term operational cost.
+The constitution check MUST confirm that the feature:
+
+- is grounded in an explicit specification;
+- is decomposed into small, testable increments;
+- defines the test development and other evidence required for completion;
+- records key decisions, assumptions, and exceptions;
+- respects the repository's architecture and environment constraints;
+- preserves clear architectural decomposition and separation of concerns; and
+- is sequenced to deliver an MVP or tracer bullet early, followed by staged evolution where feasible.
+
+Reviewers MUST reject changes that are too large to review confidently, advance the codebase without corresponding test development, lack required validation evidence, exceed approved scope without amendment, violate architectural or environment constraints, or break the approved staged sequence without a recorded justification.
+
+Implementation SHOULD prefer the narrowest viable change that satisfies the approved specification and acceptance criteria.
 
 ## Governance
 
-This constitution is the authoritative decision framework for specifications, plans,
-tasks, code review, and release readiness in this repository. All delivery artifacts
-MUST demonstrate compliance with these principles or document an approved exception.
+This constitution is the authoritative decision framework for specifications, plans, tasks, issues, implementation, review, and release readiness in this repository. All delivery artifacts MUST demonstrate compliance with these principles or document an approved exception.
 
-Amendments require: (1) a documented change to this constitution, (2) updates to any
-affected templates or guidance files, and (3) an explanation of the operational
-impact on planning, implementation, and review. Compliance reviews occur at feature
-planning, pull request review, and pre-release validation.
+Amendments require:
+
+1. a documented change to this constitution;
+2. updates to affected templates, prompts, or workflow guidance; and
+3. an explanation of the operational impact on specification, planning, task decomposition, implementation, and review.
+
+Compliance reviews occur during:
+
+- feature specification,
+- planning,
+- task generation,
+- implementation review, and
+- pre-release validation.
 
 Versioning policy:
 
-- MAJOR: remove or redefine a principle or governance rule in a backward-incompatible way
-- MINOR: add a principle, add a mandatory section, or materially expand guidance
-- PATCH: clarify wording, fix ambiguity, or make non-semantic editorial improvements
+- MAJOR: remove or fundamentally redefine a principle or governance rule in a backward-incompatible way;
+- MINOR: add a principle, add a mandatory workflow section, or materially expand constitutional guidance; and
+- PATCH: clarify wording, fix ambiguity, or make non-semantic editorial improvements.
 
-Technical decisions and implementation choices MUST be evaluated against this order
-of precedence: constitutional principles first, approved feature specification
-second, implementation plan third, and local coding preference last.
+Constitutional principles take precedence over feature-level preferences. The order of precedence is:
 
-**Version**: 1.1.0 | **Ratified**: 2026-04-10 | **Last Amended**: 2026-04-10
+1. Constitution
+2. Approved feature specification
+3. Approved implementation plan
+4. Approved task or issue definition
+5. Local coding preference
+
+**Version**: 1.5.0 | **Ratified**: 2026-04-10 | **Last Amended**: 2026-04-13
