@@ -9,8 +9,6 @@ release/
 coverage/
 playwright-report/
 test-results/
-src-tauri/target/
-src-tauri/gen/
 .tmp/
 *.log
 .env*
