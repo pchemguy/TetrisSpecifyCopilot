@@ -92,6 +92,19 @@ Plans and implementation tasks MUST identify the intended decomposition for non-
 
 Rationale: strong separation of concerns reduces regression risk, improves local reasoning, enables more reliable testing, and allows the system to evolve in controlled increments.
 
+## Technology Platform
+
+The approved technology platform for this repository is:
+
+- **Application model**: local desktop-packaged web application
+- **Frontend**: React
+- **Primary language**: TypeScript
+- **Desktop packaging**: Electron
+- **Persistence / backend storage**: SQLite
+- **Architecture expectation**: browser-oriented application logic packaged for desktop use rather than a server-centric application
+
+Implementation plans, tasks, issue generation, and code changes MUST preserve this platform definition unless it is explicitly amended. Agents and contributors MUST not substitute a different application model, language, desktop packaging approach, or persistence technology without a recorded decision and approval.
+
 ## Spec Kit Workflow Requirements
 
 Specifications MUST define:
