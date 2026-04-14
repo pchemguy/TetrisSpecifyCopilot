@@ -1,8 +1,8 @@
 <!--
 Sync Impact Report
-Version change: 1.3.0 -> 1.4.0
+Version change: 1.4.0 -> 1.5.0
 Modified principles:
-- Design Must Preserve Separation Of Concerns -> VI. Architecture And Decomposition Must Preserve Separation Of Concerns
+- Validation Evidence Is Mandatory -> III. Test Suite Development Is Inseparable From Code Development
 Templates requiring updates:
 - ⚠ pending: .specify/templates/plan-template.md
 - ⚠ pending: .specify/templates/spec-template.md
@@ -14,7 +14,7 @@ Templates requiring updates:
 - ⚠ pending: .github/agents/speckit.implement.agent.md
 - ⚠ pending: .github/agents/speckit.taskstoissues.agent.md
 Follow-up TODOs:
-- Update all Spec Kit templates and agent prompts so they operationalize the revised principles explicitly.
+- Update all Spec Kit templates and agent prompts so they operationalize inseparable code/test development, staged MVP delivery, and explicit architectural decomposition.
 -->
 
 # Project Constitution
@@ -48,20 +48,17 @@ Large or tightly coupled changes require explicit justification in the plan.
 
 Rationale: small increments reduce agent error, simplify review, improve rollback safety, and enable more deterministic progress. Early delivery of an MVP or tracer bullet provides a working baseline that reduces integration risk and supports staged evolution.
 
-### III. Validation Evidence Is Mandatory
+### III. Test Suite Development Is Inseparable From Code Development
 
-No change is complete without concrete evidence that the intended behavior, constraints, and acceptance conditions have been satisfied.
+Codebase development and test-suite development MUST proceed together. Every task that materially advances, modifies, or fixes production code MUST include the corresponding test work needed to verify the affected behavior, boundary, or regression risk. That test work MAY be performed immediately before the code change or immediately after it, but it MUST remain part of the same implementation unit and MUST not be deferred as optional follow-up work.
 
-The required evidence MAY include:
+A feature is not complete when only the code path exists; completion requires the corresponding test path to exist as well.
 
-- unit, integration, contract, or end-to-end tests;
-- lint, type, schema, or static validation checks;
-- snapshot, replay, packaging, or environment verification; or
-- manual validation when automation is not the appropriate proof mechanism.
+The required test evidence MAY include unit, integration, contract, end-to-end, snapshot, replay, packaging, or other automated checks, depending on the affected boundary. Manual validation MAY supplement automated testing where appropriate, but it MUST not be used to justify leaving the automated test base behind when durable coverage is practical and warranted.
 
-Tasks and implementation plans MUST identify the validation work needed for each change, and reviewers MUST reject changes that claim completion without corresponding evidence.
+Tasks and implementation plans MUST identify the test development required for each code-advancing change, and reviewers MUST reject changes where production code evolves without a corresponding and proportionate evolution of the test suite.
 
-Rationale: in a spec-driven workflow, validation artifacts are the proof that the specification has been implemented rather than merely attempted.
+Rationale: when tests evolve in lockstep with the codebase, the project preserves behavioral confidence, regression resistance, and change traceability. Treating test development as inseparable from code development prevents coverage debt from accumulating behind apparently complete feature work.
 
 ### IV. Scope, Decisions, And Exceptions Must Be Traceable
 
@@ -81,9 +78,9 @@ Implementation MUST preserve the repository's declared architectural boundaries,
 
 Accordingly:
 
-- Plans and tasks MUST name any platform, runtime, packaging, tooling, shell, or repository constraints that materially affect execution.
-- Agents and contributors MUST prefer the simplest approach compatible with the current architecture and supported environment, and MUST not introduce new dependencies, toolchains, or cross-boundary coupling without explicit justification.
-- Repository-specific execution guidance takes precedence over contributor convenience defaults when shell, tooling, or environment choices affect correctness or determinism.
+- plans and tasks MUST name any platform, runtime, packaging, tooling, shell, or repository constraints that materially affect execution;
+- agents and contributors MUST prefer the simplest approach compatible with the current architecture and supported environment, and MUST not introduce new dependencies, toolchains, or cross-boundary coupling without explicit justification; and
+- repository-specific execution guidance takes precedence over contributor convenience defaults when shell, tooling, or environment choices affect correctness or determinism.
 
 Rationale: agentic development is most reliable when architectural seams and execution constraints are explicit, stable, and enforced.
 
@@ -110,12 +107,12 @@ Implementation plans MUST translate the constitutional principles into concrete 
 - constitution checks tied to the current feature;
 - architectural constraints and approved technology choices;
 - architectural decomposition and separation-of-concerns strategy;
-- validation strategy and required evidence;
+- test strategy, required test development, and other required validation evidence;
 - explicit MVP or tracer-bullet scope and the staged evolution path beyond it;
 - complexity tracking for justified deviations; and
 - explicit sequencing that supports incremental implementation.
 
-Task lists MUST be organized to support independent execution and verification. Where applicable, they MUST separate foundational work from user-story work, reflect the intended architectural decomposition, and order work to deliver an MVP or tracer bullet as early as feasible before staged follow-on evolution. They MUST include the validation, documentation, and integration tasks required to prove completion.
+Task lists MUST be organized to support independent execution and verification. Where applicable, they MUST separate foundational work from user-story work, reflect the intended architectural decomposition, and order work to deliver an MVP or tracer bullet as early as feasible before staged follow-on evolution. They MUST include the test-development, validation, documentation, and integration tasks required to prove completion.
 
 ## Agentic Delivery Requirements
 
@@ -125,7 +122,7 @@ Tasks and issues MUST therefore be:
 
 - small enough to implement safely in one focused pass;
 - explicit about inputs, outputs, constraints, and dependencies; and
-- clear about the acceptance checks and validation evidence required for completion.
+- clear about the acceptance checks, required test development, and validation evidence required for completion.
 
 When tasks are converted into implementation issues, the issue set MUST preserve both the intended architectural decomposition and the staged delivery sequence. Task-to-issue workflows MUST not merge unrelated or independently testable tasks into a single implementation issue merely for administrative convenience. Where feasible, issue ordering, labels, and milestones MUST make the MVP or tracer-bullet stage explicit and distinguish it from subsequent evolution stages.
 
@@ -141,13 +138,13 @@ The constitution check MUST confirm that the feature:
 
 - is grounded in an explicit specification;
 - is decomposed into small, testable increments;
-- defines the evidence required for completion;
+- defines the test development and other evidence required for completion;
 - records key decisions, assumptions, and exceptions;
 - respects the repository's architecture and environment constraints;
 - preserves clear architectural decomposition and separation of concerns; and
 - is sequenced to deliver an MVP or tracer bullet early, followed by staged evolution where feasible.
 
-Reviewers MUST reject changes that are too large to review confidently, lack validation evidence, exceed approved scope without amendment, violate architectural or environment constraints, or break the approved staged sequence without a recorded justification.
+Reviewers MUST reject changes that are too large to review confidently, advance the codebase without corresponding test development, lack required validation evidence, exceed approved scope without amendment, violate architectural or environment constraints, or break the approved staged sequence without a recorded justification.
 
 Implementation SHOULD prefer the narrowest viable change that satisfies the approved specification and acceptance criteria.
 
@@ -183,4 +180,4 @@ Constitutional principles take precedence over feature-level preferences. The or
 4. Approved task or issue definition
 5. Local coding preference
 
-**Version**: 1.4.0 | **Ratified**: 2026-04-10 | **Last Amended**: 2026-04-13
+**Version**: 1.5.0 | **Ratified**: 2026-04-10 | **Last Amended**: 2026-04-13
